@@ -1,0 +1,17 @@
+# Card metadata consumed by https://amishchadha.com
+name: ColdPod
+slug: coldpod
+area: BioMedical
+status: concept          # concept | design | prototype | tested | released
+shortlisted: false
+pitch: >-
+  Portable Peltier cooler with a phase-change buffer and a temperature logger that raises alerts on excursions.
+problem: >-
+  Insulin and vaccines spoil in field transport without a reliable cold chain.
+budget_usd: 250
+difficulty: 3  # 1 easiest, 5 hardest
+hero_image: media/hero.png
+licenses:
+  hardware: CERN-OHL-S-2.0
+  software: MIT
+tags: [biomedical, open-hardware, cern-ohl-s]
