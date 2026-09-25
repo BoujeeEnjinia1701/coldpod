@@ -61,3 +61,80 @@ The SwapCell 48 V pack is not proposed: at about 468 Wh and 2.8 kg it is far lar
 ### Recommended next step
 
 Review this note and the media. If approved, run `/advance-trl3` to calculate the heat leak with real VIP data, check the thermosiphon at tilt and the Peltier's off-state conductance, run a freeze-fault analysis, and produce the parametric model and drawing sheet. Settle R6, R12, R15 and the budget first, since they may change the box size.
+
+## Session 2026-09-25: TRL 3
+
+Amish's instruction for this session (2026-09-25): "proceed with all of your recommendations across all batches. Make sure we don't proceed to TRL 4 on any of them." ColdPod now claims TRL 3 (proof of concept on paper). TRL 4 is on hold by Amish's instruction.
+
+### What was done
+
+- `docs/decisions/0001-trl2-review-decisions.md` (CPD-DDR-001 v0.1): the eleven TRL 2 review items with a recommendation recorded as decided by Amish, 2026-09-25 (D1 to D11), and the items that stay open.
+- `docs/04-calcs/01-sizing.md` (CPD-CAL-001 v0.1) and `docs/04-calcs/sizing.py`: first-principles sizing with stated assumptions: payload and size; heat leak by Langmuir shape factors with explicit VIP joint, foam strip, pipe and wire paths; PCM energy; passive hold; a Peltier model for three module classes with cold and hot paths; powered hold and input power; battery-then-PCM hold with a ±30 % heat-leak band; a time-stepped refreeze model; thermosiphon diode ratio and tilt limits; a stuck-on driver fault; logger storage and reserve; mass from model volumes; BOM total; foam variant; options for review. The script imports the model's `PARAMS` and prints every number the note quotes, tagged [A1] to [P2].
+- `cad/src/model.py`: parametric build123d model (shell, lid, handle, VIP set with foam strip, PCM jacket and lid pack, liner and rack with 24 pens, evaporator can with a loop thermosiphon and cold block, Peltier, heat sink and fan, end housings, cells, boards, sensors, display), exporting `cad/step/coldpod-assembly.step`, `shell.step`, `lid.step`, `vip-set.step`, `liner-rack.step`, `evaporator-thermosiphon.step`, `cooling-head.step`, `end-housings.step` and matching STL files in `cad/stl/`.
+- `cad/src/sheets.py` and `cad/drawings/CPD-DWG-001.svg`, `.pdf`, `.png`: general arrangement at Rev P1, scale 1:5, with overall dimensions drawn from the model and a main-dimensions box. The sheet carries "CONCEPT, NOT FOR FABRICATION" and "PRELIMINARY, NOT FOR FABRICATION". The concept sheet stays CPD-DWG-010, so DWG-001 was the next free number.
+- `bom/bom.csv` and `bom/bom-notes.md`: all 16 lines priced with a supplier type; total $295 against the new $300 budget.
+- `cad/src/concept_media.py` now builds the media from `model.py` and takes its figures from the calc script; all media in `media/` were regenerated and checked by eye (a tangent tube that made the PCM solid invalid, and so missing from the cutaway, was fixed); temporary `media/_views*` folders were deleted.
+- CPD-PRB-001, CPD-PRC-001 and CPD-REQ-001 revised to v0.3 (decisions recorded, numbers replaced by CPD-CAL-001, status column from the calc); `README.md` updated to TRL 3 with links; `project.yaml` set to `trl: 3`, `trl_target: 3`, `budget_usd: 300`, with the evidence files listed. PDFs are in `docs/pdf/`.
+
+### Requirements (CPD-CAL-001, Table 9)
+
+7 met, 5 at risk, 3 not met, 2 not verifiable at TRL 3. Hold times count as met only if they survive 30 % more heat leak than estimated.
+
+| ID | Status | Value against target |
+| --- | --- | --- |
+| R2 | **Not met** | Normal operation met; with a stuck-on driver the liner can reach about −4 °C, because the only hardware cut-out is on the cold block at −5 °C |
+| R8 | **Not met** | The jacket refreezes in 5.5 h (8 h target), but the lid PCM pack (0.28 kg) has no cold path to the evaporator |
+| R12 | **Not met** | 5.60 kg against the relaxed 5.5 kg; the evaporator can adds 0.25 kg |
+| R1 | At risk | Liner held at 2 to 5 °C, but in long powered holds at 43 °C the lid pack melts (after about 21 h) and settles near 13.8 °C above the top layer of pens |
+| R4 | At risk | 13.0 h at 43 °C with no power; 10.0 h at +30 % leak (12 h target) |
+| R5 | At risk | 26.5 h at 32 °C off-grid; 20.1 h at +30 % leak (24 h target) |
+| R6 | At risk | 16.5 h at 43 °C off-grid; 12.4 h at +30 % leak (16 h target, redefined by D5) |
+| R7 | At risk | 18.4 W input at 43 °C, inside the 45 W PD budget; lid pack melts after about 21 h; a 10 V vehicle input leaves little driver headroom for the 9.5 V module |
+| R10 | Not verifiable at TRL 3 | Alarm logic is design intent only; no firmware sketch was written |
+| R16 | Not verifiable at TRL 3 | Splash and drop need a test |
+| R3, R9, R11, R13, R14, R15, R17 | Met | 1.36 L and 24 pens; 1.38 MB of 2.10 MB; about 96 days of logger reserve; 368 x 214 x 207 mm; 76.8 Wh; $295; labelling by design |
+
+Other key numbers: overall conductance 0.091 W/K (0.11 at TRL 2), of which joints and edges are about 45 %; PCM 0.972 kg and 175 kJ (1.06 kg and 191 kJ at TRL 2, because the evaporator can and tubes take space); input to hold 4.2, 7.5 and 18.4 W at 25, 32 and 43 °C; the TEC1-12706 named at TRL 2 cannot hold at 43 °C at all (its off-state conduction is too high), so the TEC1-12703 class is used; on/off PWM would cost 61 % more power than smooth DC; thermosiphon forward to reverse ratio about 430, full function to 18° of tilt with the cooling head down; heat sink base about 53 °C at 43 °C; foam variant 7.4 h passive at 43 °C. Every TRL 2 number in the docs was checked against the script and corrected where it differed (CPD-CAL-001, Table 8).
+
+### Decisions recorded (CPD-DDR-001)
+
+Decided by Amish, 2026-09-25, going with the recommendation: D1 5 °C organic PCM; D2 thermosiphon, mechanical disconnect as fallback; D3 evaporator on the outer face of the PCM; D4 76.8 Wh LiFePO4 4S1P; D5 accept about 16 h at 43 °C off-grid (R6 redefined to 16 h); D6 R12 relaxed to 5.5 kg; D7 VIPs, foam variant documented; D8 local alarms and Bluetooth Low Energy only; D9 alarm defaults; D10 `budget_usd` raised to $300 (set in `project.yaml`); D11 outreach vaccinators first. The pitch and problem lines were not asked to change and are unchanged. ColdPod does not use a SwapCell pack, so the SwapCell interface v0.3 items and the shared-pack pricing rule do not affect it.
+
+### Proposed, awaiting Amish
+
+Still open from TRL 2 (no recommendation was made):
+
+1. Co-design partner: an immunization program, a diabetes association or a humanitarian logistics group (O1). Portfolio rule: partners are picked per area later.
+
+New from TRL 3:
+
+2. **Lid pack cold path (R8, R1, R7).** Options: (a) a 1.5 mm aluminium plate under the lid pack that seats on the evaporator can rim when the lid closes (about $5 and 0.12 kg; lid pack refreezes in about 2.3 h); (b) drop the lid pack and use a 20 mm jacket (1.010 kg of PCM, all actively frozen; body 10 mm longer and wider, 10 mm lower; the top of the cavity then sees the lid VIP directly); (c) keep the design and condition the lid pack in a refrigerator. Recommendation: (a), and check the gasket still seals with the plate in place.
+3. **Freeze fault (R2).** Add a second hardware cut-out on the liner, opening at 3 °C, in series with the cold-block cut-out (about $3). The liner then settles near 2.0 °C after a stuck-on fault (1.2 °C for a 2 °C setting). Recommendation: adopt.
+4. **Mass (R12).** Options: (a) thinner printed parts (3 mm shell, 5 mm lid cap, 2 mm housings), about 5.39 kg, or about 5.51 kg with the lid cold plate; (b) relax R12 again to 5.75 kg; (c) keep and accept the miss. Recommendation: (a), and confirm by weighing after TRL 3.
+5. **Evaporator can and loop thermosiphon.** The decided D2 and D3 are sized as a 1.0 mm aluminium can around the jacket fed by an 8 mm copper loop; this is in the model and BOM line 7 ($28). Charging the loop needs refrigeration tools. Recommendation: confirm; keep the mechanical disconnect (D2 fallback) ready if a maker cannot charge the loop.
+6. **Peltier class and drive.** TEC1-12703 class module with a buck driver and LC filter (smooth DC), and a heat sink of 0.50 K/W or better with the fan. In the model and BOM. Recommendation: confirm.
+7. **Vehicle input headroom (R7).** At 10 V input the 9.5 V module drive leaves little margin. Options: (a) a buck-boost driver; (b) redefine the 12 V input range as 11 to 15 V. Recommendation: (a), if it fits the power board cost.
+8. **Budget margin.** The BOM is $5 under the $300 budget, and the VIP set ($60) and thermosiphon ($28) are estimates. Recommendation: get a VIP quote before any purchase decision; `budget_usd` stays at $300.
+
+### Safety concerns
+
+- Not a medical device and not WHO-prequalified; every document, the README and the proposed box labelling say so.
+- Freeze fault: with the present single cut-out on the cold block, a stuck-on driver can freeze the liner (R2 not met). Item 3 above fixes it on paper.
+- LiFePO4 battery (76.8 Wh): BMS, fuse, charging blocked outside 0 to 45 °C, separate vented bay away from the heat sink.
+- Paraffin PCM is combustible and can soften some plastics; sealed HDPE pouches, kept away from the battery bay.
+- Heat sink base about 53 °C at 43 °C ambient; enclosed with a guarded fan.
+- A punctured VIP loses its insulation invisibly; a rising Peltier duty should raise a service warning.
+- The loop thermosiphon holds a working fluid under pressure; charging needs refrigeration tools and practice.
+- Loaded mass about 6.3 kg; carry with the strap across the body.
+
+### Other notes
+
+- No existing TRL 4 material was found (`build-log/` holds only its README; `electronics/` and `firmware/` are empty). None was created. STANDARDS section 9 asks for a TRL change to be recorded in the build log; no build-log entry was written this session, since the brief did not name one.
+- The TRL 2 review listed no unchecked citations, so no web verification was run. The sources in CPD-PRB-001 and CPD-REQ-001 are unchanged. BOM prices are indicative estimates by supplier type, not quotes.
+- `.claude/commands/advance-trl3.md` names the drawing DWG-001; that number was free (the concept sheet is CPD-DWG-010), so the general arrangement is CPD-DWG-001.
+
+### Recommended next step
+
+Stay at TRL 3. TRL 4 is on hold by Amish's instruction. Decide items 2 to 8 above, starting with the lid pack cold path and the liner cut-out (they close R8 and R2), then revise the model, CPD-CAL-001 and the BOM on paper, and request quotes for the VIP set and the thermosiphon.
+
+For reference only, TRL 4 would need: a lab test report (TST, `environment: lab`) on a built case or key subassemblies (heat leak by a steady-state heater test, passive and powered hold times in a climate chamber at 25, 32 and 43 °C, refreeze time, thermosiphon forward and reverse conductance and tilt limit, stuck-on driver fault test, alarm behavior, mass), build-log entries, and the purchasing and build work that goes with them. None of this has been started.

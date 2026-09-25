@@ -3,7 +3,7 @@ doc_id: CPD-PRB-001
 title: ColdPod problem statement
 project: ColdPod
 doc_type: Problem statement
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Populate to TRL 2 (problem, users and context, constraints, prior work with sources)
+- version: "0.3"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Record Amish's decisions (CPD-DDR-001), outreach vaccinators first and budget $300; partner stays open
 ---
 
 # ColdPod problem statement
@@ -49,7 +53,7 @@ The gap ColdPod addresses: an open, repairable carrier that combines passive sto
 
 ## Constraints
 
-- Garage-buildable prototype, about $250 USD in parts, using off-the-shelf modules, 3D-printed or hand-made parts, and bought vacuum-insulated panels.
+- Garage-buildable prototype, $300 USD or less in parts (raised from $250 by Amish, 2026-09-25, CPD-DDR-001 D10), using off-the-shelf modules, 3D-printed or hand-made parts, and bought vacuum-insulated panels.
 - Carried by one person, by hand or on a shoulder strap.
 - Chargeable from a vehicle 12 V socket, a small solar panel or a USB-C Power Delivery (PD) charger; no mains-voltage parts inside the box.
 - Battery small enough to carry on a passenger aircraft without airline approval (100 Wh or less per the [FAA PackSafe rules](https://www.faa.gov/hazmat/packsafe/lithium-batteries)).
@@ -64,6 +68,6 @@ The gap ColdPod addresses: an open, repairable carrier that combines passive sto
 
 ## Open questions
 
-- Which user comes first: the outreach vaccinator (sets the 43 °C design case) or the traveller with insulin (sets size, weight and price)? Proposed: outreach vaccinator first, awaiting Amish.
-- Which partner should help shape the requirements (an immunization program, a diabetes association, or a humanitarian logistics group)? Proposed, awaiting Amish.
+- Which user comes first? Decided by Amish, 2026-09-25 (CPD-DDR-001 D11): the outreach vaccinator first, since that user sets the 43 °C design case; the traveller with insulin second.
+- Which partner should help shape the requirements (an immunization program, a diabetes association, or a humanitarian logistics group)? Proposed, awaiting Amish; partners are to be picked per area later.
 - How hot does it really get inside a carrier strapped to a motorbike in direct sun? The 43 °C WHO test point is used until field data exists.

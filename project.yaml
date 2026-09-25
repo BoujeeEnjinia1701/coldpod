@@ -2,18 +2,28 @@
 name: ColdPod
 slug: coldpod
 area: BioMedical
-trl: 2                   # Technology Readiness Level, see .kit/STANDARDS.md section 9
+trl: 3                   # Technology Readiness Level, see .kit/STANDARDS.md section 9
 trl_target: 3
 trl_evidence:
   - docs/01-problem.md
   - docs/02-concept.md
   - docs/03-requirements.md
+  - docs/decisions/0001-trl2-review-decisions.md
+  - docs/04-calcs/01-sizing.md
+  - docs/04-calcs/sizing.py
+  - cad/src/model.py
+  - cad/step/coldpod-assembly.step
+  - cad/stl/coldpod-assembly.stl
+  - cad/drawings/CPD-DWG-001.svg
+  - cad/drawings/CPD-DWG-001.pdf
+  - bom/bom.csv
+  - bom/bom-notes.md
 shortlisted: false
 pitch: >-
   Portable Peltier cooler with a phase-change buffer and a temperature logger that raises alerts on excursions.
 problem: >-
   Insulin and vaccines spoil in field transport without a reliable cold chain.
-budget_usd: 250
+budget_usd: 300
 difficulty: 3  # 1 easiest, 5 hardest
 hero_image: media/hero.png
 licenses:

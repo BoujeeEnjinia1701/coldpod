@@ -1,14 +1,14 @@
 # ColdPod
 
-![TRL 2](https://img.shields.io/badge/TRL-2%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
+![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
 
-**Area:** BioMedical · **TRL:** 2 of 9 (concept formulated) · **Prototype budget:** about $250 USD · **Difficulty:** 3 of 5
+**Area:** BioMedical · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** $300 USD · **Difficulty:** 3 of 5
 
 Portable Peltier cooler with a phase-change buffer and a temperature logger that raises alerts on excursions.
 
 ![ColdPod concept](media/hero.png)
 
-[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [Review note](docs/REVIEW.md)
+[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement CPD-DWG-001 (PDF)](cad/drawings/CPD-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
 
 ## Problem
 
@@ -18,9 +18,9 @@ Full problem statement: [docs/01-problem.md](docs/01-problem.md)
 
 ## Concept
 
-A carry case about 370 x 215 x 205 mm holds 1.2 L of insulin or vaccines (about 24 insulin pens) in an aluminium liner wrapped in a phase-change material that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module refreezes the phase-change material from a 12 V socket, a solar panel or a USB-C charger, through a thermosiphon that carries heat one way only. A 76.8 Wh LiFePO4 battery keeps it cooling on the road, and a logger records the payload temperature every minute and raises alarms on excursions.
+A carry case 368 x 214 x 207 mm holds 1.36 L of insulin or vaccines (24 insulin pens) in an aluminium liner wrapped in a phase-change material that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module refreezes the phase-change material from a 12 V socket, a solar panel or a USB-C charger, through a loop thermosiphon that carries heat one way only. A 76.8 Wh LiFePO4 battery keeps it cooling on the road, and a logger records the payload temperature every minute and raises alarms on excursions.
 
-First-order estimates (to be checked at TRL 3): about 13 h with no power at 43 °C, about 26 h off-grid at 32 °C and about 16 h off-grid at 43 °C (short of the 24 h target), about 5.2 kg empty and about $280 in parts (over the $250 budget; a change is proposed, awaiting Amish).
+TRL 3 calculations ([CPD-CAL-001](docs/04-calcs/01-sizing.md)): about 13.0 h with no power at 43 °C, 26.5 h off-grid at 32 °C and 16.5 h off-grid at 43 °C, all with thin margins; 5.60 kg empty (over the 5.5 kg target) and $295 in parts (budget $300). Two design gaps remain: the lid phase-change pack cannot be refrozen by the Peltier, and a stuck-on driver could freeze the liner. Fixes are proposed, awaiting Amish. TRL 4 (lab testing) is on hold.
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
@@ -28,7 +28,7 @@ Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
 - Vacuum-insulated panels, 25 mm, in a printed shell
 - Phase-change material packs, 5 °C, around an aluminium liner
-- Thermosiphon (one-way heat pipes) to a 40 mm Peltier module
+- Aluminium evaporator can and loop thermosiphon (one-way) to a 40 mm Peltier module (TEC1-12703 class)
 - Heat sink and fan in a vented cooling head
 - LiFePO4 battery, 12.8 V 6 Ah (76.8 Wh), with BMS
 - USB-C PD and 12 V power board
@@ -46,7 +46,7 @@ It contains a lithium (LiFePO4) battery, a combustible paraffin phase-change mat
 
 | Folder | Contents |
 | --- | --- |
-| `docs/` | Problem, concept, requirements, calculations and design decisions |
+| `docs/` | Problem, concept, requirements, calculations (`04-calcs/`) and design decisions (`decisions/`) |
 | `cad/src/` | build123d Python source, the source of truth for all geometry |
 | `cad/step/`, `cad/stl/` | Exported models for FreeCAD, other CAD tools and printing |
 | `cad/drawings/` | 2D sketches and dimensioned drawings |
