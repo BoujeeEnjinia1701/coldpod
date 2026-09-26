@@ -3,9 +3,9 @@ doc_id: CPD-DDR-002
 title: ColdPod recommendations accepted
 project: ColdPod
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's acceptance of all recommendations in CPD-DDR-001 and docs/REVIEW.md, what changed in the repo, and the items still open
+- version: "0.2"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget top-up to $310 decided by Amish (N3); R15 met
 ---
 
 # 0002: Recommendations accepted
@@ -57,7 +61,11 @@ Other effects:
 | O1 | Co-design partner: an immunization program, a diabetes association or a humanitarian logistics group | Proposed, awaiting Amish. No recommendation was made; partners are picked per area later |
 | N1 | R8 refreeze: 8.4 h for all the PCM against 8 h, now that the lid pack is frozen actively. Giving the module 30 W and the battery 7 W only reaches 8.2 h (CPD-CAL-001, G10). Options: (a) restate R8 as 9 h for all the PCM; (b) accept the miss; (c) a thinner lid pack, trading passive hold | New finding from CPD-CAL-001 v0.2. Proposed, awaiting Amish; suggestion (a) |
 | N2 | R12 mass: 5.53 kg against 5.5 kg. Options: (a) keep the target and settle it by weighing when TRL 4 resumes; (b) relax to 5.6 kg; (c) a lighter strap and handle | New finding. Proposed, awaiting Amish; suggestion (a) |
-| N3 | R15 cost: $303 against the $300 budget. Options: (a) raise `budget_usd` to $310; (b) keep $300 and wait for the VIP quote (on hold with TRL 4); (c) keep $300 and drop the buck-boost stage for an 11 to 15 V vehicle input (saves about $4, reopens R7) | New finding. Proposed, awaiting Amish; suggestion (a). `budget_usd` is not changed until he decides |
+| N3 | R15 cost: $303 against the $300 budget. Options: (a) raise `budget_usd` to $310; (b) keep $300 and wait for the VIP quote (on hold with TRL 4); (c) keep $300 and drop the buck-boost stage for an 11 to 15 V vehicle input (saves about $4, reopens R7) | New finding. Budget top-up to $310: decided by Amish, 2026-09-26. `budget_usd` set to 310; R15 met ($303 against $310, CPD-CAL-001 v0.3) |
+
+## Budget top-up, 2026-09-26
+
+Budget top-up to $310: decided by Amish, 2026-09-26 ("I am ok with the budget top ups"). This closes N3 with option (a). `project.yaml` now carries `budget_usd: 310`, R15 in CPD-REQ-001 v0.5 reads $310, and CPD-CAL-001 v0.3 rechecks the $303 BOM against it: met, with $7 of margin.
 
 ## Cross-repo actions
 
@@ -65,6 +73,6 @@ None. ColdPod shares no part or interface with another portfolio repo: it does n
 
 ## Consequences
 
-- Requirement status (CPD-CAL-001 v0.2): 3 not met (R8, R12, R15, each by a small margin), 3 at risk (R4, R5, R6), 9 met, 2 not verifiable at TRL 3 (R10, R16). Before: 3 not met (R2, R8, R12), 5 at risk, 7 met, 2 not verifiable.
+- Requirement status (CPD-CAL-001 v0.3, after the budget top-up): 2 not met (R8, R12, each by a small margin), 3 at risk (R4, R5, R6), 10 met, 2 not verifiable at TRL 3 (R10, R16). In v0.2, before the top-up, R15 was also not met. Before: 3 not met (R2, R8, R12), 5 at risk, 7 met, 2 not verifiable.
 - The design has no remaining freeze path on paper and no lid pack that runs warm in long hot holds.
 - TRL 4 work (weighing, gasket and plate seat checks, loop charging, VIP quotes and purchasing, climate chamber tests) stays on hold.

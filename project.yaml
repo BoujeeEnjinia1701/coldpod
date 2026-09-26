@@ -24,7 +24,7 @@ pitch: >-
   Portable Peltier cooler with a phase-change buffer and a temperature logger that raises alerts on excursions.
 problem: >-
   Insulin and vaccines spoil in field transport without a reliable cold chain.
-budget_usd: 300
+budget_usd: 310
 difficulty: 3  # 1 easiest, 5 hardest
 hero_image: media/hero.png
 licenses:

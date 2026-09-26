@@ -2,7 +2,7 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
 
-**Area:** BioMedical · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** $300 USD · **Difficulty:** 3 of 5
+**Area:** BioMedical · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** $310 USD · **Difficulty:** 3 of 5
 
 Portable Peltier cooler with a phase-change buffer and a temperature logger that raises alerts on excursions.
 
@@ -20,7 +20,7 @@ It is open and garage-buildable because the gap is not the physics but access. C
 
 Two very large groups depend on a cold chain that often fails at its last step. There are 589 million adults living with diabetes, 81 % of them in low- and middle-income countries ([IDF Diabetes Atlas, 11th edition, 2025](https://media.idf.org/media/uploads/sites/3/2025/04/IDF_Atlas_11th_Edition_2025_Global-Factsheet.pdf)), and many of those who use insulin must keep it at 2 to 8 °C and discard it if it freezes ([US FDA](https://www.fda.gov/drugs/emergency-preparedness-drugs/information-regarding-insulin-storage-and-switching-between-products-emergency)). Routine immunization still leaves 14.3 million infants a year without a single vaccine dose, half of them in countries affected by fragility, conflict or humanitarian crises, where carrying vaccines is hardest ([WHO and UNICEF, 2025](https://www.unicef.org/press-releases/global-childhood-vaccination-holds-steady-yet-over-14-million-infants-remain)).
 
-Freezing, not only heat, is a common failure. A systematic review found vaccines exposed to temperatures below the recommended range in about 33 % of storage studies in wealthier countries and 37 % in lower-income countries, and during shipment in 38 % and 19 % of studies ([Hanson et al., *Vaccine*, 2017](https://www.sciencedirect.com/science/article/pii/S0264410X16309471)). Many of these events are never recorded, because the carrier has no logger.
+Freezing, not only heat, is a common failure. A systematic review estimated that vaccines were exposed to temperatures below the recommended range in about 33 % of storage in wealthier countries and 37 % in lower-income countries, and in about 38 % and 19 % of shipments ([Hanson et al., *Vaccine*, 2017](https://www.sciencedirect.com/science/article/pii/S0264410X16309471)). Many of these events are never recorded, because the carrier has no logger.
 
 ## Where it could be used
 
@@ -39,11 +39,11 @@ Freezing, not only heat, is a common failure. A systematic review found vaccines
 
 | Country or region | Why it matters there |
 | --- | --- |
-| Sub-Saharan Africa | Long outreach trips in heat with intermittent clinic power; WHO rates carriers at a constant 43 °C for such hot zones ([WHO PQS E004/VC01](https://extranet.who.int/prequal/key-resources/documents/pqs-independent-type-testing-protocol-e004vc01-vp2-vaccine-carrier)) |
+| Sub-Saharan Africa | Long outreach trips in heat with intermittent clinic power; WHO measures a vaccine carrier's cold life at a constant ambient temperature of 43 °C ([WHO PQS E004/VC01.2](https://extranet.who.int/pqweb/key-resources/documents/pqs-performance-specification-e004vc012-vaccine-carrier)) |
 | South Asia | Very hot pre-monsoon seasons and dense rural outreach; the region is part of the low- and middle-income world where 81 % of adults with diabetes live ([IDF, 2025](https://media.idf.org/media/uploads/sites/3/2025/04/IDF_Atlas_11th_Edition_2025_Global-Factsheet.pdf)) |
 | Countries affected by conflict or humanitarian crisis | Half of all unvaccinated children live in 26 fragile or crisis-affected countries ([WHO and UNICEF, 2025](https://www.unicef.org/press-releases/global-childhood-vaccination-holds-steady-yet-over-14-million-infants-remain)), where cold chain equipment and power are least reliable |
-| Latin America, including the Amazon basin | River and road outreach over several days, where freezers to recondition ice packs are far apart |
-| United States and other high-income countries | Hurricanes, wildfires and power cuts leave people with insulin but no refrigerator; the FDA publishes storage guidance for exactly these emergencies ([US FDA](https://www.fda.gov/drugs/emergency-preparedness-drugs/information-regarding-insulin-storage-and-switching-between-products-emergency)), and freezing in storage is common even in wealthier countries ([Hanson et al., 2017](https://www.sciencedirect.com/science/article/pii/S0264410X16309471)) |
+| Latin America, including the Amazon basin | In Colombia's Putumayo department, vaccination teams travel five to six hours by river to reach riverside communities ([PAHO, 2024](https://www.paho.org/en/stories/colombian-vaccination-team-donated-boat-makes-all-difference)), and in Panama some communities can be reached only by plane or boat ([PAHO](https://www.paho.org/en/stories/strengthening-cold-chain-operations-mission-take-vaccines-farthest-corners-region)) |
+| United States and other high-income countries | Natural disasters and other emergencies can leave people with insulin but no working refrigerator; the FDA publishes storage guidance for these conditions ([US FDA](https://www.fda.gov/drugs/emergency-preparedness-drugs/information-regarding-insulin-storage-and-switching-between-products-emergency)), and freezing in storage is common even in wealthier countries ([Hanson et al., 2017](https://www.sciencedirect.com/science/article/pii/S0264410X16309471)) |
 
 ## What sparked the idea
 
@@ -59,7 +59,7 @@ Full problem statement: [docs/01-problem.md](docs/01-problem.md)
 
 A carry case 366 x 212 x 207 mm holds 1.36 L of insulin or vaccines (24 insulin pens) in an aluminium liner wrapped in a phase-change material that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module refreezes the phase-change material from a 12 V socket, a solar panel or a USB-C charger, through a loop thermosiphon that carries heat one way only; an aluminium cold plate under the lid pack lets it freeze that pack too. A 76.8 Wh LiFePO4 battery keeps it cooling on the road, and a logger records the payload temperature every minute and raises alarms on excursions.
 
-TRL 3 calculations ([CPD-CAL-001](docs/04-calcs/01-sizing.md)): about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C, all with thin margins. Two hardware cut-outs in series keep a stuck-on driver from freezing the payload. Three targets are missed by small margins: refreezing all the phase-change material takes 8.4 h (target 8 h), the case weighs 5.53 kg empty (target 5.5 kg) and the parts cost $303 (budget $300); the options are awaiting Amish. TRL 4 (lab testing) is on hold.
+TRL 3 calculations ([CPD-CAL-001](docs/04-calcs/01-sizing.md)): about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C, all with thin margins. Two hardware cut-outs in series keep a stuck-on driver from freezing the payload. Two targets are missed by small margins: refreezing all the phase-change material takes 8.4 h (target 8 h) and the case weighs 5.53 kg empty (target 5.5 kg); the options are awaiting Amish. The parts cost $303 against the $310 budget. TRL 4 (lab testing) is on hold.
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
@@ -99,6 +99,12 @@ It contains a lithium (LiFePO4) battery, a combustible paraffin phase-change mat
 ## Documentation
 
 Controlled documents follow the portfolio [documentation standard](.kit/STANDARDS.md). Each carries a document ID (CPD-PRC-001 for the precis), a version and a revision history. Branded PDFs are built with `python .kit/render.py` and attached to GitHub Releases when a document is tagged, for example `CPD-PRC-001/v1.0`.
+
+## Credits
+
+Designed by Amish Chadha. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for roles. To cite this design, use [CITATION.cff](CITATION.cff) (GitHub shows it as "Cite this repository").
+
+AI assistance (Claude) was used to accelerate concept renders, prototype documentation and first-pass sizing calculations. Design direction and all decisions are Amish Chadha's, recorded in this repository's decision records (`docs/decisions/`).
 
 ## Licenses
 

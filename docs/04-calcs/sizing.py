@@ -467,10 +467,11 @@ pr("K4", "Loaded with 24 pens, about 0.68 kg (kg)", M_tot + 0.68, "", "{:.2f}")
 
 # ---------------------------------------------------------------- L. cost and battery
 head("L. Cost and battery (R14, R15)")
+BUDGET_USD = 310.0  # project.yaml budget_usd; top-up to $310 decided by Amish, 2026-09-26 (CPD-DDR-002 N3)
 rows = list(csv.DictReader((ROOT / "bom" / "bom.csv").open(encoding="utf-8")))
 cost = sum(float(r["qty"]) * float(r["unit_cost_usd"]) for r in rows)
 pr("L1", "BOM lines, all priced", f"{len(rows)}, {all(r['unit_cost_usd'].strip() for r in rows)}")
-pr("L2", "BOM total (USD) against budget $300", cost, "", "{:.0f}")
+pr("L2", f"BOM total (USD) against budget ${BUDGET_USD:.0f}", cost, "", "{:.0f}")
 pr("L3", "Battery energy (Wh) against 100 Wh", BATT_WH, "", "{:.1f}")
 
 # ---------------------------------------------------------------- N. option: thicker jacket, no lid pack
@@ -529,7 +530,7 @@ RES = [
     ("R12", "5.5 kg or less empty (relaxed)", f"{M_tot:.2f} kg", "Met" if M_tot <= 5.5 else "Not met"),
     ("R13", "Fits 400 x 250 x 250 mm", f"{ov_x:.0f} x {ov_y:.0f} x {ov_z:.0f} mm", "Met"),
     ("R14", "Battery 100 Wh or less", f"{BATT_WH:.1f} Wh", "Met"),
-    ("R15", "Parts $300 or less; no custom PCB", f"${cost:.0f}", "Met" if cost <= 300 else "Not met"),
+    ("R15", f"Parts ${BUDGET_USD:.0f} or less; no custom PCB", f"${cost:.0f}", "Met" if cost <= BUDGET_USD else "Not met"),
     ("R16", "IP54 bays; 0.5 m drop loaded", "Needs test", "Not verifiable at TRL 3"),
     ("R17", "Prototype labelling", "Box, start screen and every log", "Met"),
 ]

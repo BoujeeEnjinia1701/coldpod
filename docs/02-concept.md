@@ -3,9 +3,9 @@ doc_id: CPD-PRC-001
 title: ColdPod design precis
 project: ColdPod
 doc_type: Design precis
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,11 +25,15 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002). Lid cold plate, liner cut-out at 3 °C, thinner printed parts and buck-boost driver; numbers from CPD-CAL-001 v0.2
+- version: "0.5"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget top-up approved by Amish; budget $310, R15 met
 ---
 
 # ColdPod design precis
 
-ColdPod is a carry case about the size of a lunch cooler (366 x 212 x 207 mm) that holds 1.36 L of insulin or vaccines (24 pens) at 2 to 8 °C. The payload sits in an aluminium liner wrapped in a phase-change material (PCM) that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module freezes the PCM from a 12 V socket, a solar panel or a USB-C charger, and a small LiFePO4 battery keeps it running on the road. A two-phase loop thermosiphon connects the two and carries heat in one direction only, so a stopped Peltier does not leak heat back in. A logger records the payload temperature every minute and raises alarms. An aluminium cold plate under the lid PCM pack seats on the evaporator can when the lid closes, so the Peltier freezes all the PCM, and a second hardware cut-out on the liner stops a stuck-on driver from freezing the payload. The TRL 3 calculations (CPD-CAL-001 v0.2) give about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C, for $303 in parts and 5.53 kg empty. The hold times meet their targets with thin margins. The design misses three targets by small amounts: refreezing all the PCM takes 8.4 h (R8, 8 h), the mass is 0.03 kg over (R12) and the parts cost is $3 over (R15). Options for these are awaiting Amish.
+ColdPod is a carry case about the size of a lunch cooler (366 x 212 x 207 mm) that holds 1.36 L of insulin or vaccines (24 pens) at 2 to 8 °C. The payload sits in an aluminium liner wrapped in a phase-change material (PCM) that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module freezes the PCM from a 12 V socket, a solar panel or a USB-C charger, and a small LiFePO4 battery keeps it running on the road. A two-phase loop thermosiphon connects the two and carries heat in one direction only, so a stopped Peltier does not leak heat back in. A logger records the payload temperature every minute and raises alarms. An aluminium cold plate under the lid PCM pack seats on the evaporator can when the lid closes, so the Peltier freezes all the PCM, and a second hardware cut-out on the liner stops a stuck-on driver from freezing the payload. The TRL 3 calculations (CPD-CAL-001 v0.2) give about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C, for $303 in parts and 5.53 kg empty. The hold times meet their targets with thin margins. The design misses two targets by small amounts: refreezing all the PCM takes 8.4 h (R8, 8 h) and the mass is 0.03 kg over (R12). Options for these are awaiting Amish. The parts cost is within the $310 budget that Amish approved on 2026-09-26 (R15 met).
 
 ![Hero render](../media/hero.png)
 
@@ -98,7 +102,7 @@ Table 2. Hold times, charging, size, mass and cost.
 | Log storage | 1.38 MB for 60 days | 1 record per minute, 16 bytes [J1] | R9 met on 2 MB flash |
 | Size | 366 x 212 x 207 mm (14.4 x 8.3 x 8.1 in) overall | Handle up [A6] | R13 met |
 | Mass, empty | **5.53 kg (12.2 lb)** | Model volumes and densities [K2]; thinner printed parts save 0.21 kg, the lid cold plate adds 0.12 kg | R12 **not met** (5.5 kg) |
-| Parts cost | **$303** | `bom/bom.csv` [L2] | R15 **not met** ($300) |
+| Parts cost | **$303** | `bom/bom.csv` [L2] | R15 met ($310) |
 
 ## Key design choices
 
@@ -122,7 +126,7 @@ Amish decided the TRL 3 review items on 2026-09-25, again going with the recomme
 13. **Evaporator can and loop thermosiphon confirmed (decided, DDR-002 item 5).** As sized in CPD-CAL-001: a 1.0 mm aluminium can around the jacket fed by an 8 mm copper loop. The mechanical disconnect (choice 2b) stays ready as the fallback if a maker cannot charge the loop.
 14. **Peltier class and drive confirmed (decided, DDR-002 item 6).** TEC1-12703 class module, smooth DC through an LC filter, heat sink of 0.50 K/W or better with the fan.
 15. **Buck-boost driver (decided, DDR-002 item 7).** The Peltier driver can raise the module voltage above a low vehicle input (10 V), rather than narrowing the 12 V input range to 11 to 15 V (about $4 more).
-16. **Budget kept at $300 (decided, DDR-002 item 8).** A VIP quote is to come before any purchase decision; purchasing is TRL 4 work, on hold.
+16. **Budget kept at $300 (decided, DDR-002 item 8), then raised to $310 (decided by Amish, 2026-09-26, DDR-002 N3).** A VIP quote is to come before any purchase decision; purchasing is TRL 4 work, on hold.
 
 ![Exploded view](../media/exploded.png)
 
@@ -148,7 +152,7 @@ Amish decided the TRL 3 review items on 2026-09-25, again going with the recomme
 
 - Refreeze (R8): with the lid pack now frozen actively, all the PCM takes 8.4 h against 8 h. Options are in `docs/REVIEW.md`, awaiting Amish.
 - Mass (R12): 5.53 kg against 5.5 kg after the thinner printed parts and the lid cold plate. Awaiting Amish; weighing a built case is TRL 4 work, on hold.
-- Cost (R15): $303 against the $300 budget kept by CPD-DDR-002. Awaiting Amish; a VIP quote could move it either way.
+- Cost (R15): $303 against the $310 budget, raised from $300 by Amish on 2026-09-26 (CPD-DDR-002 N3). Met; a VIP quote could still move it either way.
 - Does the lid gasket still seal with the cold plate in place, and does the plate rim seat well enough on the can rim (assumed 0.5 K/W)?
 - Can the loop thermosiphon be made and charged reliably at this size, and does a motorbike carrier stay within about 18° of tilt with the cooling head down? If not, the mechanical disconnect (choice 2b) is the fallback.
 - Confirm the off-state conductance and real COP of the chosen module with the chosen heat sink, and the sink's resistance with the fan.

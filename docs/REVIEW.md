@@ -1,5 +1,20 @@
 # Review note: ColdPod
 
+## Session 2026-09-26: sources strengthened
+
+Amish asked on 2026-09-26 to "Fix the weaker sources" and approved the budget top-ups ("I am ok with the budget top ups"). Every link kept or added in the README sections Concept rationale, Burning platform, Where it could be used and What sparked the idea was fetched and checked against its claim.
+
+| Where | Old source | New source |
+| --- | --- | --- |
+| Country row: Latin America, including the Amazon basin | None (claim of multi-day river outreach and distant freezers, uncited) | PAHO stories on river vaccination in Putumayo, Colombia (2024) and boat or plane access in Panama; the row now states only what they report |
+| Country row: Sub-Saharan Africa | WHO PQS E004/VC01-VP2 test protocol page (could not be fetched for checking) | WHO PQS E004/VC01.2 vaccine carrier performance specification (cold life at a constant +43 °C) |
+| Country row: United States | US FDA (kept; wording narrowed from "hurricanes, wildfires and power cuts" to natural disasters and other emergencies, which is what the page says) | Same |
+| Burning platform: Hanson et al., 2017 | Kept; the wording "33 % of storage studies" was corrected to the review's pooled estimate of storage and shipments | Same |
+
+What sparked the idea (vaccine vial monitor, PATH and an Ethiopian Federal Ministry of Health training module on OpenLearn Create) was checked and kept. docs/01-problem.md still uses the "storage studies" wording and the VC01-VP2 link, which are not weak sources and were left for a later pass.
+
+**Budget:** `budget_usd` raised from 300 to 310 (CPD-DDR-002 N3, decided by Amish, 2026-09-26). `sizing.py` now reads the budget from a `BUDGET_USD` constant and was re-run: BOM $303 against $310, R15 met. Counts: 10 met, 3 at risk, 2 not met (R8, R12), 2 not verifiable. Controlled documents: CPD-CAL-001 v0.3, CPD-REQ-001 v0.5, CPD-PRC-001 v0.5, CPD-PRB-001 v0.5, CPD-DDR-002 v0.2; README budget figures updated.
+
 ## Session 2026-09-25: /populate to a strong TRL 2 (overnight batch run)
 
 ### What was done
@@ -179,7 +194,7 @@ Counts: 9 met, 3 at risk, 3 not met, 2 not verifiable (before: 7, 5, 3, 2).
 1. Co-design partner (CPD-DDR-001 O1). No recommendation was made.
 2. R8 refreeze, 8.4 h against 8 h (CPD-DDR-002 N1). Options: restate R8 as 9 h for all the PCM (suggested); accept the miss; a thinner lid pack.
 3. R12 mass, 5.53 kg against 5.5 kg (N2). Options: keep the target and settle it by weighing when TRL 4 resumes (suggested); relax to 5.6 kg; lighter strap and handle.
-4. R15 cost, $303 against $300 (N3). Options: raise `budget_usd` to $310 (suggested); wait for the VIP quote; drop the buck-boost stage and narrow the vehicle input to 11 to 15 V. `budget_usd` is not changed until Amish decides.
+4. R15 cost, $303 against $300 (N3). **Decided by Amish, 2026-09-26:** budget top-up to $310. `budget_usd` is now 310 and R15 is met (see Session 2026-09-26 below).
 
 ### Cross-repo actions
 

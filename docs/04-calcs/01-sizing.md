@@ -3,9 +3,9 @@ doc_id: CPD-CAL-001
 title: ColdPod sizing calculations
 project: ColdPod
 doc_type: Calculation
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,11 +17,15 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002). Lid cold plate, liner cut-out, thinner printed parts and buck-boost driver added; hold times pooled through the plate; refreeze of all PCM; results recomputed
+- version: "0.3"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget top-up approved by Amish; budget $310 in the script; R15 met ($303 against $310); counts updated
 ---
 
 # ColdPod sizing calculations
 
-On paper, ColdPod meets nine of its seventeen requirements, has three at risk and misses three, each by a small amount; two cannot be verified at TRL 3. Version 0.2 applies the design changes Amish accepted on 2026-09-25 (CPD-DDR-002): an aluminium cold plate under the lid PCM pack, a second hardware cut-out on the liner at 3 °C, thinner printed parts and a buck-boost Peltier driver. The plate couples the lid pack to the evaporator can, so the Peltier now refreezes all of the PCM, the lid pack no longer melts in long powered holds, and the jacket and lid pack melt together. The hold times are about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C; they stay at risk against a ±30 % uncertainty in the heat leak (R4, R5, R6). The liner cut-out closes the freeze fault (R2 met), and the plate and buck-boost stage close R1 and R7. The misses are refreezing all the PCM (R8: 8.4 h against 8 h, because the lid pack now shares the module), mass (R12: 5.53 kg against 5.5 kg) and cost (R15: $303 against $300). Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [B9], is the line of that script's output that carries it.
+On paper, ColdPod meets ten of its seventeen requirements, has three at risk and misses two, each by a small amount; two cannot be verified at TRL 3. Version 0.2 applies the design changes Amish accepted on 2026-09-25 (CPD-DDR-002): an aluminium cold plate under the lid PCM pack, a second hardware cut-out on the liner at 3 °C, thinner printed parts and a buck-boost Peltier driver. The plate couples the lid pack to the evaporator can, so the Peltier now refreezes all of the PCM, the lid pack no longer melts in long powered holds, and the jacket and lid pack melt together. The hold times are about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C; they stay at risk against a ±30 % uncertainty in the heat leak (R4, R5, R6). The liner cut-out closes the freeze fault (R2 met), and the plate and buck-boost stage close R1 and R7. The two misses are refreezing all the PCM (R8: 8.4 h against 8 h, because the lid pack now shares the module), and mass (R12: 5.53 kg against 5.5 kg). Version 0.3 applies the budget top-up to $310 that Amish decided on 2026-09-26 (CPD-DDR-002 N3), so cost (R15: $303 against $310) is now met. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [B9], is the line of that script's output that carries it.
 
 > **Safety:** These calculations concern a device meant to protect vaccines and insulin, a 76.8 Wh lithium battery, a combustible paraffin PCM and a heat sink near 53 °C. They are first-principles estimates for a paper proof of concept, not a substitute for datasheets, a fault analysis by a qualified engineer or test. ColdPod is a research and educational prototype, not a medical device, and is not WHO-prequalified. See CPD-PRC-001, Safety.
 
@@ -187,7 +191,7 @@ The thinner printed parts adopted in CPD-DDR-002 save 0.06 kg on the shell, 0.04
 
 ## L. Cost and battery (R14, R15)
 
-All 16 BOM lines are priced [L1]; the total is $303 [L2] against the $300 budget set by CPD-DDR-001 D10 and kept by CPD-DDR-002: **R15 is not met**, by $3. The accepted changes add the lid cold plate (about $5), the liner cut-out (about $3) and the buck-boost driver (about $4), and the thinner printed parts save about $4 of filament; v0.1 was $295. There is still no custom PCB. The battery is 76.8 Wh [L3], under the 100 Wh airline limit: R14 is met.
+All 16 BOM lines are priced [L1]; the total is $303 [L2] against the $310 budget (raised from $300 by Amish, 2026-09-26, CPD-DDR-002 N3): **R15 is met**, with $7 of margin. The accepted changes add the lid cold plate (about $5), the liner cut-out (about $3) and the buck-boost driver (about $4), and the thinner printed parts save about $4 of filament; v0.1 was $295. There is still no custom PCB. The battery is 76.8 Wh [L3], under the 100 Wh airline limit: R14 is met.
 
 ## P. Foam variant (CPD-DDR-001 D7)
 
@@ -227,7 +231,7 @@ The documented low-cost variant replaces the VIPs with 25 mm polyurethane foam (
 | --- | --- | --- | --- |
 | R8 | Refreeze a fully melted PCM in 8 h or less at 25 °C | All PCM 8.4 h (jacket 6.9 h, lid pack 8.4 h) [G4] | **Not met** |
 | R12 | 5.5 kg or less empty (relaxed) | 5.53 kg [K2] | **Not met** |
-| R15 | Parts $300 or less; no custom PCB | $303 [L2]; modules on perfboard | **Not met** |
+| R15 | Parts $310 or less; no custom PCB | $303 [L2]; modules on perfboard | Met |
 | R4 | 12 h or more at 43 °C, no power | 14.0 h; 10.8 h at +30 % leak [D2, D3] | At risk |
 | R5 | 24 h or more at 32 °C, battery then PCM | 28.4 h; 22.3 h at +30 % leak [F2] | At risk |
 | R6 | 16 h or more at 43 °C, battery then PCM (relaxed) | 17.5 h; 13.2 h at +30 % leak [F2] | At risk |
@@ -243,7 +247,7 @@ The documented low-cost variant replaces the VIPs with 25 mm polyurethane foam (
 | R10 | Alarm logic and thresholds | Design intent only; no firmware sketch exists at TRL 3 | Not verifiable at TRL 3 |
 | R16 | IP54 bays; 0.5 m drop while loaded | Needs a test | Not verifiable at TRL 3 |
 
-Counts: 9 met, 3 at risk, 3 not met, 2 not verifiable at TRL 3 (v0.1: 7 met, 5 at risk, 3 not met, 2 not verifiable).
+Counts: 10 met, 3 at risk, 2 not met, 2 not verifiable at TRL 3 (v0.2: 9 met, 3 at risk, 3 not met; v0.1: 7 met, 5 at risk, 3 not met, 2 not verifiable).
 
 ## Limits of this note
 

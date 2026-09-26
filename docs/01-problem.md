@@ -3,9 +3,9 @@ doc_id: CPD-PRB-001
 title: ColdPod problem statement
 project: ColdPod
 doc_type: Problem statement
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,6 +25,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002); budget kept at $300; origin of the idea (vaccine vial monitor) added
+- version: "0.5"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget top-up approved by Amish; budget $310
 ---
 
 # ColdPod problem statement
@@ -59,7 +63,7 @@ The gap ColdPod addresses: an open, repairable carrier that combines passive sto
 
 ## Constraints
 
-- Garage-buildable prototype, $300 USD or less in parts (raised from $250 by Amish, 2026-09-25, CPD-DDR-001 D10; kept at $300 by CPD-DDR-002, although the TRL 3 BOM is now $303), using off-the-shelf modules, 3D-printed or hand-made parts, and bought vacuum-insulated panels.
+- Garage-buildable prototype, $310 USD or less in parts (raised from $250 to $300 by Amish, 2026-09-25, CPD-DDR-001 D10, and to $310 by Amish, 2026-09-26, CPD-DDR-002 N3; the TRL 3 BOM is $303), using off-the-shelf modules, 3D-printed or hand-made parts, and bought vacuum-insulated panels.
 - Carried by one person, by hand or on a shoulder strap.
 - Chargeable from a vehicle 12 V socket, a small solar panel or a USB-C Power Delivery (PD) charger; no mains-voltage parts inside the box.
 - Battery small enough to carry on a passenger aircraft without airline approval (100 Wh or less per the [FAA PackSafe rules](https://www.faa.gov/hazmat/packsafe/lithium-batteries)).
