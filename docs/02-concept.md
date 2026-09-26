@@ -3,7 +3,7 @@ doc_id: CPD-PRC-001
 title: ColdPod design precis
 project: ColdPod
 doc_type: Design precis
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -21,11 +21,15 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's decisions (CPD-DDR-001); numbers replaced by CPD-CAL-001; evaporator can, loop thermosiphon and TEC1-12703 class sized; smooth DC drive
+- version: "0.4"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002). Lid cold plate, liner cut-out at 3 °C, thinner printed parts and buck-boost driver; numbers from CPD-CAL-001 v0.2
 ---
 
 # ColdPod design precis
 
-ColdPod is a carry case about the size of a lunch cooler (368 x 214 x 207 mm) that holds 1.36 L of insulin or vaccines (24 pens) at 2 to 8 °C. The payload sits in an aluminium liner wrapped in a phase-change material (PCM) that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module freezes the PCM from a 12 V socket, a solar panel or a USB-C charger, and a small LiFePO4 battery keeps it running on the road. A two-phase loop thermosiphon connects the two and carries heat in one direction only, so a stopped Peltier does not leak heat back in. A logger records the payload temperature every minute and raises alarms. The TRL 3 calculations (CPD-CAL-001) give about 13.0 h with no power at 43 °C, 26.5 h off-grid at 32 °C and 16.5 h off-grid at 43 °C, for $295 in parts and 5.60 kg empty. The hold times meet their targets with thin margins; the design misses R12 (mass), R8 (the lid PCM pack cannot be refrozen by the Peltier) and R2 (a stuck-on driver can freeze the liner). Fixes are proposed, awaiting Amish.
+ColdPod is a carry case about the size of a lunch cooler (366 x 212 x 207 mm) that holds 1.36 L of insulin or vaccines (24 pens) at 2 to 8 °C. The payload sits in an aluminium liner wrapped in a phase-change material (PCM) that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module freezes the PCM from a 12 V socket, a solar panel or a USB-C charger, and a small LiFePO4 battery keeps it running on the road. A two-phase loop thermosiphon connects the two and carries heat in one direction only, so a stopped Peltier does not leak heat back in. A logger records the payload temperature every minute and raises alarms. An aluminium cold plate under the lid PCM pack seats on the evaporator can when the lid closes, so the Peltier freezes all the PCM, and a second hardware cut-out on the liner stops a stuck-on driver from freezing the payload. The TRL 3 calculations (CPD-CAL-001 v0.2) give about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C, for $303 in parts and 5.53 kg empty. The hold times meet their targets with thin margins. The design misses three targets by small amounts: refreezing all the PCM takes 8.4 h (R8, 8 h), the mass is 0.03 kg over (R12) and the parts cost is $3 over (R15). Options for these are awaiting Amish.
 
 ![Hero render](../media/hero.png)
 
@@ -33,15 +37,15 @@ ColdPod is a carry case about the size of a lunch cooler (368 x 214 x 207 mm) th
 
 ## How it works
 
-1. **Charge the cold.** At a clinic, in a vehicle or under a solar panel, the Peltier module runs at up to 25 W and freezes the PCM jacket through the thermosiphon and the aluminium evaporator can around it. The same input charges the battery at about 12 W. A melted jacket refreezes in about 5.5 h. The lid PCM pack has no cold path in this revision (see Open questions). The case works best if the payload goes in already cold from a refrigerator.
-2. **Carry.** On the road, the controller runs the Peltier from the battery only as hard as needed to hold the evaporator can at about 2 °C, so the PCM stays frozen, and turns it off when the battery reaches 15 % so that the logger always has a reserve. A buck driver feeds the module smooth DC; on/off PWM would cost about 61 % more power at 43 °C.
-3. **Hold passively.** When the battery is flat or the user switches cooling off, the PCM absorbs the heat that leaks through the walls. Because it melts at 5 °C, it cannot pull the payload below freezing the way water ice can.
+1. **Charge the cold.** At a clinic, in a vehicle or under a solar panel, the Peltier module runs at up to 25 W and freezes the PCM jacket through the thermosiphon and the aluminium evaporator can around it. The lid PCM pack sits on a 1.5 mm aluminium cold plate whose rim lands on the can rim when the lid closes, so it freezes through the can too. The same input charges the battery at about 12 W. A fully melted charge refreezes in about 8.4 h (the jacket in 6.9 h). The case works best if the payload goes in already cold from a refrigerator.
+2. **Carry.** On the road, the controller runs the Peltier from the battery only as hard as needed to hold the evaporator can at about 2 °C, so the PCM stays frozen, and turns it off when the battery reaches 15 % so that the logger always has a reserve. A buck-boost driver feeds the module smooth DC from any input between 10 and 20 V; on/off PWM would cost about 60 % more power at 43 °C. The lid pack stays frozen on its plate.
+3. **Hold passively.** When the battery is flat or the user switches cooling off, the PCM absorbs the heat that leaks through the walls; the plate lets the jacket and lid pack share the load. Because it melts at 5 °C, it cannot pull the payload below freezing the way water ice can.
 4. **Watch.** A buffered probe among the payload, a liner probe, a cold-block probe and an ambient sensor are read every minute. The payload probe is logged with a timestamp on the controller's flash memory for 60 days or more.
 5. **Alarm.** The display shows current, minimum and maximum temperature and time left. A buzzer, an LED and a phone notification warn after 10 min outside 2 to 8 °C, alarm at once at 0 °C or lower, and flag low battery, a failed sensor or a lid left open. The owner exports the log as a CSV file over Bluetooth Low Energy or USB. Nothing goes to the cloud.
 
 ![Heat flow](../media/flow.png)
 
-*Figure 2. Heat flow in powered hold at 32 °C ambient, can at 2 °C. All values are estimates from CPD-CAL-001: 0.091 W/K overall heat leak, TEC1-12703 class module at a coefficient of performance (COP) of 0.45, fan 0.6 W.*
+*Figure 2. Heat flow in powered hold at 32 °C ambient, can at 2 °C. All values are estimates from CPD-CAL-001: 0.092 W/K overall heat leak, TEC1-12703 class module at a coefficient of performance (COP) of 0.45, fan 0.6 W.*
 
 ## Main components
 
@@ -49,8 +53,8 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4.
 
 | # | Component | Proposed choice | Notes |
 | --- | --- | --- | --- |
-| 1 | Outer shell | 3D-printed PETG or ASA tub, 4 mm walls, 263 x 198 x 164 mm | Protects the VIPs from knocks and punctures |
-| 2 | Lid | Printed cap with EPDM gasket and a 25 mm VIP plug | Latches closed; lid switch for the lid-open alarm |
+| 1 | Outer shell | 3D-printed PETG or ASA tub, 3 mm walls, 261 x 196 x 164.5 mm | Protects the VIPs from knocks and punctures; walls cut from 4 mm to save mass |
+| 2 | Lid and lid cold plate | Printed 5 mm cap with EPDM gasket and a 25 mm VIP plug; 1.5 mm aluminium cold plate, 205 x 140 mm, under the lid PCM pack | Latches closed; lid switch for the lid-open alarm; the plate rim lands on the evaporator can rim so the lid pack freezes and stays frozen |
 | 3 | Bail handle and strap | Folding bail handle, padded shoulder strap | Rated 10 kg or more |
 | 4 | Vacuum-insulated panels | Six panels, 25 mm, fumed silica core, ordered to size | VIPs cannot be cut or pierced; the heat-pipe crossing is a foam-filled gap between panels |
 | 5 | PCM packs | About 0.97 kg of organic PCM melting at 5 °C (Rubitherm RT 5 HC class) in sealed HDPE pouches: a 0.69 kg jacket on four sides and the floor inside the evaporator can, and a 0.28 kg pack under the lid | Organic paraffins are stable for thousands of cycles ([PATH PCM study](https://media.path.org/documents/DT_pcm_summary_rpt1.pdf)) |
@@ -58,18 +62,18 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4.
 | 7 | Evaporator can and thermosiphon | 1.0 mm aluminium can lining the outer face of the PCM jacket (four sides and floor); two-phase loop thermosiphon: 8 mm copper evaporator loop around the base of the can, vapour riser and liquid return at the +X end, stainless sections through the wall, aluminium cold block 75 mm above the loop | One-way thermal link (design choices 2 and 3); sized in CPD-CAL-001, section G |
 | 8 | Peltier module | 40 x 40 mm, 127 couples, Imax about 3 A (TEC1-12703 class) | The TEC1-12706 cannot hold at 43 °C: its off-state conduction is too high (CPD-CAL-001, section E) |
 | 9 | Heat sink and fan | Finned aluminium sink, 80 x 80 x 30 mm, 0.50 K/W or better with a 70 mm, 12 V fan and a finger guard | Rejects about 8.9 W at 32 °C and 19.7 W at 43 °C |
-| 10 | End housings | Printed cooling head (+X end) and battery and electronics bay (−X end), vented | Keep the heat source and the battery outside the insulation |
+| 10 | End housings | Printed cooling head (+X end) and battery and electronics bay (−X end), 2 mm walls, vented | Keep the heat source and the battery outside the insulation |
 | 11 | Battery | LiFePO4, 4S1P 32700 cells, 12.8 V 6 Ah (76.8 Wh), BMS and fuse | Below the 100 Wh airline limit |
-| 12 | Power board | USB-C PD sink (20 V), 12 V input with reverse-polarity protection, LiFePO4 charger, buck Peltier driver with an LC filter, fan driver, hardware cold-block cut-out | Off-the-shelf modules on perfboard; no custom PCB |
+| 12 | Power board | USB-C PD sink (20 V), 12 V input (10 to 15 V) with reverse-polarity protection, LiFePO4 charger, buck-boost Peltier driver with an LC filter, fan driver; the cold-block and liner cut-outs wired in series in the Peltier supply | Off-the-shelf modules on perfboard; no custom PCB |
 | 13 | Logger controller | nRF52840 module with real-time clock and 2 MB flash | Bluetooth Low Energy link to a phone |
-| 14 | Temperature sensors | Glycol-buffered payload probe, liner probe, cold-block probe, ambient sensor | Digital sensors with ±0.5 °C or better accuracy |
+| 14 | Temperature sensors and liner cut-out | Glycol-buffered payload probe, liner probe, cold-block probe, ambient sensor; bimetal cut-out on the liner opening at 3 °C | Digital sensors with ±0.5 °C or better accuracy; the cut-out works without firmware |
 | 15 | Display and alarm | 2.13 in e-paper, buzzer, red and green LED | E-paper keeps the last reading visible with no power |
 
 Item 16 (wiring, fasteners, latches and consumables) is in the BOM but not modelled.
 
 ![Cutaway](../media/cutaway.png)
 
-*Figure 3. Section looking from the front. From the inside out: payload (white pens) in the rack and liner (6), PCM jacket and lid pack (5, blue) with the evaporator can and its loop (7, copper; the loop shows as two circles at the base), VIPs (4, light grey) and shell (1). The pipes (7) cross the right wall to the cold block, Peltier (8) and heat sink (9) in the cooling head. The battery (11) and logger (13) are in the left bay.*
+*Figure 3. Section looking from the front. From the inside out: payload (white pens) in the rack and liner (6), PCM jacket and lid pack (5, blue) with the evaporator can and its loop (7, copper; the loop shows as two circles at the base), the lid cold plate (2) under the lid pack, VIPs (4, light grey) and shell (1). The pipes (7) cross the right wall to the cold block, Peltier (8) and heat sink (9) in the cooling head. The battery (11) and logger (13) are in the left bay.*
 
 ## Numbers at TRL 3
 
@@ -80,20 +84,21 @@ Table 2. Hold times, charging, size, mass and cost.
 | Quantity | Value | Basis | Requirement |
 | --- | --- | --- | --- |
 | Payload | 1.36 L; 24 insulin pens in four layers of six, up to 172 mm long | Liner less rack and probe [A2, A3] | R3 met |
-| Heat leak | 0.091 W/K: 1.82 W at 25 °C, 2.46 W at 32 °C, 3.46 W at 43 °C | Langmuir shape factor, joints, foam strip, pipes, wires [B9, B10] | |
+| Heat leak | 0.092 W/K: 1.83 W at 25 °C, 2.47 W at 32 °C, 3.48 W at 43 °C | Langmuir shape factor, joints, foam strip, pipes, wires [B9, B10] | |
 | PCM | 0.972 kg, 175 kJ (48.6 Wh) usable | Jacket 0.691 kg, lid pack 0.282 kg [C2, C3] | |
-| Passive hold, PCM only | 24.7 h at 25 °C, 18.3 h at 32 °C, **13.0 h at 43 °C** | Jacket melts first [D1] | R4 at risk (10.0 h at +30 % leak) |
-| Input power to hold | 4.2 W at 25 °C, 7.5 W at 32 °C, 18.4 W at 43 °C | TEC1-12703 class, can at 2 °C [E3] | R7 at risk (lid pack) |
-| Battery hold, then PCM | 15.6 + 22.1 = 37.6 h at 25 °C; 8.7 + 17.8 = **26.5 h at 32 °C**; 3.5 + 13.0 = **16.5 h at 43 °C** | 65.3 Wh, then the PCM [F2] | R5 and R6 at risk |
-| PCM refreeze from melted | 5.5 h for the jacket at 25 °C; the lid pack has no cold path | Time-stepped model, 25 W to the module [G4] | R8 **not met** |
+| Passive hold, PCM only | 26.6 h at 25 °C, 19.7 h at 32 °C, **14.0 h at 43 °C** | Jacket and lid pack pooled through the lid cold plate [D1, D2] | R4 at risk (10.8 h at +30 % leak) |
+| Input power to hold | 4.2 W at 25 °C, 7.5 W at 32 °C, 18.5 W at 43 °C | TEC1-12703 class, can at 2 °C, buck-boost driver [E3] | R7 met |
+| Battery hold, then PCM | 15.5 + 26.6 = 42.1 h at 25 °C; 8.7 + 19.7 = **28.4 h at 32 °C**; 3.5 + 14.0 = **17.5 h at 43 °C** | 65.3 Wh, then the PCM [F2] | R5 and R6 at risk |
+| PCM refreeze from melted | **8.4 h** for all the PCM at 25 °C (jacket 6.9 h, lid pack 8.4 h) | Time-stepped model, 25 W to the module [G4] | R8 **not met** (8 h) |
 | Battery recharge | about 6.7 h at 12 W alongside the refreeze | 45 W USB-C PD budget [G8] | |
-| Heat rejected at the heat sink | 5.2 W at 25 °C, 8.9 W at 32 °C, 19.7 W at 43 °C; sink base about 53 °C at 43 °C | Heat lifted plus module input [E6, E7] | Fan needed |
+| Heat rejected at the heat sink | 5.3 W at 25 °C, 8.9 W at 32 °C, 19.8 W at 43 °C; sink base about 53 °C at 43 °C | Heat lifted plus module input [E6, E7] | Fan needed |
 | Thermosiphon | Forward 2.50 W/K, reverse 0.0058 W/K; full function to 18° of tilt with the cooling head down | [H1, H5] | |
+| Freeze fault | Liner settles near 2.0 °C after a stuck-on driver, with the 3 °C liner cut-out | Lumped estimate [I5] | R2 met |
 | Logger reserve | about 96 days | 15 % of 76.8 Wh at a 5 mW allowance [J4] | R11 met |
 | Log storage | 1.38 MB for 60 days | 1 record per minute, 16 bytes [J1] | R9 met on 2 MB flash |
-| Size | 368 x 214 x 207 mm (14.5 x 8.4 x 8.1 in) overall | Handle up [A6] | R13 met |
-| Mass, empty | **5.60 kg (12.3 lb)** | Model volumes and densities [K2]; the evaporator can adds 0.25 kg | R12 **not met** (5.5 kg) |
-| Parts cost | **$295** | `bom/bom.csv` [L2] | R15 met ($300) |
+| Size | 366 x 212 x 207 mm (14.4 x 8.3 x 8.1 in) overall | Handle up [A6] | R13 met |
+| Mass, empty | **5.53 kg (12.2 lb)** | Model volumes and densities [K2]; thinner printed parts save 0.21 kg, the lid cold plate adds 0.12 kg | R12 **not met** (5.5 kg) |
+| Parts cost | **$303** | `bom/bom.csv` [L2] | R15 **not met** ($300) |
 
 ## Key design choices
 
@@ -104,12 +109,20 @@ Amish decided choices 1 to 9 on 2026-09-25, going with the recommendation in eac
 3. **Evaporator on the outer face of the PCM, not on the liner (decided, D3).** Keeps the coldest surface (down to −2 °C during refreezing) separated from the payload by the PCM, which supports R2. At TRL 3 this is sized as an aluminium can lining the outer face of the jacket, because a small plate cannot freeze a paraffin jacket that wraps the liner.
 4. **LiFePO4, 76.8 Wh (decided, D4).** LiFePO4 tolerates heat better than other lithium-ion chemistries and 76.8 Wh stays under the 100 Wh airline limit. The rejected 4S2P option (153.6 Wh, about $30 more and 0.6 kg heavier) would give about 18.6 h at 43 °C off-grid.
 5. **R6 redefined (decided, D5).** Accept about 16 h at 43 °C off-grid and run from a vehicle 12 V socket or a solar panel on long hot trips, rather than a larger battery or 35 mm VIPs with 1.6 kg of PCM (about 400 mm long and over 6 kg). Revisit after field data on real trip temperatures.
-6. **Vacuum-insulated panels instead of foam (decided, D7).** Polyurethane foam of the same thickness (about 0.024 W/(m·K)) gives 0.160 W/K rather than 0.091 W/K, so the passive hold at 43 °C would drop from 13.0 h to about 7.4 h (CPD-CAL-001, P1 and P2), but it would save about $45 and some mass. VIPs are used, with a foam version documented as a low-cost variant.
+6. **Vacuum-insulated panels instead of foam (decided, D7).** Polyurethane foam of the same thickness (about 0.024 W/(m·K)) gives 0.161 W/K rather than 0.092 W/K, so the passive hold at 43 °C would drop from 14.0 h to about 7.9 h (CPD-CAL-001, P1 and P2), but it would save about $45 and some mass. VIPs are used, with a foam version documented as a low-cost variant.
 7. **Local alarms and Bluetooth Low Energy only (decided, D8).** No cellular or LoRa radio in the first build (either would add $20 to $40 and more power).
 8. **Alarm thresholds (decided, D9).** Warn after 10 min outside 2 to 8 °C; alarm at once at 0 °C or lower on the payload probe; alarm if the liner probe reaches 1 °C (an early freeze warning); adjustable per product.
-9. **Budget raised to $300 (decided, D10).** The TRL 3 parts cost is $295.
+9. **Budget raised to $300 (decided, D10).** Kept at $300 by CPD-DDR-002; the parts cost after the TRL 3 changes is $303.
 
-Sizing choices made at TRL 3, listed for Amish to confirm in `docs/REVIEW.md`: the evaporator can and loop thermosiphon (choices 2 and 3), the TEC1-12703 class module with smooth DC drive, and a 0.50 K/W heat sink.
+Amish decided the TRL 3 review items on 2026-09-25, again going with the recommendation in each case (CPD-DDR-002):
+
+10. **Lid cold plate (decided, DDR-002 item 2).** A 1.5 mm aluminium plate under the lid PCM pack, whose rim seats on the evaporator can rim when the lid closes (about $5 and 0.12 kg). It gives the lid pack a cold path, so the Peltier refreezes all the PCM and the lid pack stays frozen in long powered holds. The other options were no lid pack with a 20 mm jacket, or conditioning the lid pack in a refrigerator. The gasket must still seal with the plate in place; that is a check for a built lid.
+11. **Liner cut-out at 3 °C (decided, DDR-002 item 3).** A bimetal cut-out on the liner, in series with the −5 °C cold-block cut-out in the Peltier supply (about $3). After a stuck-on driver fault the liner settles near 2.0 °C.
+12. **Thinner printed parts (decided, DDR-002 item 4).** Shell 3 mm (was 4 mm), lid cap 5 mm (was 8 mm), end housings 2 mm (was 3 mm), saving about 0.21 kg. Confirming the mass by weighing is TRL 4 work, on hold.
+13. **Evaporator can and loop thermosiphon confirmed (decided, DDR-002 item 5).** As sized in CPD-CAL-001: a 1.0 mm aluminium can around the jacket fed by an 8 mm copper loop. The mechanical disconnect (choice 2b) stays ready as the fallback if a maker cannot charge the loop.
+14. **Peltier class and drive confirmed (decided, DDR-002 item 6).** TEC1-12703 class module, smooth DC through an LC filter, heat sink of 0.50 K/W or better with the fan.
+15. **Buck-boost driver (decided, DDR-002 item 7).** The Peltier driver can raise the module voltage above a low vehicle input (10 V), rather than narrowing the 12 V input range to 11 to 15 V (about $4 more).
+16. **Budget kept at $300 (decided, DDR-002 item 8).** A VIP quote is to come before any purchase decision; purchasing is TRL 4 work, on hold.
 
 ![Exploded view](../media/exploded.png)
 
@@ -126,16 +139,17 @@ Sizing choices made at TRL 3, listed for Amish to confirm in `docs/REVIEW.md`: t
 - **Hot surfaces.** At 43 °C ambient the heat sink base reaches about 53 °C (estimate, CPD-CAL-001, E7). It is enclosed by the vented cooling head, and the vents must not be blocked, covered or placed against skin or a bag.
 - **Moving parts.** The fan has a finger guard inside the cooling head grille.
 - **Electrical.** All voltages are 20 V DC or less. There are no mains-voltage parts in the box. Inputs are fused and protected against reverse polarity.
-- **Freezing fault.** A stuck-on Peltier driver is the main way to freeze the payload. A hardware thermostat on the cold block cuts power to the Peltier below −5 °C, independent of the firmware, and the liner and payload probes raise alarms. CPD-CAL-001 (section I) shows that this is not enough: once the PCM is frozen, the liner can follow the can down to about −4 °C. A second hardware cut-out on the liner at 3 °C, in series, is proposed, awaiting Amish.
+- **Freezing fault.** A stuck-on Peltier driver is the main way to freeze the payload. Two hardware thermostats in series cut power to the Peltier independent of the firmware: one on the cold block at −5 °C and one on the liner at 3 °C. CPD-CAL-001 (section I) shows that the cold-block cut-out alone would let the liner follow the can down to about −4 °C; with the liner cut-out the liner settles near 2.0 °C. The liner and payload probes also raise alarms. The lid cold plate reaches −2 °C only while refreezing, which is done with the box empty; it touches no payload.
 - **Condensation.** Water condenses on the cold block and pipes. The cooling head drains outward and the electronics are conformal-coated.
 - **VIP damage.** A punctured VIP loses most of its insulation value without any visible change. The shell protects the panels, and a rising Peltier duty cycle should trigger a service warning.
-- **Lifting.** About 6.3 kg when loaded; carry with the strap across the body.
+- **Lifting.** About 6.2 kg when loaded; carry with the strap across the body.
 
 ## Open questions after TRL 3
 
-- The lid PCM pack has no cold path to the evaporator, so the Peltier cannot refreeze it (R8), and in long powered holds at 43 °C it melts and warms the top of the payload (R1, R7). Proposed, awaiting Amish: an aluminium plate under the lid pack that seats on the can rim when the lid closes; or no lid pack and a 20 mm jacket.
-- Freeze fault (R2): add a hardware cut-out on the liner at 3 °C. Proposed, awaiting Amish.
-- Mass (R12): 5.60 kg against 5.5 kg. Thinner printed parts would reach about 5.39 kg. Proposed, awaiting Amish.
+- Refreeze (R8): with the lid pack now frozen actively, all the PCM takes 8.4 h against 8 h. Options are in `docs/REVIEW.md`, awaiting Amish.
+- Mass (R12): 5.53 kg against 5.5 kg after the thinner printed parts and the lid cold plate. Awaiting Amish; weighing a built case is TRL 4 work, on hold.
+- Cost (R15): $303 against the $300 budget kept by CPD-DDR-002. Awaiting Amish; a VIP quote could move it either way.
+- Does the lid gasket still seal with the cold plate in place, and does the plate rim seat well enough on the can rim (assumed 0.5 K/W)?
 - Can the loop thermosiphon be made and charged reliably at this size, and does a motorbike carrier stay within about 18° of tilt with the cooling head down? If not, the mechanical disconnect (choice 2b) is the fallback.
 - Confirm the off-state conductance and real COP of the chosen module with the chosen heat sink, and the sink's resistance with the fan.
 - Confirm the VIP supplier, panel sizes, aged conductivity and edge losses; joints and edges are about 45 % of the heat leak.

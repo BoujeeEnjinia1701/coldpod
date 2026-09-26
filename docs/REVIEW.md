@@ -138,3 +138,53 @@ New from TRL 3:
 Stay at TRL 3. TRL 4 is on hold by Amish's instruction. Decide items 2 to 8 above, starting with the lid pack cold path and the liner cut-out (they close R8 and R2), then revise the model, CPD-CAL-001 and the BOM on paper, and request quotes for the VIP set and the thermosiphon.
 
 For reference only, TRL 4 would need: a lab test report (TST, `environment: lab`) on a built case or key subassemblies (heat leak by a steady-state heater test, passive and powered hold times in a climate chamber at 25, 32 and 43 °C, refreeze time, thermosiphon forward and reverse conductance and tilt limit, stuck-on driver fault test, alarm behavior, mass), build-log entries, and the purchasing and build work that goes with them. None of this has been started.
+
+## Session 2026-09-25: recommendations accepted
+
+Amish wrote on 2026-09-25: "i accept all your recommendations, go with them across all repos." Every open item with a recommendation is now **decided by Amish, 2026-09-25: go with recommendation**, recorded item by item in `docs/decisions/0002-recommendations-accepted.md` (CPD-DDR-002 v0.1). TRL 4 remains on hold; `trl` and `trl_target` stay at 3.
+
+### Decisions applied and what changed
+
+Items 2 to 8 of the TRL 3 list "Proposed, awaiting Amish" above (D1 to D11 in CPD-DDR-001 were already decided):
+
+| Item | Decision | Change (before to after) |
+| --- | --- | --- |
+| 2 Lid pack cold path | (a) 1.5 mm aluminium lid cold plate seated on the can rim | Added to model, BOM line 2 ($8 to $12), drawing, media. Lid pack in powered hold at 43 °C: melted after about 21 h and settled near 13.8 °C, to held frozen near 2.8 °C. Passive hold at 43 °C: 13.0 to 14.0 h (jacket and lid pack now pooled). Off-grid: 26.5 to 28.4 h at 32 °C, 16.5 to 17.5 h at 43 °C. Refreeze: jacket only 5.5 h (lid pack could not be refrozen) to all PCM 8.4 h |
+| 3 Freeze fault | Liner cut-out at 3 °C in series with the cold-block cut-out | Added to model and BOM line 14 ($10 to $13). Liner after a stuck-on fault: about −4 °C to about 2.0 °C |
+| 4 Mass | (a) Shell 4 to 3 mm, lid cap 8 to 5 mm, housings 3 to 2 mm | Model and BOM lines 1 ($18 to $17) and 10 ($8 to $6). Empty mass 5.60 to 5.53 kg (with the plate). Weighing is TRL 4, on hold |
+| 5 Evaporator can and loop | Confirmed as sized; mechanical disconnect kept as fallback | Wording only. Loop charging is build work, on hold |
+| 6 Peltier class and drive | Confirmed: TEC1-12703 class, smooth DC, 0.50 K/W sink | Wording only |
+| 7 Vehicle input headroom | (a) Buck-boost Peltier driver | BOM line 12 ($22 to $26); R7 target text names it. Input at 43 °C 18.4 to 18.5 W (thinner shell, taller lid stack) |
+| 8 Budget margin | `budget_usd` stays at $300; VIP quote before any purchase | `project.yaml` unchanged. The quote request goes with purchasing, TRL 4, on hold |
+
+Budget: `budget_usd` unchanged at 300. BOM total $295 to $303. Overall size 368 x 214 x 207 mm to 366 x 212 x 207 mm. Drawing CPD-DWG-001 Rev P1 to P2. Controlled documents: CPD-DDR-001 v0.2, CPD-PRB-001 v0.4, CPD-PRC-001 v0.4, CPD-REQ-001 v0.4, CPD-CAL-001 v0.2, new CPD-DDR-002 v0.1. All media, STEP and STL files, the drawing and every PDF were regenerated (the footers now read designmolecule.com); superseded PDFs that showed the old domain were deleted. The README gained the Concept rationale, Burning platform, Where it could be used and What sparked the idea sections; the idea's origin is the vaccine vial monitor (1996), which records heat but not freezing.
+
+### Requirement status (CPD-CAL-001 v0.2)
+
+| ID | Status | Value against target |
+| --- | --- | --- |
+| R8 | **Not met** | 8.4 h for all the PCM against 8 h (jacket 6.9 h, lid pack 8.4 h); 30 W to the module only reaches 8.2 h |
+| R12 | **Not met** | 5.53 kg against 5.5 kg |
+| R15 | **Not met** | $303 against $300 |
+| R4 | At risk | 14.0 h at 43 °C; 10.8 h at +30 % leak (12 h) |
+| R5 | At risk | 28.4 h at 32 °C; 22.3 h at +30 % leak (24 h) |
+| R6 | At risk | 17.5 h at 43 °C; 13.2 h at +30 % leak (16 h) |
+| R10, R16 | Not verifiable at TRL 3 | Firmware sketch and tests needed |
+| R1, R2, R3, R7, R9, R11, R13, R14, R17 | Met | R1 and R7 were at risk and R2 was not met before this session |
+
+Counts: 9 met, 3 at risk, 3 not met, 2 not verifiable (before: 7, 5, 3, 2).
+
+### Still awaiting Amish
+
+1. Co-design partner (CPD-DDR-001 O1). No recommendation was made.
+2. R8 refreeze, 8.4 h against 8 h (CPD-DDR-002 N1). Options: restate R8 as 9 h for all the PCM (suggested); accept the miss; a thinner lid pack.
+3. R12 mass, 5.53 kg against 5.5 kg (N2). Options: keep the target and settle it by weighing when TRL 4 resumes (suggested); relax to 5.6 kg; lighter strap and handle.
+4. R15 cost, $303 against $300 (N3). Options: raise `budget_usd` to $310 (suggested); wait for the VIP quote; drop the buck-boost stage and narrow the vehicle input to 11 to 15 V. `budget_usd` is not changed until Amish decides.
+
+### Cross-repo actions
+
+None. ColdPod shares no part or interface with another repo and no recommendation named one.
+
+### TRL 4
+
+Remains on hold by Amish's instruction. Decided but on hold: weighing the case, checking the gasket seal and plate seat on a built lid, charging the loop thermosiphon, VIP and thermosiphon quotes and any purchasing, and all climate chamber tests. No build, test, PCB or firmware work was done.

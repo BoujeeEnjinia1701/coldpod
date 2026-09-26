@@ -18,11 +18,11 @@ from build123d import Box, Pos  # noqa: E402
 from concept import Part, render_all  # noqa: E402
 from model import build_parts  # noqa: E402
 
-COLORS = {"shell": "#D1D5DB", "lid": "#9CA3AF", "handle": "#374151", "vip": "#E7E5E4", "pcm": "#60A5FA",
+COLORS = {"shell": "#D1D5DB", "lid": "#9CA3AF", "lidplate": "#94A3B8", "handle": "#374151", "vip": "#E7E5E4", "pcm": "#60A5FA",
           "liner": "#A8A29E", "pens": "#F9FAFB", "thermo": "#B87333", "tec": "#F3F4F6", "sink": "#4B5563",
           "housings": "#0F766E", "cells": "#C2410C", "power": "#15803D", "logger": "#1F2937",
           "sensors": "#D4A017", "display": "#38BDF8"}
-EXPLODE = {"shell": (0, 0, -260), "thermo": (0, 0, 180), "pcm": (0, 0, 320), "liner": (0, 0, 460),
+EXPLODE = {"shell": (0, 0, -260), "thermo": (0, 0, 180), "pcm": (0, 0, 320), "lidplate": (0, 0, 365), "liner": (0, 0, 460),
            "pens": (0, 0, 460), "lid": (0, 0, 600), "handle": (0, 0, 720), "tec": (150, 0, 0),
            "sink": (220, 0, 0), "housings": (0, 0, -260), "cells": (-170, 0, 0), "power": (110, 0, -40),
            "logger": (-120, 0, 70), "sensors": (0, -190, 0), "display": (-60, 0, 170)}
@@ -42,9 +42,9 @@ if __name__ == "__main__":
     render_all(
         parts, project="ColdPod", title="Portable medicine cooler concept", dwg_no="CPD-DWG-010",
         key_figures=[f"{C.V_use:.2f} L payload at 2 to 8 °C (24 insulin pens)",
-                     f"No power: about {C.t4:.0f} h at 43 °C, {C.passive(32.0)[0]:.0f} h at 32 °C (est.)",
+                     f"No power: about {C.t4:.0f} h at 43 °C, {C.passive(32.0)[2]:.0f} h at 32 °C (est.)",
                      f"Battery then PCM: about {C.F[32.0][2]:.0f} h at 32 °C, {C.F[43.0][2]:.1f} h at 43 °C (est.)",
-                     f"PCM jacket refreeze about {C.t_ref:.1f} h on 12 V or USB-C PD (est.)",
+                     f"All PCM refreezes in about {C.t_ref:.1f} h on 12 V or USB-C PD (est.)",
                      "Logs every 1 min; alarms outside 2 to 8 °C",
                      f"About {C.ov_x:.0f} x {C.ov_y:.0f} x {C.ov_z:.0f} mm, {C.M_tot:.1f} kg empty (est.)"],
         scale_figure=False, context=context, cut_exclude=("Bail handle and shoulder strap",),

@@ -11,7 +11,10 @@ Y front (-Y) to back (+Y), Z up, table at Z = 0. Units mm.
 
 Layers from the inside out: payload cavity in an aluminium liner, a phase-change material
 (PCM) jacket on four sides and the floor held in an aluminium evaporator can, a PCM pack in
-the lid, 25 mm vacuum-insulated panels (VIP), a printed shell. A two-phase loop thermosiphon
+the lid on a 1.5 mm aluminium cold plate that seats on the can rim when the lid closes,
+25 mm vacuum-insulated panels (VIP), a printed shell (3 mm walls, 5 mm lid cap, 2 mm end
+housings, CPD-DDR-002). A hardware cut-out on the liner (3 °C) backs up the one on the
+cold block. A two-phase loop thermosiphon
 (evaporator loop low around the can, vapour riser and liquid return at the +X end) carries
 heat one way, up and out, to a cold block on the Peltier module in the +X cooling head.
 
@@ -27,8 +30,9 @@ PARAMS = {
     "rack_t": 2.0,                            # rack floor and divider thickness
     # PCM jacket (includes the evaporator can wall) and lid pack
     "pcm_t": 15.0, "can_t": 1.0, "lid_pcm_t": 15.0,
-    # insulation and shell
-    "vip_t": 25.0, "shell_t": 4.0, "lid_cap_t": 8.0,
+    "lid_plate_t": 1.5,                       # aluminium cold plate under the lid pack, seats on the can rim
+    # insulation and shell (thinner printed parts, CPD-DDR-002)
+    "vip_t": 25.0, "shell_t": 3.0, "lid_cap_t": 5.0,
     "foam_strip": 20.0,                       # foam-filled strip in the +X VIP wall where the pipes cross
     # payload (not supplied): insulin pens in layers
     "pen_d": 16.0, "pen_l": 160.0, "pen_cols": 6, "pen_layers": 4,
@@ -40,7 +44,7 @@ PARAMS = {
     "sink_base": 6.0, "sink_fin": 24.0, "sink_w": 80.0, "sink_h": 80.0, "fins": 9,
     "fan": (10.0, 70.0, 70.0),
     # end housings
-    "head_l": 60.0, "bay_l": 45.0, "end_w": 160.0, "end_wall": 3.0,
+    "head_l": 60.0, "bay_l": 45.0, "end_w": 160.0, "end_wall": 2.0,
     # battery: 4S1P 32700 LiFePO4 cells standing in the -X bay
     "cell_d": 32.0, "cell_h": 70.0, "cells": 4,
     # bail handle (up position)
@@ -59,7 +63,8 @@ def levels(P=PARAMS):
     d["pcm_z0"] = d["vip_z0"] + P["vip_t"]
     d["cav_z0"] = d["pcm_z0"] + P["pcm_t"]
     d["cav_z1"] = d["cav_z0"] + P["cav_h"]
-    d["lidpcm_z1"] = d["cav_z1"] + P["lid_pcm_t"]
+    d["plate_z1"] = d["cav_z1"] + P["lid_plate_t"]
+    d["lidpcm_z1"] = d["plate_z1"] + P["lid_pcm_t"]
     d["rim"] = d["lidpcm_z1"] + P["vip_t"]
     d["lid_top"] = d["rim"] + P["lid_cap_t"]
     d["loop_z"] = d["pcm_z0"] + P["can_t"] + P["loop_inset"] + P["pipe_d"] / 2
@@ -113,7 +118,9 @@ def build_parts(P=PARAMS):
     # 5 PCM: jacket inside the evaporator can (sides and floor) plus the lid pack
     ct = P["can_t"]
     jacket = B(-px + ct, px - ct, -py + ct, py - ct, L["pcm_z0"] + ct, L["cav_z1"]) - B(-cx, cx, -cy, cy, L["cav_z0"], L["cav_z1"] + 1)
-    lid_pcm = B(-px, px, -py, py, L["cav_z1"], L["lidpcm_z1"])
+    lid_pcm = B(-px, px, -py, py, L["plate_z1"], L["lidpcm_z1"])
+    # Lid cold plate (BOM line 2): under the lid pack, its rim lands on the evaporator can rim
+    lid_plate = B(-px, px, -py, py, L["cav_z1"], L["plate_z1"])
 
     # 6 Liner and payload rack
     lt, rt = P["liner_t"], P["rack_t"]
@@ -205,7 +212,9 @@ def build_parts(P=PARAMS):
     # 14 Temperature sensors: buffered payload probe in the cavity, liner probe, ambient at the intake
     sensors = (Pos(cx - 12, -cy + 12, rz0 + rt + 18) * Cylinder(7, 36)
                + B(cx - 20, cx - 8, cy - lt - 3, cy - lt, L["cav_z0"] + 30, L["cav_z0"] + 36)
-               + B(sx + 14, sx + 30, -ew - 3, -ew, 80, 92))
+               + B(sx + 14, sx + 30, -ew - 3, -ew, 80, 92)
+               # liner cut-out thermostat (opens at 3 °C), clipped to the inside of the +X liner wall
+               + B(cx - lt - 4, cx - lt, -8, 8, L["cav_z0"] + 50, L["cav_z0"] + 62))
 
     # 15 E-paper display and alarm on top of the bay
     display = B(bx0 + 7, bx0 + 37, -33, 33, top, top + 3) + Pos(bx0 + 22, 50, top + 2) * Cylinder(5, 4)
@@ -213,6 +222,7 @@ def build_parts(P=PARAMS):
     return [
         ("shell", "Outer shell", shell, 1),
         ("lid", "Lid cap with gasket", lid, 2),
+        ("lidplate", "Lid cold plate, 1.5 mm aluminium", lid_plate, 2),
         ("handle", "Bail handle and shoulder strap", handle, 3),
         ("vip", "Vacuum-insulated panels, 25 mm", vip, 4),
         ("pcm", "PCM jacket and lid pack, 5 °C", pcm, 5),
@@ -225,7 +235,7 @@ def build_parts(P=PARAMS):
         ("cells", "LiFePO4 pack, 12.8 V 6 Ah, with BMS", cells, 11),
         ("power", "Power board (USB-C PD, 12 V, drivers)", power, 12),
         ("logger", "Logger controller (nRF52840 class)", logger, 13),
-        ("sensors", "Temperature sensors (buffered probe)", sensors, 14),
+        ("sensors", "Temperature sensors and liner cut-out", sensors, 14),
         ("display", "E-paper display and alarm", display, 15),
     ]
 
@@ -246,7 +256,7 @@ if __name__ == "__main__":
     out = Path(__file__).resolve().parents[1]
     (out / "step").mkdir(exist_ok=True); (out / "stl").mkdir(exist_ok=True)
     parts = {k: s for k, _, s, _ in build_parts()}
-    groups = {"shell": ["shell"], "lid": ["lid"], "vip-set": ["vip"], "liner-rack": ["liner"],
+    groups = {"shell": ["shell"], "lid": ["lid", "lidplate"], "vip-set": ["vip"], "liner-rack": ["liner"],
               "evaporator-thermosiphon": ["thermo"], "cooling-head": ["tec", "sink"],
               "end-housings": ["housings"]}
     for name, keys in groups.items():  # export parts before they are adopted by a compound

@@ -48,13 +48,13 @@ H_USABLE = 180e3       # J/kg usable inside 2 to 8 °C (of about 250 kJ/kg liste
 T_MELT = 5.0
 K_PCM_S = 0.2          # W/(m K), solid paraffin
 CP_PCM_L, CP_PCM_S = 2.0e3, 1.8e3
-H_CAVITY = 2.0         # W/(m² K), lid pack to cavity: stable stratified air, about 12 mm gap
 T_CAN_HOLD = 2.0       # controller holds the evaporator can here in powered hold
 T_CAN_MIN = -2.0       # controller floor for the can during refreeze
 R_COLD = 0.40          # K/W, can and loop, two-phase thermosiphon, block, interface to the module cold face
 R_HOT = 0.55           # K/W, module hot face to air: 80 x 80 x 30 mm finned sink, 70 mm fan, interface
 H_CAN_LIQ = 40.0       # W/(m² K), can to liquid PCM through the pouch film (sensible phase)
-ETA_DRV = 0.90         # buck driver giving the module smooth DC (not on/off PWM)
+ETA_DRV = 0.90         # buck-boost driver giving the module smooth DC (not on/off PWM), CPD-DDR-002
+V_IN_MIN = 10.0        # lowest vehicle input the buck-boost stage accepts (V)
 P_FAN, P_CTRL = 0.6, 0.1
 BATT_WH, BATT_RESERVE = 76.8, 0.15
 P_CAP_REFREEZE = 25.0  # W to the module while the battery also charges (45 W USB-C PD budget)
@@ -62,6 +62,8 @@ P_CHARGE = 12.0        # W into the battery during refreeze
 # Peltier module classes (127 couples), parameters derived at Th = 300 K from Vmax, Imax, dTmax
 MODULES = {"TEC1-12703": (15.4, 3.0, 67.0), "TEC1-12704": (15.4, 4.0, 67.0), "TEC1-12706": (15.4, 6.0, 67.0)}
 MODULE = "TEC1-12703"  # chosen in section E
+K_AL = 237.0           # W/(m K), aluminium
+T_CUT_BLOCK, T_CUT_LINER = -5.0, 3.0   # hardware cut-outs in series (cold block, liner), CPD-DDR-002
 
 
 # ---------------------------------------------------------------- A. geometry and payload
@@ -150,19 +152,27 @@ head("D. Passive hold, PCM only (R4)")
 
 
 def passive(ta, ej=E_j, el=E_l, u_scale=1.0):
+    """Jacket alone, lid pack alone, and pooled. The lid cold plate couples the lid pack to the
+    can rim, so the two melt together: the pooled figure is the hold time."""
     qj, ql = u_scale * U_body * (ta - T_MELT), u_scale * U_lid * (ta - T_MELT)
     tj, tl = ej / qj / 3600, el / ql / 3600
     return tj, tl, (ej + el) / (qj + ql) / 3600
 
 
+# lateral conductance of the lid cold plate from its centre to the can rim (plate as a square fin)
+a_pl = (2 * L["pcm_x"] + 2 * L["pcm_y"]) / 2 / 1000            # mean side (m)
+G_plate = K_AL * P["lid_plate_t"] / 1000 * 4 * a_pl / (a_pl / 2)
+
+
 for name, ta in T_CASES.items():
     tj, tl, tt = passive(ta)
-    pr("D1", f"{ta:.0f} °C: jacket / lid pack / pooled (h)", f"{tj:.1f} / {tl:.1f} / {tt:.1f}")
+    pr("D1", f"{ta:.0f} °C: jacket alone / lid pack alone / pooled (h)", f"{tj:.1f} / {tl:.1f} / {tt:.1f}")
+pr("D1b", "Lid cold plate lateral conductance to the can rim (W/K)", G_plate, "", "{:.1f}")
+pr("D1c", "Against the lid heat leak (ratio)", G_plate / U_lid, "", "{:.0f}")
 tj43, tl43, tt43 = passive(43.0)
-t4 = min(tj43, tl43)
-pr("D2", "R4 hold at 43 °C, first of jacket or lid pack to melt (h)", t4, "", "{:.1f}")
-tj, tl, _ = passive(43.0, u_scale=1.3)
-pr("D3", "Same with 30 % more heat leak (h)", min(tj, tl), "", "{:.1f}")
+t4 = tt43
+pr("D2", "R4 hold at 43 °C, jacket and lid pack pooled by the plate (h)", t4, "", "{:.1f}")
+pr("D3", "Same with 30 % more heat leak (h)", passive(43.0, u_scale=1.3)[2], "", "{:.1f}")
 pr("D4", "Heat leak rise that brings R4 to exactly 12 h (%)", (t4 / 12.0 - 1) * 100, "", "{:.0f}")
 
 # ---------------------------------------------------------------- E. Peltier and heat sink
@@ -239,7 +249,8 @@ pr("E6", "Heat rejected at the sink at 25 / 32 / 43 °C (W)",
    f"{HOLD[(MODULE, 25.0)]['qh']:.1f} / {HOLD[(MODULE, 32.0)]['qh']:.1f} / {h43['qh']:.1f}")
 pr("E7", "Sink base temperature at 43 °C (°C)", 43.0 + h43["qh"] * (R_HOT - 0.05), "", "{:.0f}")
 pr("E8", "Input power at 43 °C against 45 W USB-C PD budget (W)", f"{h43['p_in']:.1f} of {45 * 0.92:.1f}")
-pr("E9", "Input power at 43 °C from 10 V vehicle input needs (A)", h43["p_in"] / 10.0 / 0.95, "", "{:.2f}")
+pr("E9", "Input power at 43 °C from 10 V vehicle input needs (A)", h43["p_in"] / V_IN_MIN / 0.95, "", "{:.2f}")
+pr("E9b", "Buck-boost: module voltage / lowest input (V); headroom", f"{h43['v']:.1f} / {V_IN_MIN:.1f}; boosts below the module voltage")
 # on/off PWM at full supply voltage instead of smooth DC, same average heat lift, 43 °C
 s, r, k = mod
 dt_pwm = h43["th"] - h43["tc"]
@@ -253,17 +264,14 @@ pr("E10", "Unfiltered on/off PWM at 12.8 V, 43 °C: duty, module W", f"{duty:.2f
 head("F. Off-grid hold: battery, then PCM (R5, R6)")
 E_batt = BATT_WH * (1 - BATT_RESERVE)
 pr("F1", "Battery energy for cooling (Wh)", E_batt, "", "{:.1f}")
-G_lc = H_CAVITY * A_top
 
 
 def offgrid(ta, u_scale=1.0):
     h = hold_power(ta, mod, u_scale=u_scale)
     tb = E_batt / h["p_in"]
-    # lid pack melts slowly during the battery phase (heat in through the lid, out to the cavity at 3 °C)
-    q_lid_net = u_scale * U_lid * (ta - T_MELT) - G_lc * (T_MELT - 3.0)
-    el_left = max(E_l - q_lid_net * tb * 3600, 0.0)
-    tj, tl, _ = passive(ta, E_j, el_left, u_scale)
-    tp = min(tj, tl)
+    # the lid pack sits on the cold plate, held near the can temperature, so it stays frozen in
+    # the battery phase; then jacket and lid pack melt together
+    tp = passive(ta, E_j, E_l, u_scale)[2]
     return tb, tp, tb + tp
 
 
@@ -275,13 +283,14 @@ for ta in (25.0, 32.0, 43.0):
 for ta in (32.0, 43.0):
     F13[ta] = offgrid(ta, 1.3)
     pr("F2b", f"{ta:.0f} °C with 30 % more heat leak: total (h)", F13[ta][2], "", "{:.1f}")
-pr("F3", "Lid pack net melt rate in powered hold at 43 °C (W)", U_lid * 38 - G_lc * 2, "", "{:.2f}")
-pr("F4", "Lid pack fully melted after, powered hold at 43 °C (h)", E_l / (U_lid * 38 - G_lc * 2) / 3600, "", "{:.0f}")
-T_lidpack = (U_lid * 43.0 + G_lc * 3.0) / (U_lid + G_lc)
-pr("F5", "Steady lid pack temperature once melted, 43 °C (°C)", T_lidpack, "", "{:.1f}")
+q_lid43 = U_lid * (43.0 - T_CAN_HOLD)
+dT_plate = q_lid43 / G_plate
+pr("F3", "Lid heat leak carried by the plate to the can, powered hold at 43 °C (W)", q_lid43, "", "{:.2f}")
+pr("F4", "Plate centre above the can rim at that load (K)", dT_plate, "", "{:.2f}")
+T_lidpack = T_CAN_HOLD + dT_plate + 0.5
+pr("F5", "Lid pack stays frozen, powered hold at 43 °C, near (°C)", T_lidpack, "", "{:.1f}")
 tb43_2x = 2 * E_batt / HOLD[(MODULE, 43.0)]["p_in"]
-el_2x = max(E_l - (U_lid * 38 - G_lc * 2) * tb43_2x * 3600, 0.0)
-pr("F6", "43 °C total with the 153.6 Wh 4S2P pack, for reference (h)", tb43_2x + min(passive(43.0, E_j, el_2x)[0:2]), "", "{:.1f}")
+pr("F6", "43 °C total with the 153.6 Wh 4S2P pack, for reference (h)", tb43_2x + passive(43.0)[2], "", "{:.1f}")
 
 # ---------------------------------------------------------------- G. refreeze
 head("G. Refreeze from fully melted, 25 °C ambient, box empty (R8)")
@@ -298,7 +307,10 @@ pr("G2", "Effective frozen jacket thickness (mm)", s_j * 1000, "", "{:.1f}")
 pr("G3", "Can wall fin efficiency above the loop", eta_fin, "", "{:.2f}")
 m_liner = (P["cav_l"] * P["cav_w"] * P["cav_h"] - in_l * in_w * in_h) / 1e9 * 2700
 m_can = A_can * ct / 1000 * 2700
-C_sens = m_j * CP_PCM_L + (m_liner + m_can) * 900.0
+m_plate = A_top * P["lid_plate_t"] / 1000 * 2700
+s_l = m_l / RHO_PCM_S / A_top                    # frozen lid pack thickness on the plate
+C_sens = (m_j + m_l) * CP_PCM_L + (m_liner + m_can + m_plate) * 900.0
+R_RIM = 0.5            # K/W, plate rim to can rim through the compressed gasket seat
 
 
 def best_point(q_pcm_fn, ta, mod, pcap):
@@ -325,39 +337,48 @@ def best_point(q_pcm_fn, ta, mod, pcap):
 
 
 def refreeze(mod, pcap=P_CAP_REFREEZE, dt=120.0):
-    T = 25.0; frozen = 0.0; time = 0.0; t_sens = None
-    while frozen < 1.0 and time < 30 * 3600:
+    """Jacket (through the can) and lid pack (through the lid cold plate) freeze in parallel."""
+    T = 25.0; fj = fl = 0.0; time = 0.0; t_sens = None; t_j = t_l = None
+    A_sens = A_can + A_top
+    while (fj < 1.0 or fl < 1.0) and time < 30 * 3600:
         if T > T_MELT:
-            fn = lambda tc: H_CAN_LIQ * A_can * (T - tc)
+            fn = lambda tc: H_CAN_LIQ * A_sens * (T - tc)
             q, I, tcn, p = best_point(fn, ta, mod, pcap)
             T -= q * dt / C_sens
             if T <= T_MELT:
                 T = T_MELT; t_sens = time
         else:
-            s = max(frozen * s_j, 0.5e-3)
-            fn = lambda tc: K_PCM_S * A_can * eta_fin * max(T_MELT - tc, 0) / s
-            q, I, tcn, p = best_point(fn, ta, mod, pcap)
-            frozen += q * dt / E_j
+            sj, sl = max(fj * s_j, 0.5e-3), max(fl * s_l, 0.5e-3)
+            qj_fn = lambda tc: K_PCM_S * A_can * eta_fin * max(T_MELT - tc, 0) / sj if fj < 1.0 else 0.0
+            ql_fn = lambda tc: max(T_MELT - tc, 0) / (sl / (K_PCM_S * A_top) + R_RIM) if fl < 1.0 else 0.0
+            q, I, tcn, p = best_point(lambda tc: qj_fn(tc) + ql_fn(tc), ta, mod, pcap)
+            fj += qj_fn(tcn) * dt / E_j
+            fl += ql_fn(tcn) * dt / E_l
+            if fj >= 1.0 and t_j is None:
+                t_j = time
+            if fl >= 1.0 and t_l is None:
+                t_l = time
         time += dt
-    return time / 3600, (t_sens or 0) / 3600
+    return time / 3600, (t_sens or 0) / 3600, (t_j or time) / 3600, (t_l or time) / 3600
 
 
 for name in MODULES:
-    tt, ts = refreeze(module(name))
-    pr("G4", f"{name}: jacket refreeze, sensible part / total (h)", f"{ts:.1f} / {tt:.1f}")
-t_ref, t_sens = refreeze(mod)
+    tt, ts, tjf, tlf = refreeze(module(name))
+    pr("G4", f"{name}: refreeze, sensible / jacket / lid pack / all PCM (h)", f"{ts:.1f} / {tjf:.1f} / {tlf:.1f} / {tt:.1f}")
+t_ref, t_sens, t_ref_j, t_ref_l = refreeze(mod)
 t_stefan = RHO_PCM_S * H_USABLE * s_j ** 2 / (2 * K_PCM_S * (T_MELT - T_CAN_MIN)) / 3600 / eta_fin
 pr("G5", "Conduction limit alone, can at -2 °C (Stefan, h)", t_stefan, "", "{:.1f}")
-pr("G6", "Lid pack cold path to the evaporator", "none (only a 15 mm air gap and the lid gasket)")
-# proposed fix: aluminium plate under the lid pack seated on the can rim when the lid closes
-R_contact = 0.5
+pr("G6", "Lid pack cold path to the evaporator", "1.5 mm aluminium lid cold plate seated on the can rim")
 T_plate = T_CAN_MIN + 1.0
-s_l = m_l / RHO_PCM_S / A_top
 t_lid_plate = RHO_PCM_S * H_USABLE * s_l ** 2 / (2 * K_PCM_S * (T_MELT - T_plate)) / 3600
-pr("G7", "With a lid cold plate on the can rim: lid pack refreeze (h, Stefan)", t_lid_plate, "", "{:.1f}")
+pr("G7", "Lid pack conduction limit alone on the plate (h, Stefan)", t_lid_plate, "", "{:.1f}")
 q_bat_charge = BATT_WH / (P_CHARGE * 0.95)
 pr("G8", "Battery recharge alongside refreeze at 12 W (h)", q_bat_charge, "", "{:.1f}")
 pr("G9", "Input during refreeze: module cap + fan + controller + charge (W)", P_CAP_REFREEZE / ETA_DRV + P_FAN + P_CTRL + P_CHARGE, "", "{:.1f}")
+# option for review: give the module 30 W and the battery 7 W during refreeze (same 45 W PD budget)
+t_ref30 = refreeze(mod, pcap=30.0)[0]
+pr("G10", "Option: 30 W to the module, 7 W charge: all PCM refreeze (h)", t_ref30, "", "{:.1f}")
+pr("G11", "Option: input then (W); battery recharge at 7 W (h)", f"{30.0 / ETA_DRV + P_FAN + P_CTRL + 7.0:.1f}; {BATT_WH / (7.0 * 0.95):.1f}")
 
 # ---------------------------------------------------------------- H. thermosiphon
 head("H. Thermosiphon: diode ratio and tilt")
@@ -377,17 +398,19 @@ pr("H7", "Tilt, front or back down: whole loop below condenser to (deg)", roll_f
 
 # ---------------------------------------------------------------- I. freeze fault
 head("I. Freeze fault: stuck-on driver (R2)")
-T_CUT_BLOCK = -5.0
-t_liner_fault = T_CUT_BLOCK + 1.0
+t_block_only = T_CUT_BLOCK + 1.0
 pr("I1", "Cold-block cut-out opens at (°C)", T_CUT_BLOCK, "", "{:.0f}")
-pr("I2", "Liner settles near, stuck-on, cool ambient (°C)", t_liner_fault, "", "{:.0f}")
+pr("I2", "Block cut-out alone: liner settles near, stuck-on, cool ambient (°C)", t_block_only, "", "{:.0f}")
 # proposed: second hardware cut-out on the liner, in series; lumped equilibrium after it opens
 C_pay = 0.68 * 3.0e3 + m_liner * 900.0             # payload (pens, about 0.68 kg) and liner, J/K
 C_pcm = m_j * CP_PCM_S + m_can * 900.0
+T_EQ = {}
 for t_cut in (2.0, 3.0):
     t_pcm_mean = (T_CAN_MIN + t_cut) / 2
-    t_eq = (C_pay * t_cut + C_pcm * t_pcm_mean) / (C_pay + C_pcm)
-    pr("I3", f"Liner cut-out at {t_cut:.0f} °C: liner settles to (°C)", t_eq, "", "{:.1f}")
+    T_EQ[t_cut] = (C_pay * t_cut + C_pcm * t_pcm_mean) / (C_pay + C_pcm)
+    pr("I3", f"Liner cut-out at {t_cut:.0f} °C: liner settles to (°C)", T_EQ[t_cut], "", "{:.1f}")
+t_liner_fault = T_EQ[T_CUT_LINER]
+pr("I5", f"Adopted: liner cut-out at {T_CUT_LINER:.0f} °C in series; liner settles near (°C)", t_liner_fault, "", "{:.1f}")
 pr("I4", "Stuck-on current from 14.4 V charge rail, module cold (A)", 14.4 / mod[1], "", "{:.1f}")
 
 # ---------------------------------------------------------------- J. logger
@@ -409,13 +432,14 @@ v = volumes_cm3()
 RHO_PETG = 1.27
 shell_frac = (2 * 3 * 0.45 + (P["shell_t"] - 2.7) * 0.2) / P["shell_t"]
 lid_frac = (4.0 + (P["lid_cap_t"] - 4.0) * 0.2) / P["lid_cap_t"]
-hous_frac = (2.7 + (P["end_wall"] - 2.7) * 0.2) / P["end_wall"]
+hous_frac = min(1.0, (2.7 + (P["end_wall"] - 2.7) * 0.2) / P["end_wall"])
 sink_al = (P["sink_base"] * P["sink_w"] * P["sink_h"] + P["fins"] * P["sink_fin"] * 2 * P["sink_h"]) / 1e3
 tube_cu = math.pi * (ro ** 2 - (ro - 0.5e-3) ** 2) * (loop_len + riser_len + 2 * 0.041) * 8960
 bxv = P["block"][0] * P["block"][1] * P["block"][2] / 1e3
 M = {
     "Shell (PETG, printed)": v["shell"] * RHO_PETG * shell_frac / 1e3,
     "Lid cap, gasket, latches": v["lid"] * RHO_PETG * lid_frac / 1e3 + 0.04,
+    "Lid cold plate (aluminium)": v["lidplate"] * 2.7 / 1e3,
     "Handle and strap": 0.20,
     "VIP set (190 kg/m³ with film)": v["vip"] * 0.19 / 1e3,
     "PCM": m_pcm,
@@ -431,7 +455,7 @@ M = {
     "End housings (PETG, printed)": v["housings"] * RHO_PETG * hous_frac / 1e3,
     "LiFePO4 cells, 4 x 32700": 4 * 0.14,
     "BMS, fuse, holder": 0.08,
-    "Electronics (power board, logger, sensors, display)": 0.16,
+    "Electronics (power board, logger, sensors, cut-outs, display)": 0.17,
     "Wiring and hardware": 0.15,
 }
 for k_, m_ in M.items():
@@ -458,30 +482,30 @@ m_opt = V_opt * PCM_FILL * RHO_PCM_L / 1000
 pr("N1", "PCM mass, all in the actively frozen jacket (kg)", m_opt, "", "{:.3f}")
 pr("N2", "Box length / width change (mm); height change (mm)", f"+{2 * (jt - P['pcm_t']):.0f} / +{2 * (jt - P['pcm_t']):.0f}; {(jt - P['pcm_t']) - P['lid_pcm_t']:+.0f}")
 
-# ---------------------------------------------------------------- O. option: lighter printed parts
-head("O. Option for review: lighter printed parts (not adopted)")
-P2 = dict(P, shell_t=3.0, lid_cap_t=5.0, end_wall=2.0)
-v2 = volumes_cm3(P2)
-f_sh2 = (2.7 + (P2["shell_t"] - 2.7) * 0.2) / P2["shell_t"]
-f_lid2 = (4.0 + (P2["lid_cap_t"] - 4.0) * 0.2) / P2["lid_cap_t"]
-f_h2 = min(1.0, (2.7 + (P2["end_wall"] - 2.7) * 0.2) / P2["end_wall"])
-d_shell = M["Shell (PETG, printed)"] - v2["shell"] * RHO_PETG * f_sh2 / 1e3
-d_lid = M["Lid cap, gasket, latches"] - 0.04 - v2["lid"] * RHO_PETG * f_lid2 / 1e3
-d_h = M["End housings (PETG, printed)"] - v2["housings"] * RHO_PETG * f_h2 / 1e3
-pr("O1", "Saving: shell 3 mm / lid cap 5 mm / housings 2 mm (kg)", f"{d_shell:.2f} / {d_lid:.2f} / {d_h:.2f}")
-pr("O2", "Empty mass with all three (kg)", M_tot - d_shell - d_lid - d_h, "", "{:.2f}")
-pr("O3", "Lid cold plate, 1.5 mm aluminium, adds (kg)", A_top * 1.5e-3 * 2700, "", "{:.2f}")
+# ---------------------------------------------------------------- O. adopted: lighter printed parts
+head("O. Lighter printed parts, adopted (CPD-DDR-002): change against CPD-CAL-001 v0.1")
+P1 = dict(P, shell_t=4.0, lid_cap_t=8.0, end_wall=3.0)
+v1 = volumes_cm3(P1)
+f_sh1 = (2 * 3 * 0.45 + (P1["shell_t"] - 2.7) * 0.2) / P1["shell_t"]
+f_lid1 = (4.0 + (P1["lid_cap_t"] - 4.0) * 0.2) / P1["lid_cap_t"]
+f_h1 = min(1.0, (2.7 + (P1["end_wall"] - 2.7) * 0.2) / P1["end_wall"])
+d_shell = v1["shell"] * RHO_PETG * f_sh1 / 1e3 - M["Shell (PETG, printed)"]
+d_lid = v1["lid"] * RHO_PETG * f_lid1 / 1e3 + 0.04 - M["Lid cap, gasket, latches"]
+d_h = v1["housings"] * RHO_PETG * f_h1 / 1e3 - M["End housings (PETG, printed)"]
+pr("O1", "Saving: shell 4 to 3 mm / lid cap 8 to 5 mm / housings 3 to 2 mm (kg)", f"{d_shell:.2f} / {d_lid:.2f} / {d_h:.2f}")
+pr("O3", "Lid cold plate, 1.5 mm aluminium, adds (kg)", M["Lid cold plate (aluminium)"], "", "{:.2f}")
+pr("O4", "Over the 5.5 kg target by (kg)", M_tot - 5.5, "", "{:.2f}")
 
 # ---------------------------------------------------------------- P. foam variant (CPD-DDR-001 D7)
 head("P. Documented low-cost variant: 25 mm polyurethane foam instead of VIPs")
 U_fb = K_FOAM * S_body + U_pipe + U_wire
 U_fl = K_FOAM * S_lid
 pr("P1", "Foam variant conductance, body / lid / total (W/K)", f"{U_fb:.4f} / {U_fl:.4f} / {U_fb + U_fl:.4f}")
-pr("P2", "Foam variant passive hold at 43 °C, jacket melts (h)", E_j / (U_fb * 38) / 3600, "", "{:.1f}")
+pr("P2", "Foam variant passive hold at 43 °C, pooled (h)", E_pcm / ((U_fb + U_fl) * 38) / 3600, "", "{:.1f}")
 
 # ---------------------------------------------------------------- results
 head("Results against requirements")
-t4_13 = min(passive(43.0, u_scale=1.3)[0:2])
+t4_13 = passive(43.0, u_scale=1.3)[2]
 
 
 def status(nominal, high_leak, target):
@@ -491,14 +515,14 @@ def status(nominal, high_leak, target):
 
 h32 = HOLD[(MODULE, 32.0)]
 RES = [
-    ("R1", "2 to 8 °C at the payload probe", "Can held at 2 °C; liner 2 to 5 °C in powered and passive hold; lid path warms the top layer in long powered hold at 43 °C", "At risk"),
-    ("R2", "No contact surface below 1 °C, incl. stuck-on driver", f"Normal: met. Fault: liner settles near {t_liner_fault:.0f} °C with the -5 °C block cut-out", "Not met"),
+    ("R1", "2 to 8 °C at the payload probe", f"Can held at 2 °C; liner 2 to 5 °C; lid pack held frozen near {T_lidpack:.1f} °C by the cold plate in powered hold at 43 °C", "Met"),
+    ("R2", "No contact surface below 1 °C, incl. stuck-on driver", f"Normal: met. Fault: liner settles near {t_liner_fault:.1f} °C with the 3 °C liner cut-out", "Met" if t_liner_fault >= 1.0 else "Not met"),
     ("R3", "1.0 L or more; 20 or more pens up to 170 mm", f"{V_use:.2f} L; {nl * nc} pens; {in_l:.0f} mm long", "Met"),
     ("R4", "12 h or more at 43 °C, no power", f"{t4:.1f} h ({t4_13:.1f} h at +30 % leak)", status(t4, t4_13, 12)),
     ("R5", "24 h or more at 32 °C, battery then PCM", f"{F[32.0][2]:.1f} h ({F13[32.0][2]:.1f} h at +30 % leak)", status(F[32.0][2], F13[32.0][2], 24)),
     ("R6", "16 h or more at 43 °C, battery then PCM (relaxed)", f"{F[43.0][2]:.1f} h ({F13[43.0][2]:.1f} h at +30 % leak)", status(F[43.0][2], F13[43.0][2], 16)),
-    ("R7", "Holds up to 43 °C on 12 V or 45 W USB-C PD", f"{h43['p_in']:.1f} W input; lid pack melts after about {E_l / (U_lid * 38 - G_lc * 2) / 3600:.0f} h", "At risk"),
-    ("R8", "Refreeze melted PCM in 8 h or less at 25 °C", f"Jacket {t_ref:.1f} h; lid pack has no cold path", "Not met"),
+    ("R7", "Holds up to 43 °C on 12 V or 45 W USB-C PD", f"{h43['p_in']:.1f} W input; lid pack held by the plate; buck-boost from {V_IN_MIN:.0f} V", "Met"),
+    ("R8", "Refreeze melted PCM in 8 h or less at 25 °C", f"All PCM {t_ref:.1f} h (jacket {t_ref_j:.1f} h, lid pack {t_ref_l:.1f} h)", "Met" if t_ref <= 8.0 else "Not met"),
     ("R9", "±0.5 °C, 1 min log, 60 days, CSV export", f"{rec / 1e6:.2f} MB of 2.10 MB; accuracy by sensor selection", "Met"),
     ("R10", "Alarm logic and thresholds", "Design intent only; no firmware sketch at TRL 3", "Not verifiable at TRL 3"),
     ("R11", "Logger runs 14 days after cooling stops", f"{BATT_WH * BATT_RESERVE / 5e-3 / 24:.0f} days at 5 mW", "Met"),

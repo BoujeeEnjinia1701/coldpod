@@ -3,7 +3,7 @@ doc_id: CPD-REQ-001
 title: ColdPod requirements
 project: ColdPod
 doc_type: Requirements
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -21,31 +21,35 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's decisions (CPD-DDR-001); R6 redefined to 16 h, R12 relaxed to 5.5 kg, R15 set to $300; status from CPD-CAL-001
+- version: "0.4"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002). R2 and R7 targets restated for the liner cut-out and buck-boost driver; status from CPD-CAL-001 v0.2
 ---
 
 # ColdPod requirements
 
-These are the requirements for the concept, checked by calculation at TRL 3 in CPD-CAL-001. Amish decided the TRL 2 review items on 2026-09-25 (CPD-DDR-001): R6 is redefined from 24 h to 16 h at 43 °C (D5), R12 is relaxed from 5.0 kg to 5.5 kg (D6), R15 follows the new $300 budget (D10) and the R10 alarm defaults are adopted (D9). Against CPD-CAL-001, seven requirements are met, five are at risk, three are **not met** (R2, R8 and R12) and two cannot be verified at TRL 3 (R10 and R16).
+These are the requirements for the concept, checked by calculation at TRL 3 in CPD-CAL-001 v0.2. Amish decided the TRL 2 review items on 2026-09-25 (CPD-DDR-001): R6 is redefined from 24 h to 16 h at 43 °C (D5), R12 is relaxed from 5.0 kg to 5.5 kg (D6), R15 follows the new $300 budget (D10) and the R10 alarm defaults are adopted (D9). He then accepted the TRL 3 recommendations (CPD-DDR-002): R2 now names the two hardware cut-outs in series and R7 names the buck-boost driver that serves the full 10 to 15 V vehicle range; no target was relaxed, and R15 stays at $300. Against CPD-CAL-001 v0.2, nine requirements are met, three are at risk, three are **not met** by small margins (R8, R12 and R15) and two cannot be verified at TRL 3 (R10 and R16). Before DDR-002 the count was seven met, five at risk and three not met (R2, R8, R12).
 
 Table 1. Requirements.
 
 | ID | Requirement | Target | Verification (TRL 3 or later) | Status at TRL 3 (CPD-CAL-001) |
 | --- | --- | --- | --- | --- |
-| R1 | Keep the payload in the safe range | 2 to 8 °C at a buffered probe anywhere in the payload space; control setpoint 5 °C | Heat-transfer calculation; later lab test in a climate chamber | At risk: liner held at 2 to 5 °C, but in long powered holds at 43 °C the lid pack melts and warms the top layer |
-| R2 | Never freeze the payload | No payload-contact surface below 1 °C in normal operation or with a stuck-on Peltier driver | Calculation of the cold path; fault analysis | **Not met:** met in normal operation; with a stuck-on driver the liner can reach about −4 °C before the −5 °C cold-block cut-out acts. A liner cut-out at 3 °C is proposed |
+| R1 | Keep the payload in the safe range | 2 to 8 °C at a buffered probe anywhere in the payload space; control setpoint 5 °C | Heat-transfer calculation; later lab test in a climate chamber | Met on paper: liner held at 2 to 5 °C; the lid pack stays frozen near 2.8 °C on its cold plate in powered hold at 43 °C (was at risk) |
+| R2 | Never freeze the payload | No payload-contact surface below 1 °C in normal operation or with a stuck-on Peltier driver; two hardware cut-outs in series in the Peltier supply, on the cold block (−5 °C) and on the liner (3 °C), independent of firmware (CPD-DDR-002) | Calculation of the cold path; fault analysis | Met on paper: with a stuck-on driver the liner settles near 2.0 °C after the liner cut-out opens (was not met, about −4 °C) |
 | R3 | Carry a useful load | 1.0 L or more of usable payload; holds 20 or more insulin pens up to 170 mm long | Massing model | Met: 1.36 L, 24 pens, up to 172 mm |
-| R4 | Hold with no power at all | 12 h or more at a constant +43 °C, starting with the PCM frozen | Heat-leak and PCM calculation | At risk: 13.0 h; 10.0 h with 30 % more heat leak |
-| R5 | Hold off-grid on a full charge | 24 h or more at a constant +32 °C on the internal battery, then the PCM | Energy budget | At risk: 26.5 h; 20.1 h with 30 % more heat leak |
-| R6 | Hold off-grid on a full charge in extreme heat | 16 h or more at a constant +43 °C on the internal battery, then the PCM; longer hot trips run from external power under R7 (redefined from 24 h, CPD-DDR-001 D5) | Energy budget | At risk: 16.5 h; 12.4 h with 30 % more heat leak |
-| R7 | Hold indefinitely on external power | Keeps 2 to 8 °C up to +43 °C from 12 V DC (10 to 15 V) or USB-C PD (20 V, 45 W or more) | Peltier and heat sink calculation | At risk: 18.4 W input is well inside 45 W, but the lid pack melts after about 21 h at 43 °C; 10 V input leaves little driver headroom |
-| R8 | Recharge the cold quickly | Refreeze a fully melted PCM in 8 h or less at 25 °C ambient, box empty, while charging the battery | PCM and Peltier calculation | **Not met:** the jacket refreezes in 5.5 h, but the lid pack has no cold path |
+| R4 | Hold with no power at all | 12 h or more at a constant +43 °C, starting with the PCM frozen | Heat-leak and PCM calculation | At risk: 14.0 h; 10.8 h with 30 % more heat leak |
+| R5 | Hold off-grid on a full charge | 24 h or more at a constant +32 °C on the internal battery, then the PCM | Energy budget | At risk: 28.4 h; 22.3 h with 30 % more heat leak |
+| R6 | Hold off-grid on a full charge in extreme heat | 16 h or more at a constant +43 °C on the internal battery, then the PCM; longer hot trips run from external power under R7 (redefined from 24 h, CPD-DDR-001 D5) | Energy budget | At risk: 17.5 h; 13.2 h with 30 % more heat leak |
+| R7 | Hold indefinitely on external power | Keeps 2 to 8 °C up to +43 °C from 12 V DC (10 to 15 V, through a buck-boost Peltier driver, CPD-DDR-002) or USB-C PD (20 V, 45 W or more) | Peltier and heat sink calculation | Met on paper: 18.5 W input, well inside 45 W; the buck-boost stage covers a 10 V input; the lid pack stays frozen (was at risk) |
+| R8 | Recharge the cold quickly | Refreeze a fully melted PCM in 8 h or less at 25 °C ambient, box empty, while charging the battery | PCM and Peltier calculation | **Not met: 8.4 h** for all the PCM (jacket 6.9 h, lid pack 8.4 h). The lid pack now has a cold path, so it counts; before, the jacket alone took 5.5 h and the lid pack could not be refrozen |
 | R9 | Record the temperature | Payload probe accuracy ±0.5 °C; log every 1 min; 60 days or more on board; export as CSV over Bluetooth Low Energy or USB | Datasheet and storage calculation; later calibration | Met: 1.38 MB of 2.10 MB; accuracy by sensor selection |
 | R10 | Raise alarms early | Local sound, light and display alarm, plus a phone notification when paired: warn after 10 min outside 2 to 8 °C; alarm at once at 0 °C or lower on the payload probe; early freeze warning at 1 °C on the liner probe; low battery, sensor fault and lid open for more than 2 min (defaults decided, CPD-DDR-001 D9; adjustable per product) | Design review of firmware sketch | Not verifiable at TRL 3: design intent only, no firmware sketch |
 | R11 | Keep logging when the cooling stops | Logger runs 14 days or more after the Peltier is shut off for low battery | Power budget | Met: about 96 days |
-| R12 | Be light enough to carry all day | 5.5 kg (12.1 lb) or less empty (relaxed from 5.0 kg, CPD-DDR-001 D6) | Mass estimate, later weighing | **Not met: 5.60 kg** |
-| R13 | Be compact | Fits in 400 x 250 x 250 mm including handle | Massing model | Met: 368 x 214 x 207 mm |
+| R12 | Be light enough to carry all day | 5.5 kg (12.1 lb) or less empty (relaxed from 5.0 kg, CPD-DDR-001 D6) | Mass estimate, later weighing | **Not met: 5.53 kg** (was 5.60 kg), after thinner printed parts and the lid cold plate |
+| R13 | Be compact | Fits in 400 x 250 x 250 mm including handle | Massing model | Met: 366 x 212 x 207 mm |
 | R14 | Travel by air | Battery 100 Wh or less, removable or with a shipping switch | Battery specification | Met: 76.8 Wh |
-| R15 | Be affordable and buildable | Parts cost $300 or less (CPD-DDR-001 D10); no custom PCB for the first build | Priced BOM | Met: $295, $5 margin |
+| R15 | Be affordable and buildable | Parts cost $300 or less (CPD-DDR-001 D10); no custom PCB for the first build | Priced BOM | **Not met: $303** (was $295), after the lid cold plate, liner cut-out and buck-boost driver |
 | R16 | Survive field use | Splash resistant (IP54 target for electronics bays); survives a 0.5 m drop onto a hard floor while loaded | Design review; later test | Not verifiable at TRL 3 |
 | R17 | Be clearly labelled as a prototype | "Research prototype, not a medical device" on the box, the display start screen and every exported log | Design review | Met by design |
 

@@ -3,7 +3,7 @@ doc_id: CPD-PRB-001
 title: ColdPod problem statement
 project: ColdPod
 doc_type: Problem statement
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's decisions (CPD-DDR-001), outreach vaccinators first and budget $300; partner stays open
+- version: "0.4"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002); budget kept at $300; origin of the idea (vaccine vial monitor) added
 ---
 
 # ColdPod problem statement
@@ -39,6 +43,8 @@ Insulin and vaccines must stay between 2 and 8 °C in transport, but the last le
 
 **Existing active coolers are closed or costly.** Battery-powered cold chain boxes with built-in monitoring exist, for example the Ember Cube shipping box ([Fast Company](https://www.fastcompany.com/90717041/ember-known-for-keeping-coffee-hot-builds-a-shipping-box-to-keep-vaccines-cold)), and small USB-powered insulin coolers are sold to travellers ([4AllFamily Voyager](https://4allfamily.com/products/portable-medical-fridge-usb-insulin-medicines)). None is an open, inspectable design that a clinic, university group or maker space can build, repair and adapt.
 
+**Indicators record heat, not cold.** The vaccine vial monitor, a heat-sensitive label that WHO and PATH brought into use on oral polio vaccine in 1996 ([PATH](https://www.path.org/our-impact/articles/vaccine-vial-monitor-worlds-smartest-sticker/)), showed how much a cheap indicator travelling with each vial can do, but it does "not measure exposure to freezing temperatures" ([OpenLearn Create, Immunization module](https://www.open.edu/openlearncreate/mod/oucontent/view.php?id=53354&section=1.5.1)). That gap between heat monitoring and freeze protection is the starting point for ColdPod.
+
 The gap ColdPod addresses: an open, repairable carrier that combines passive storage (so it works with no power), active cooling (so it can be topped up from a vehicle, a solar panel or a USB-C charger instead of a freezer) and an integrated logger that raises alarms before a load is lost.
 
 ## Users and context
@@ -53,7 +59,7 @@ The gap ColdPod addresses: an open, repairable carrier that combines passive sto
 
 ## Constraints
 
-- Garage-buildable prototype, $300 USD or less in parts (raised from $250 by Amish, 2026-09-25, CPD-DDR-001 D10), using off-the-shelf modules, 3D-printed or hand-made parts, and bought vacuum-insulated panels.
+- Garage-buildable prototype, $300 USD or less in parts (raised from $250 by Amish, 2026-09-25, CPD-DDR-001 D10; kept at $300 by CPD-DDR-002, although the TRL 3 BOM is now $303), using off-the-shelf modules, 3D-printed or hand-made parts, and bought vacuum-insulated panels.
 - Carried by one person, by hand or on a shoulder strap.
 - Chargeable from a vehicle 12 V socket, a small solar panel or a USB-C Power Delivery (PD) charger; no mains-voltage parts inside the box.
 - Battery small enough to carry on a passenger aircraft without airline approval (100 Wh or less per the [FAA PackSafe rules](https://www.faa.gov/hazmat/packsafe/lithium-batteries)).

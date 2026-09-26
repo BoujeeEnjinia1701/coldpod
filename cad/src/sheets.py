@@ -1,4 +1,4 @@
-"""ColdPod general arrangement sheet CPD-DWG-001, Rev P1 (TRL 3).
+"""ColdPod general arrangement sheet CPD-DWG-001, Rev P2 (TRL 3).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CPD-DWG-001.svg, .pdf and .png from the parametric model in
@@ -61,10 +61,11 @@ def main():
     asm = build()
     views = project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P1",
+    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P2",
               author="Amish Chadha", date=DATE, scale=None, theme="technical",
               material="Printed PETG shell, 25 mm VIPs, 5 °C PCM, aluminium liner; see bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
-              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC")])
+              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
+                         ("P2", "Lid cold plate, liner cut-out, thinner walls (CPD-DDR-002)", DATE, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -98,10 +99,12 @@ def main():
         f"Body {2 * Lv['sh_x']:.0f} x {2 * Lv['sh_y']:.0f} x {Lv['lid_top']:.0f}; bay {P['bay_l']:.0f}, head {P['head_l']:.0f}",
         f"Liner {P['cav_l']:.0f} x {P['cav_w']:.0f} x {P['cav_h']:.0f} outside; 24 pens, 4 x 6",
         f"PCM jacket {P['pcm_t']:.0f} in a {P['can_t']:.1f} Al can; lid pack {P['lid_pcm_t']:.0f}",
-        f"VIP {P['vip_t']:.0f} on six faces; shell {P['shell_t']:.0f}; lid cap {P['lid_cap_t']:.0f}",
+        f"Lid cold plate {P['lid_plate_t']:.1f} Al, seats on can rim",
+        f"VIP {P['vip_t']:.0f}; shell {P['shell_t']:.0f}; lid cap {P['lid_cap_t']:.0f}; housings {P['end_wall']:.0f}",
         f"Thermosiphon loop Z {Lv['loop_z']:.1f}; pipes cross +X wall at Z {P['pipe_exit_z']:.0f}, Y +/-{P['pipe_y']:.0f}",
         "Peltier 40 x 40 (TEC1-12703 class); sink 80 x 80 x 30",
-        "Empty mass about 5.6 kg (CPD-CAL-001, K2)",
+        "Cut-outs in series: cold block −5 °C, liner 3 °C",
+        "Empty mass about 5.53 kg (CPD-CAL-001 v0.2, K2)",
         "Third-angle; front view from -Y, right view from +X",
     ], x=276, y=160, width=140)
     path = s.save(ROOT / "cad" / "drawings" / "CPD-DWG-001")
