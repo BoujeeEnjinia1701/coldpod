@@ -6,9 +6,9 @@
 
 Portable Peltier cooler with a phase-change buffer and a temperature logger that raises alerts on excursions.
 
-![ColdPod concept](media/hero.png)
+![ColdPod: portable medicine cooler with a temperature logger, product render](media/render-hero.png)
 
-[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement CPD-DWG-001 (PDF)](cad/drawings/CPD-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
+[Exploded render](media/render-exploded.png) · [Detail render](media/render-detail.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement CPD-DWG-001 (PDF)](cad/drawings/CPD-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
 
 ## Concept rationale
 

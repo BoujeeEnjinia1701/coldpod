@@ -203,3 +203,28 @@ None. ColdPod shares no part or interface with another repo and no recommendatio
 ### TRL 4
 
 Remains on hold by Amish's instruction. Decided but on hold: weighing the case, checking the gasket seal and plate seat on a built lid, charging the loop thermosiphon, VIP and thermosiphon quotes and any purchasing, and all climate chamber tests. No build, test, PCB or firmware work was done.
+
+## Session 2026-09-26: product appearance model and photoreal renders
+
+Amish chose ColdPod on 2026-09-26 for the first batch of product renders. This session added an appearance model for photoreal renders; the render images themselves (`media/render-hero.png`, `media/render-exploded.png`) are produced later by the portfolio render pipeline.
+
+### What was done
+
+- `cad/src/product_model.py` (new): `product_parts()` returns 53 named parts (28 shell, 22 internal, 3 accessory, no context) with colour, material class, BOM line, group and exploded-view offset, plus `TITLE` and `RENDER_VIEWS` (hero from the front right, exploded from the front right, and a detail view of the battery bay and logger display from the front left). It imports `PARAMS`, `levels()` and `build_parts()` from `model.py` and keeps every main dimension and interface: 261 x 196 mm tub, 169.5 mm lid top, 207 mm to the top of the handle, 60 mm cooling head and 45 mm bay at 160 mm wide, pipe pass-throughs, cold block, Peltier, sink, fan, cells and boards where `model.py` puts them.
+- Appearance detail added: 12 mm plan radius and filleted edges on the tub, lid and end housings; a black EPDM gasket line under the lid; a rubber base bumper; two teal draw latches on the front; a round steel bail with a ribbed rubber grip on pivot bosses; rounded grille, intake and vent slots; housing screws; a raised lid wordmark, lid range marking and a front label plate; a lit e-paper display with an illustrative readout, a lit green status light and a red alarm light; USB-C and 12 V inlets; a vented ambient sensor cap; fan blades; the internal stack split for the exploded view (VIP body set and lid plug, PCM jacket and lid pack, liner and rack, evaporator can, copper loop and cold block); and the padded shoulder strap as a fabric accessory.
+- `README.md`: the hero image now points to `media/render-hero.png`, and the links line starts with the exploded render.
+- Matplotlib self-check previews were made outside the repo; nothing in `media/` was changed.
+
+### Differences from model.py (each Proposed, awaiting Amish)
+
+1. **Handle form.** `model.py` has square 16 x 8 mm arms from Z = 128 mm and a 16 mm top bar. The appearance model uses a 10 mm round steel bail with 22 mm bends, pivot eyes at Z = 136 mm on 24 mm bosses, and a 16 mm ribbed rubber grip; the grip top stays at 207 mm. Recommendation: adopt the round bail in `model.py` at the next model revision; it matches the bought folding handle in BOM line 3.
+2. **Window over the heat sink.** The appearance model has an 83 x 88 mm smoked window in the top of the cooling head so the fins show; `model.py` has a solid top. Options: (a) keep it as render styling only; (b) adopt it, with a check that it cannot be touched hot and does not change the airflow; (c) replace it with more exhaust slots. Recommendation: (a) for now, because it adds a part and a hot-surface question for no thermal benefit.
+3. **Inlet positions.** USB-C and 12 V inlets are drawn low on the +X face of the cooling head, next to the power board; `model.py` does not place them. Recommendation: adopt this position (short leads to the power board, away from the battery bay).
+4. **Latch positions and no hinge.** The two BOM line 2 draw latches are drawn on the front at X = ±72 mm, and the lid lifts off. Options: one latch front and one back, or a rear hinge. Recommendation: two front latches with a lift-off lid, as drawn, since a lid tether is simpler than a hinge through the VIP.
+5. **Second status light.** `model.py` has one alarm light beside the display; the appearance model adds a red light at the mirrored position, matching the red and green LEDs already in BOM line 15. Recommendation: adopt.
+6. **Base bumper, labels and wordmark.** A 12 mm rubber bumper around the base, a front label plate and a raised lid wordmark are not in the BOM. Recommendation: keep the labels under BOM line 16 and decide the bumper when the shell is next revised (it adds grams against R12, which is already 0.03 kg over).
+7. **Shoulder strap anchors.** The strap is shown loose as an accessory; neither model places its anchor points. Recommendation: decide the anchors (handle pivots or end-housing lugs) with the next model revision.
+
+### Scope
+
+This is an appearance model only: no tolerances, no fabrication detail, and nothing past TRL 3. `trl` stays 3 in `project.yaml`, and TRL 4 remains on hold. `model.py`, the BOM and the controlled documents were not changed.
