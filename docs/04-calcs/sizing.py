@@ -14,9 +14,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "cad" / "src"))
-from model import PARAMS as P, levels  # noqa: E402
+from model import PARAMS as P, levels, component_volumes_cm3  # noqa: E402
 
 L = levels()
+CV = component_volumes_cm3()   # cm³ of every component of the constructable model (CPD-DDR-003)
 K0 = 273.15
 
 
@@ -75,7 +76,7 @@ nc, nl, pd = P["pen_cols"], P["pen_layers"], P["pen_d"]
 rack_floor = (in_l - 2) * (in_w - 2) * rt
 rack_div = (nc // 2 - 1) * (in_l - 2) * rt * (nl * pd - 4)
 V_rack = (rack_floor + rack_div) / 1e3            # cm³
-V_probe = math.pi * 7 ** 2 * 36 / 1e3
+V_probe = math.pi * (P["probe"][0] / 2) ** 2 * P["probe"][1] / 1e3   # 10 x 40 mm vial above the top layer (DDR-003)
 V_use = V_cav - (V_rack + V_probe) / 1e3
 pr("A1", "Liner inside, L x W x H (mm)", f"{in_l:.0f} x {in_w:.0f} x {in_h:.1f}")
 pr("A2", "Usable payload volume (inside liner less rack and probe)", V_use, "L")
@@ -85,7 +86,7 @@ pr("A3", "Pens held (layers x columns), 16 mm dia.", f"{nl} x {nc} = {nl * nc}")
 pr("A4", "Width used / available; height used / available (mm)", f"{width_need:.0f} / {in_w:.0f}; {height_need:.0f} / {in_h:.1f}")
 pr("A5", "Longest pen that fits (mm)", in_l, "", "{:.0f}")
 ov_x = L["head_x1"] - L["bay_x0"]
-ov_y = 2 * L["sh_y"] + P["handle_d"]
+ov_y = 2 * (L["sh_y"] + P["pad_t"]) + P["handle_d"]     # handle arms on 4 mm pivot pads (DDR-003)
 ov_z = P["handle_top"] + P["handle_d"] / 2
 pr("A6", "Overall L x W x H with handle up (mm)", f"{ov_x:.0f} x {ov_y:.0f} x {ov_z:.0f}")
 pr("A7", "Overall (in)", f"{ov_x / 25.4:.1f} x {ov_y / 25.4:.1f} x {ov_z / 25.4:.1f}")
@@ -136,8 +137,8 @@ V_jspace = ((2 * L["pcm_x"] - 2 * ct) * (2 * L["pcm_y"] - 2 * ct) * (L["cav_z1"]
 loop_len = (2 * (2 * (L["pcm_x"] - ct - P["loop_inset"] - ro * 1000)) + 2 * (2 * (L["pcm_y"] - ct - P["loop_inset"] - ro * 1000))) / 1000
 riser_len = 2 * (P["pipe_exit_z"] - L["loop_z"]) / 1000
 V_tubes = math.pi * ro ** 2 * (loop_len + riser_len) * 1000   # L
-V_j = V_jspace - V_tubes
-V_l = 2 * L["pcm_x"] * 2 * L["pcm_y"] * P["lid_pcm_t"] / 1e6
+V_j = CV["pcm_jacket"] / 1e3        # pouch space from the model: can less liner, feet, collar, loop and cable (DDR-003)
+V_l = CV["pcm_lid"] / 1e3           # inside the lid cold plate tray (DDR-003)
 m_j, m_l = V_j * PCM_FILL * RHO_PCM_L / 1000, V_l * PCM_FILL * RHO_PCM_L / 1000
 m_pcm = m_j + m_l
 E_j, E_l = m_j * H_USABLE, m_l * H_USABLE
@@ -306,8 +307,8 @@ pr("G1", "Evaporator can area in contact with the jacket (m²)", A_can, "", "{:.
 pr("G2", "Effective frozen jacket thickness (mm)", s_j * 1000, "", "{:.1f}")
 pr("G3", "Can wall fin efficiency above the loop", eta_fin, "", "{:.2f}")
 m_liner = (P["cav_l"] * P["cav_w"] * P["cav_h"] - in_l * in_w * in_h) / 1e9 * 2700
-m_can = A_can * ct / 1000 * 2700
-m_plate = A_top * P["lid_plate_t"] / 1000 * 2700
+m_can = CV["can"] / 1e6 * 2700       # with the 5 mm rim flange (DDR-003)
+m_plate = CV["lidplate"] / 1e6 * 2700  # folded tray (DDR-003)
 s_l = m_l / RHO_PCM_S / A_top                    # frozen lid pack thickness on the plate
 C_sens = (m_j + m_l) * CP_PCM_L + (m_liner + m_can + m_plate) * 900.0
 R_RIM = 0.5            # K/W, plate rim to can rim through the compressed gasket seat
@@ -436,12 +437,17 @@ hous_frac = min(1.0, (2.7 + (P["end_wall"] - 2.7) * 0.2) / P["end_wall"])
 sink_al = (P["sink_base"] * P["sink_w"] * P["sink_h"] + P["fins"] * P["sink_fin"] * 2 * P["sink_h"]) / 1e3
 tube_cu = math.pi * (ro ** 2 - (ro - 0.5e-3) ** 2) * (loop_len + riser_len + 2 * 0.041) * 8960
 bxv = P["block"][0] * P["block"][1] * P["block"][2] / 1e3
+V_VIP = sum(x for k, x in CV.items() if k.startswith("vip_"))
+V_PRINT_NEW = CV["fillers"] + CV["duct"] + CV["frame"] + CV["cradle"] + CV["feet"] + CV["collar"]
 M = {
-    "Shell (PETG, printed)": v["shell"] * RHO_PETG * shell_frac / 1e3,
-    "Lid cap, gasket, latches": v["lid"] * RHO_PETG * lid_frac / 1e3 + 0.04,
-    "Lid cold plate (aluminium)": v["lidplate"] * 2.7 / 1e3,
+    "Shell with pads and towers (PETG, printed)": CV["shell"] * RHO_PETG * shell_frac / 1e3,
+    "Lid cap, gasket, latches": CV["lid"] * RHO_PETG * lid_frac / 1e3 + 0.04,
+    "Lid cold plate tray (aluminium)": m_plate,
     "Handle and strap": 0.20,
-    "VIP set (190 kg/m³ with film)": v["vip"] * 0.19 / 1e3,
+    "VIP set (190 kg/m³ with film)": V_VIP * 0.19 / 1e3,
+    "Foam strip (35 kg/m³)": CV["foam"] * 0.035 / 1e3,
+    "Construction parts, printed (fillers, duct cover, block frame, cradle, liner feet and collar)": V_PRINT_NEW * RHO_PETG * 0.8 / 1e3,
+    "Heat-set inserts, standoffs, extra screws, drain tube": 0.05,
     "PCM": m_pcm,
     "PCM pouches (HDPE)": 0.08,
     "Liner (aluminium)": m_liner,
@@ -452,7 +458,7 @@ M = {
     "Peltier module": 0.025,
     "Heat sink (aluminium)": sink_al * 2.7 / 1e3,
     "Fan and guard": 0.06,
-    "End housings (PETG, printed)": v["housings"] * RHO_PETG * hous_frac / 1e3,
+    "End housings with ears (PETG, printed)": (CV["head"] + CV["bay"]) * RHO_PETG * hous_frac / 1e3,
     "LiFePO4 cells, 4 x 32700": 4 * 0.14,
     "BMS, fuse, holder": 0.08,
     "Electronics (power board, logger, sensors, cut-outs, display)": 0.17,
@@ -486,15 +492,15 @@ pr("N2", "Box length / width change (mm); height change (mm)", f"+{2 * (jt - P['
 # ---------------------------------------------------------------- O. adopted: lighter printed parts
 head("O. Lighter printed parts, adopted (CPD-DDR-002): change against CPD-CAL-001 v0.1")
 P1 = dict(P, shell_t=4.0, lid_cap_t=8.0, end_wall=3.0)
-v1 = volumes_cm3(P1)
+v1 = component_volumes_cm3(P1)
 f_sh1 = (2 * 3 * 0.45 + (P1["shell_t"] - 2.7) * 0.2) / P1["shell_t"]
 f_lid1 = (4.0 + (P1["lid_cap_t"] - 4.0) * 0.2) / P1["lid_cap_t"]
 f_h1 = min(1.0, (2.7 + (P1["end_wall"] - 2.7) * 0.2) / P1["end_wall"])
-d_shell = v1["shell"] * RHO_PETG * f_sh1 / 1e3 - M["Shell (PETG, printed)"]
+d_shell = v1["shell"] * RHO_PETG * f_sh1 / 1e3 - M["Shell with pads and towers (PETG, printed)"]
 d_lid = v1["lid"] * RHO_PETG * f_lid1 / 1e3 + 0.04 - M["Lid cap, gasket, latches"]
-d_h = v1["housings"] * RHO_PETG * f_h1 / 1e3 - M["End housings (PETG, printed)"]
+d_h = (v1["head"] + v1["bay"]) * RHO_PETG * f_h1 / 1e3 - M["End housings with ears (PETG, printed)"]
 pr("O1", "Saving: shell 4 to 3 mm / lid cap 8 to 5 mm / housings 3 to 2 mm (kg)", f"{d_shell:.2f} / {d_lid:.2f} / {d_h:.2f}")
-pr("O3", "Lid cold plate, 1.5 mm aluminium, adds (kg)", M["Lid cold plate (aluminium)"], "", "{:.2f}")
+pr("O3", "Lid cold plate, 1.5 mm aluminium, adds (kg)", M["Lid cold plate tray (aluminium)"], "", "{:.2f}")
 pr("O4", "Over the 5.5 kg target by (kg)", M_tot - 5.5, "", "{:.2f}")
 
 # ---------------------------------------------------------------- P. foam variant (CPD-DDR-001 D7)
@@ -523,7 +529,7 @@ RES = [
     ("R5", "24 h or more at 32 °C, battery then PCM", f"{F[32.0][2]:.1f} h ({F13[32.0][2]:.1f} h at +30 % leak)", status(F[32.0][2], F13[32.0][2], 24)),
     ("R6", "16 h or more at 43 °C, battery then PCM (relaxed)", f"{F[43.0][2]:.1f} h ({F13[43.0][2]:.1f} h at +30 % leak)", status(F[43.0][2], F13[43.0][2], 16)),
     ("R7", "Holds up to 43 °C on 12 V or 45 W USB-C PD", f"{h43['p_in']:.1f} W input; lid pack held by the plate; buck-boost from {V_IN_MIN:.0f} V", "Met"),
-    ("R8", "Refreeze melted PCM in 8 h or less at 25 °C", f"All PCM {t_ref:.1f} h (jacket {t_ref_j:.1f} h, lid pack {t_ref_l:.1f} h)", "Met" if t_ref <= 8.0 else "Not met"),
+    ("R8", "Refreeze melted PCM in 8 h or less at 25 °C", f"All PCM {t_ref:.2f} h (jacket {t_ref_j:.1f} h, lid pack {t_ref_l:.1f} h)", "Met" if t_ref <= 8.0 else "Not met"),
     ("R9", "±0.5 °C, 1 min log, 60 days, CSV export", f"{rec / 1e6:.2f} MB of 2.10 MB; accuracy by sensor selection", "Met"),
     ("R10", "Alarm logic and thresholds", "Design intent only; no firmware sketch at TRL 3", "Not verifiable at TRL 3"),
     ("R11", "Logger runs 14 days after cooling stops", f"{BATT_WH * BATT_RESERVE / 5e-3 / 24:.0f} days at 5 mW", "Met"),

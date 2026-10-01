@@ -1,4 +1,4 @@
-"""ColdPod general arrangement sheet CPD-DWG-001, Rev P2 (TRL 3).
+"""ColdPod general arrangement sheet CPD-DWG-001, Rev P4 (TRL 3, constructable design).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CPD-DWG-001.svg, .pdf and .png from the parametric model in
@@ -16,6 +16,7 @@ from drawing import Sheet, project_views, _viewbox, _t, M, TB_Y, INK, MUTED  # n
 from model import PARAMS as P, build, levels  # noqa: E402
 
 DATE = "2026-09-25"
+DATE4 = "2026-10-01"
 
 
 def ortho_cells(sheet, views, names=("front", "top", "right")):
@@ -61,12 +62,13 @@ def main():
     asm = build()
     views = project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P3",
-              author="Amish Chadha", date=DATE, scale=1 / 5, theme="technical",
+    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P4",
+              author="Amish Chadha", date=DATE4, scale=1 / 5, theme="technical",
               material="Printed PETG shell, 25 mm VIPs, 5 °C PCM, aluminium liner; see bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
                          ("P2", "Lid cold plate, liner cut-out, thinner walls (CPD-DDR-002)", DATE, "AC"),
-                         ("P3", "Layout and labels tidied", "2026-09-30", "AC")])
+                         ("P3", "Layout and labels tidied", "2026-09-30", "AC"),
+                         ("P4", "Design made constructable (CPD-DDR-003)", DATE4, "AC")])
     s.add_ortho(views, dims=False)
     k = s.scale
     c = ortho_cells(s, views)
@@ -100,12 +102,13 @@ def main():
         f"Body {2 * Lv['sh_x']:.0f} x {2 * Lv['sh_y']:.0f} x {Lv['lid_top']:.0f}; bay {P['bay_l']:.0f}, head {P['head_l']:.0f}",
         f"Liner {P['cav_l']:.0f} x {P['cav_w']:.0f} x {P['cav_h']:.0f} outside; 24 pens, 4 x 6",
         f"PCM jacket {P['pcm_t']:.0f} in a {P['can_t']:.1f} Al can; lid pack {P['lid_pcm_t']:.0f}",
-        f"Lid cold plate {P['lid_plate_t']:.1f} Al, seats on can rim",
+        f"Lid cold plate tray {P['lid_plate_t']:.1f} Al, lands on can rim flange",
         f"VIP {P['vip_t']:.0f}; shell {P['shell_t']:.0f}; lid cap {P['lid_cap_t']:.0f}; housings {P['end_wall']:.0f}",
-        f"Thermosiphon loop Z {Lv['loop_z']:.1f}; pipes cross +X wall at Z {P['pipe_exit_z']:.0f}, Y +/-{P['pipe_y']:.0f}",
+        f"Loop Z {Lv['loop_z']:.0f} in the can corner; pipes exit Z {P['pipe_exit_z']:.0f}, Y +/-{P['pipe_y']:.0f}",
         "Peltier 40 x 40 (TEC1-12703 class); sink 80 x 80 x 30",
         "Cut-outs in series: cold block −5 °C, liner 3 °C",
-        "Empty mass about 5.53 kg (CPD-CAL-001 v0.2, K2)",
+        "Fixings on printed pads; no screw through a VIP wall",
+        "Empty mass about 5.70 kg (CPD-CAL-001 v0.4, K2)",
         "Third-angle; front view from -Y, right view from +X",
     ], x=276, y=145, width=140)
     path = s.save(ROOT / "cad" / "drawings" / "CPD-DWG-001")

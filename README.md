@@ -8,7 +8,7 @@ Portable Peltier cooler with a phase-change buffer and a temperature logger that
 
 ![ColdPod: portable medicine cooler with a temperature logger, product render](media/render-hero.png)
 
-[Exploded render](media/render-exploded.png) · [Detail render](media/render-detail.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement CPD-DWG-001 (PDF)](cad/drawings/CPD-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
+[Exploded render](media/render-exploded.png) · [Detail render](media/render-detail.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement CPD-DWG-001 (PDF)](cad/drawings/CPD-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Prototype build plan](docs/05-build-plan.md) · [Design decisions](docs/06-design-decisions.md) · [Review note](docs/REVIEW.md)
 
 ## Concept rationale
 
@@ -57,9 +57,9 @@ Full problem statement: [docs/01-problem.md](docs/01-problem.md)
 
 ## Concept
 
-A carry case 366 x 212 x 207 mm holds 1.36 L of insulin or vaccines (24 insulin pens) in an aluminium liner wrapped in a phase-change material that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module refreezes the phase-change material from a 12 V socket, a solar panel or a USB-C charger, through a loop thermosiphon that carries heat one way only; an aluminium cold plate under the lid pack lets it freeze that pack too. A 76.8 Wh LiFePO4 battery keeps it cooling on the road, and a logger records the payload temperature every minute and raises alarms on excursions.
+A carry case 366 x 220 x 207 mm holds 1.37 L of insulin or vaccines (24 insulin pens) in an aluminium liner wrapped in a phase-change material that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module refreezes the phase-change material from a 12 V socket, a solar panel or a USB-C charger, through a loop thermosiphon that carries heat one way only; an aluminium cold plate tray round the lid pack lets it freeze that pack too. A 76.8 Wh LiFePO4 battery keeps it cooling on the road, and a logger records the payload temperature every minute and raises alarms on excursions.
 
-TRL 3 calculations ([CPD-CAL-001](docs/04-calcs/01-sizing.md)): about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C, all with thin margins. Two hardware cut-outs in series keep a stuck-on driver from freezing the payload. Two targets are missed by small margins: refreezing all the phase-change material takes 8.4 h (target 8 h) and the case weighs 5.53 kg empty (target 5.5 kg); the options are awaiting Amish. The parts cost $303 against the $310 budget. TRL 4 (lab testing) is on hold.
+TRL 3 calculations ([CPD-CAL-001](docs/04-calcs/01-sizing.md)): about 13.3 h with no power at 43 °C, 27.3 h off-grid at 32 °C and 16.7 h off-grid at 43 °C, all with thin margins. Two hardware cut-outs in series keep a stuck-on driver from freezing the payload. Two targets are missed: refreezing all the phase-change material takes 8.0 h, a few minutes over the 8 h target, and the case weighs 5.70 kg empty (target 5.5 kg) now that every fixing is in; the options are awaiting Amish ([design decisions register](docs/06-design-decisions.md)). The parts cost $308 against the $310 budget. TRL 4 (lab testing) is on hold.
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
@@ -68,13 +68,19 @@ Full design precis: [docs/02-concept.md](docs/02-concept.md)
 - Vacuum-insulated panels, 25 mm, in a printed shell
 - Phase-change material packs, 5 °C, around an aluminium liner
 - Aluminium evaporator can and loop thermosiphon (one-way) to a 40 mm Peltier module (TEC1-12703 class)
-- Aluminium lid cold plate under the lid phase-change pack
+- Aluminium lid cold plate tray holding the lid phase-change pack
 - Heat sink and fan in a vented cooling head
 - LiFePO4 battery, 12.8 V 6 Ah (76.8 Wh), with BMS
 - USB-C PD and 12 V power board with a buck-boost Peltier driver and two hardware freeze cut-outs (cold block and liner)
 - nRF52840 logger with buffered payload probe, e-paper display and alarm
 
 The working bill of materials is in [bom/bom.csv](bom/bom.csv).
+
+## Building the prototype
+
+The design is constructable: every part can be printed, folded, bent, machined or bought, and every part fixes to the next. Because a vacuum-insulated panel sits behind every wall, no screw goes through the shell; all outside fixings land on printed pads with threaded inserts. The [prototype build plan](docs/05-build-plan.md) shows each of the 15 made components on a making sketch and every one of the 20 assembly steps in a picture; the sealed copper loop is brazed and charged by a refrigeration technician before it goes in. It is a plan, not yet built; building to it is TRL 4 work.
+
+![ColdPod prototype: every component, pulled apart and numbered in build order](docs/05-build-plan/overview.png)
 
 ## Safety
 

@@ -234,3 +234,52 @@ This is an appearance model only: no tolerances, no fabrication detail, and noth
 - Kit 1.5.0 synced: STANDARDS v1.5 (sections 12 to 15: product renders, storefront images and image quality, public release, authorship and signing), `.kit/cards.py`, `.kit/image_qc.py`, `.kit/release_gate.py`, issue templates, and the `/render-product` and `/release` commands. `CLAUDE.md` now matches `.kit/CLAUDE.md`.
 - Every `media/render-*.png` recaptioned from its original render with the new layout: the title, concept label and repository sit in a band above the render and the view note in a band below it, each line wrapped to the image width, so no text overlaps other text or the render or runs off the image. `media/card.png` and `media/social-preview.png` regenerated with the same rules.
 - `python .kit/image_qc.py` and `python .kit/release_gate.py` pass. trl stays 3.
+
+## Session 2026-10-01: kit 1.7.0, design made constructable, prototype build plan
+
+Amish approved the build plan format on 2026-09-30 and asked for it across all repos, with outstanding decisions kept out of the plan and in a separate register. Under his 2026-09-30 instruction ("If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations"), the design was made constructable. Every change is recorded in CPD-DDR-003 (Draft, open for his review). TRL stays 3; nothing was built or tested.
+
+### What was done
+
+- Kit 1.7.0 installed (`.kit/`, `.claude/commands/`); `CLAUDE.md` matches `.kit/CLAUDE.md`.
+- `cad/src/model.py`: rebuilt as 49 separate components (`build_components()`), grouped back into the 17 concept groups for the media, product model and calculations; 63 constructability checks (`python cad/src/model.py --check`), all pass. STEP and STL regenerated.
+- `docs/decisions/0003-design-for-construction.md` (CPD-DDR-003 v0.1, Draft).
+- `docs/05-build-plan.md` (CPD-BLD-001 v0.1): 17 component subsections, 20 assembly steps, first checks, nine safety stops.
+- `docs/06-design-decisions.md` (CPD-DEC-001 v0.1): seven open decisions, seven items to confirm when parts are bought, four decisions made.
+- `cad/src/build_plan_media.py`: overview, VIP panel picture, 15 making sketches (CPD-DWG-101 to 115), 9 joint close-ups, 20 step pictures and the wiring diagram.
+- CPD-CAL-001 v0.4 (PCM volumes now measured on the model), CPD-REQ-001 v0.6, CPD-PRC-001 v0.6, `bom/bom.csv` (lines 1, 2, 4 to 7, 14, 16 changed; line 17 added), `bom/bom-notes.md`, CPD-DWG-001 Rev P4, concept media, README (links line and "Building the prototype"), `project.yaml` (`design_state: constructable`, both new documents in `trl_evidence`).
+
+### Design changes made for construction (CPD-DDR-003)
+
+1. Payload probe: a 10 x 40 mm vial across the top layer of pens; the old probe overlapped the pens by 2.35 cm³.
+2. Loop: the evaporator ring bonded into the bottom inside corner of the can (it floated in the PCM); 25 mm corner bends.
+3. Risers: 17.5 mm bends lying in the foam strip; can and shell slots open at the rim; three printed slot fillers; foam strip 20 to 28 mm tall.
+4. Cold block: two tube sockets, a drilled condensing passage and a charge stub, brazed with aluminium-to-copper rod; the loop is charged on the bench as one sealed unit.
+5. Peltier stack: a printed block frame screwed to two printed towers on the shell; two M3 clamp screws through the sink into the block; fan and guard on the sink.
+6. End housings: printed pads with M3 inserts on both shell ends, ears on both housings.
+7. Handle and latches: printed pads with M5 and M3 inserts; handle arms 4 mm further out (width 212 to 220 mm).
+8. Liner and lid: 5 mm inward rim flange on the can; liner on four printed feet and a printed collar; the lid cold plate folded into a tray bonded to the lid VIP plug, landing on the flange.
+9. VIPs: seven panels with order sizes; the lid plug 0.5 mm under the opening.
+10. Electronics: power board and logger on standoffs, a printed cell cradle, the display under a window.
+11. Condensate: a drip tray on the block frame and a drain tube through the head floor.
+12. Cables and inlets: grommets and a cable slot at the cooling end, a printed cable duct cover on the back face, 12 V and USB-C inlets low on the head's end wall, a reed lid switch in the head.
+
+### Key results (CPD-CAL-001 v0.4)
+
+PCM 0.972 to 0.935 kg. Passive hold at 43 °C 14.0 to 13.3 h (R4 at risk); off-grid 27.3 h at 32 °C (R5 at risk) and 16.7 h at 43 °C (R6 at risk). Refreeze of all the PCM 8.4 to 8.0 h (8.03 h, R8 **not met** by a few minutes). Mass 5.53 to 5.70 kg (R12 **not met** by 0.20 kg). Size 366 x 220 x 207 mm (R13 met). BOM $303 to $308 against $310 (R15 met). Counts unchanged: 10 met, 3 at risk, 2 not met, 2 not verifiable.
+
+### Proposed, awaiting Amish
+
+All in the design decisions register (CPD-DEC-001): accept CPD-DDR-003 (recommended); mass, now 0.20 kg over (recommend relaxing R12 to 5.75 kg); refreeze R8 (recommend restating as 9 h); battery removal for R14 (recommend counting the four-screw bay as removable for the prototype); the loop's working fluid (decide with the technician); the co-design partner; and the remaining appearance-model items.
+
+### Safety concerns
+
+The loop is a sealed refrigerant circuit: brazing and charging are for a qualified technician, before any plastic, VIP or PCM is near it (build plan S1, S2). No hot work once the paraffin is in (S8). A punctured VIP fails silently; the build plan bans tools near the panels (S3). The battery, first power and first charge stops (S4 to S7) carry over from the concept's safety section.
+
+### Stale until regenerated on Amish's Mac
+
+The photoreal renders (`media/render-hero.png`, `media/render-exploded.png`, `media/render-detail.png`), `media/card.png`, `media/social-preview.png` and the appearance model `cad/src/product_model.py` still show the concept: no pads, towers, slots or duct, a flat lid plate and the handle 4 mm closer to the shell.
+
+### Recommended next step
+
+Amish reviews CPD-DDR-003 and the register. TRL 4 (building to the plan) stays on hold until he asks for it.
