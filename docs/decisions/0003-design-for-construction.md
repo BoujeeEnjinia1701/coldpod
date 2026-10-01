@@ -3,7 +3,7 @@ doc_id: CPD-DDR-003
 title: ColdPod design for construction
 project: ColdPod
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -13,6 +13,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Changes that make the concept physically buildable, with the reason for each; made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review
+- version: "0.2"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # 0003: Design for construction
@@ -56,7 +60,7 @@ The changes keep what ColdPod does: the same payload space and pen layout, the s
 | Refreeze | All PCM 8.4 to 8.0 h, a few minutes over the 8 h target [G4]; R8 still not met | Less PCM to freeze |
 | Mass | 5.53 to 5.70 kg empty [K2]; R12 now missed by 0.20 kg | Pads, towers, ears, feet, collar, frame, fillers, duct, cradle, inserts and the folded tray |
 | Size | 366 x 212 x 207 to 366 x 220 x 207 mm [A6]; R13 met | Handle pivot pads |
-| Cost | $303 to $308 against $310 [L2]: line 2 $12 to $13, new line 17 at $4; R15 met | Parts added for construction |
+| Cost | $303 to $308 against the $310 value-engineering target [L2]: line 2 $12 to $13, new line 17 at $4; R15 within the target | Parts added for construction |
 | Drawings | CPD-DWG-001 Rev P4; making sketches CPD-DWG-101 to 115 added | Follows the model |
 | Documents | CPD-CAL-001 v0.4, CPD-REQ-001 v0.6, CPD-PRC-001 v0.6, BOM and BOM notes; new CPD-BLD-001 and CPD-DEC-001 | Follows the model |
 

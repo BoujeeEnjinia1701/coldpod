@@ -3,7 +3,7 @@ doc_id: CPD-REQ-001
 title: ColdPod requirements
 project: ColdPod
 doc_type: Requirements
-version: "0.6"
+version: "0.7"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -33,11 +33,15 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Status values from CPD-CAL-001 v0.4 for the constructable design (CPD-DDR-003, Draft); no target changed
+- version: "0.7"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # ColdPod requirements
 
-These are the requirements for the concept, checked by calculation at TRL 3 in CPD-CAL-001 v0.4 against the constructable design of CPD-DDR-003 (Draft, open for Amish's review). Amish decided the TRL 2 review items on 2026-09-25 (CPD-DDR-001): R6 is redefined from 24 h to 16 h at 43 °C (D5), R12 is relaxed from 5.0 kg to 5.5 kg (D6), R15 follows the new $300 budget (D10) and the R10 alarm defaults are adopted (D9). He then accepted the TRL 3 recommendations (CPD-DDR-002): R2 now names the two hardware cut-outs in series and R7 names the buck-boost driver that serves the full 10 to 15 V vehicle range; no target was relaxed. On 2026-09-26 Amish approved a budget top-up to $310 (CPD-DDR-002 N3), and R15 follows it. No target changed in v0.6; the values follow the constructable design. Against CPD-CAL-001 v0.4, ten requirements are met, three are at risk, two are **not met** by small margins (R8 and R12) and two cannot be verified at TRL 3 (R10 and R16). Before DDR-002 the count was seven met, five at risk and three not met (R2, R8, R12).
+These are the requirements for the concept, checked by calculation at TRL 3 in CPD-CAL-001 v0.4 against the constructable design of CPD-DDR-003 (Draft, open for Amish's review). Amish decided the TRL 2 review items on 2026-09-25 (CPD-DDR-001): R6 is redefined from 24 h to 16 h at 43 °C (D5), R12 is relaxed from 5.0 kg to 5.5 kg (D6), R15 follows the $300 value-engineering target of D10 and the R10 alarm defaults are adopted (D9). He then accepted the TRL 3 recommendations (CPD-DDR-002): R2 now names the two hardware cut-outs in series and R7 names the buck-boost driver that serves the full 10 to 15 V vehicle range; no target was relaxed. The target is now $310 (CPD-DDR-002 N3), a hypothetical control target and not a limit, and R15 follows it. No target changed in v0.6; the values follow the constructable design. Against CPD-CAL-001 v0.4, ten requirements are met, three are at risk, two are **not met** by small margins (R8 and R12) and two cannot be verified at TRL 3 (R10 and R16). Before DDR-002 the count was seven met, five at risk and three not met (R2, R8, R12).
 
 Table 1. Requirements.
 
@@ -57,7 +61,7 @@ Table 1. Requirements.
 | R12 | Be light enough to carry all day | 5.5 kg (12.1 lb) or less empty (relaxed from 5.0 kg, CPD-DDR-001 D6) | Mass estimate, later weighing | **Not met: 5.70 kg** (5.53 kg before the fixings and parts added to make the design buildable, CPD-DDR-003) |
 | R13 | Be compact | Fits in 400 x 250 x 250 mm including handle | Massing model | Met: 366 x 220 x 207 mm |
 | R14 | Travel by air | Battery 100 Wh or less, removable or with a shipping switch | Battery specification | Met: 76.8 Wh |
-| R15 | Be affordable and buildable | Parts cost $310 or less (raised from $300, CPD-DDR-002 N3, decided by Amish, 2026-09-26); no custom PCB for the first build | Priced BOM | Met: $308 against $310, with the construction parts of CPD-DDR-003 |
+| R15 | Be affordable and buildable | Estimated parts cost within the $310 value-engineering target (hypothetical control target, CPD-DDR-002 N3); no custom PCB for the first build | Priced BOM | Within the value-engineering target: $308 against $310, with the construction parts of CPD-DDR-003 |
 | R16 | Survive field use | Splash resistant (IP54 target for electronics bays); survives a 0.5 m drop onto a hard floor while loaded | Design review; later test | Not verifiable at TRL 3 |
 | R17 | Be clearly labelled as a prototype | "Research prototype, not a medical device" on the box, the display start screen and every exported log | Design review | Met by design |
 

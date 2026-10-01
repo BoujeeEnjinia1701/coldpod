@@ -266,7 +266,7 @@ Amish approved the build plan format on 2026-09-30 and asked for it across all r
 
 ### Key results (CPD-CAL-001 v0.4)
 
-PCM 0.972 to 0.935 kg. Passive hold at 43 °C 14.0 to 13.3 h (R4 at risk); off-grid 27.3 h at 32 °C (R5 at risk) and 16.7 h at 43 °C (R6 at risk). Refreeze of all the PCM 8.4 to 8.0 h (8.03 h, R8 **not met** by a few minutes). Mass 5.53 to 5.70 kg (R12 **not met** by 0.20 kg). Size 366 x 220 x 207 mm (R13 met). BOM $303 to $308 against $310 (R15 met). Counts unchanged: 10 met, 3 at risk, 2 not met, 2 not verifiable.
+PCM 0.972 to 0.935 kg. Passive hold at 43 °C 14.0 to 13.3 h (R4 at risk); off-grid 27.3 h at 32 °C (R5 at risk) and 16.7 h at 43 °C (R6 at risk). Refreeze of all the PCM 8.4 to 8.0 h (8.03 h, R8 **not met** by a few minutes). Mass 5.53 to 5.70 kg (R12 **not met** by 0.20 kg). Size 366 x 220 x 207 mm (R13 met). BOM $303 to $308 against the $310 value-engineering target (R15 within the target). Counts unchanged: 10 met, 3 at risk, 2 not met, 2 not verifiable.
 
 ### Proposed, awaiting Amish
 

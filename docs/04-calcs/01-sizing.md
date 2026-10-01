@@ -3,7 +3,7 @@ doc_id: CPD-CAL-001
 title: ColdPod sizing calculations
 project: ColdPod
 doc_type: Calculation
-version: "0.4"
+version: "0.5"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -25,11 +25,15 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Recomputed for the constructable design (CPD-DDR-003, Draft); PCM volumes and masses now taken from the model's components; results updated
+- version: "0.5"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # ColdPod sizing calculations
 
-On paper, ColdPod meets ten of its seventeen requirements, has three at risk and misses two, each by a small amount; two cannot be verified at TRL 3. Version 0.2 applies the design changes Amish accepted on 2026-09-25 (CPD-DDR-002): an aluminium cold plate under the lid PCM pack, a second hardware cut-out on the liner at 3 °C, thinner printed parts and a buck-boost Peltier driver. The plate couples the lid pack to the evaporator can, so the Peltier now refreezes all of the PCM, the lid pack no longer melts in long powered holds, and the jacket and lid pack melt together. In v0.3 the hold times were about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C; they stay at risk against a ±30 % uncertainty in the heat leak (R4, R5, R6). The liner cut-out closes the freeze fault (R2 met), and the plate and buck-boost stage close R1 and R7. In v0.3 the two misses were refreezing all the PCM (R8: 8.4 h against 8 h, because the lid pack shares the module), and mass (R12: 5.53 kg against 5.5 kg). Version 0.3 applied the budget top-up to $310 that Amish decided on 2026-09-26 (CPD-DDR-002 N3). Version 0.4 recomputes everything for the constructable design of CPD-DDR-003 (Draft, open for Amish's review): the liner now stands on printed feet with a printed collar, the lid pack sits in a folded aluminium tray, the foam strip is 28 mm tall, the loop lies in the can's bottom corner, and every fixing has been added. The PCM space is now measured on the model rather than estimated, so the PCM falls to 0.935 kg and the holds shorten: about 13.3 h with no power at 43 °C, 27.3 h off-grid at 32 °C and 16.7 h off-grid at 43 °C. Refreezing all the PCM takes 8.0 h, just over the 8 h target (R8), and the case now weighs 5.70 kg empty (R12, 5.5 kg). Cost (R15: $308 against $310) is met. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [B9], is the line of that script's output that carries it.
+On paper, ColdPod meets ten of its seventeen requirements, has three at risk and misses two, each by a small amount; two cannot be verified at TRL 3. Version 0.2 applies the design changes Amish accepted on 2026-09-25 (CPD-DDR-002): an aluminium cold plate under the lid PCM pack, a second hardware cut-out on the liner at 3 °C, thinner printed parts and a buck-boost Peltier driver. The plate couples the lid pack to the evaporator can, so the Peltier now refreezes all of the PCM, the lid pack no longer melts in long powered holds, and the jacket and lid pack melt together. In v0.3 the hold times were about 14.0 h with no power at 43 °C, 28.4 h off-grid at 32 °C and 17.5 h off-grid at 43 °C; they stay at risk against a ±30 % uncertainty in the heat leak (R4, R5, R6). The liner cut-out closes the freeze fault (R2 met), and the plate and buck-boost stage close R1 and R7. In v0.3 the two misses were refreezing all the PCM (R8: 8.4 h against 8 h, because the lid pack shares the module), and mass (R12: 5.53 kg against 5.5 kg). Version 0.3 set the value-engineering target at $310, as Amish decided on 2026-09-26 (CPD-DDR-002 N3). Version 0.4 recomputes everything for the constructable design of CPD-DDR-003 (Draft, open for Amish's review): the liner now stands on printed feet with a printed collar, the lid pack sits in a folded aluminium tray, the foam strip is 28 mm tall, the loop lies in the can's bottom corner, and every fixing has been added. The PCM space is now measured on the model rather than estimated, so the PCM falls to 0.935 kg and the holds shorten: about 13.3 h with no power at 43 °C, 27.3 h off-grid at 32 °C and 16.7 h off-grid at 43 °C. Refreezing all the PCM takes 8.0 h, just over the 8 h target (R8), and the case now weighs 5.70 kg empty (R12, 5.5 kg). Cost (R15: $308 against $310) is met. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [B9], is the line of that script's output that carries it.
 
 > **Safety:** These calculations concern a device meant to protect vaccines and insulin, a 76.8 Wh lithium battery, a combustible paraffin PCM and a heat sink near 53 °C. They are first-principles estimates for a paper proof of concept, not a substitute for datasheets, a fault analysis by a qualified engineer or test. ColdPod is a research and educational prototype, not a medical device, and is not WHO-prequalified. See CPD-PRC-001, Safety.
 
@@ -197,7 +201,7 @@ The thinner printed parts adopted in CPD-DDR-002 save 0.05 kg on the shell, 0.04
 
 ## L. Cost and battery (R14, R15)
 
-All 17 BOM lines are priced [L1]; the total is $308 [L2] against the $310 budget (raised from $300 by Amish, 2026-09-26, CPD-DDR-002 N3): **R15 is met**, with $2 of margin. The constructable design adds line 17 (printed construction parts, inserts and the foam strip, $4) and $1 for folding the lid tray ($303 in v0.3). The accepted changes add the lid cold plate (about $5), the liner cut-out (about $3) and the buck-boost driver (about $4), and the thinner printed parts save about $4 of filament; v0.1 was $295. There is still no custom PCB. The battery is 76.8 Wh [L3], under the 100 Wh airline limit: R14 is met.
+All 17 BOM lines are priced [L1]; the estimated cost is $308 [L2] against the $310 value-engineering target (a hypothetical control target, CPD-DDR-002 N3): **R15 is within the value-engineering target**, by $2. The constructable design adds line 17 (printed construction parts, inserts and the foam strip, $4) and $1 for folding the lid tray ($303 in v0.3). The accepted changes add the lid cold plate (about $5), the liner cut-out (about $3) and the buck-boost driver (about $4), and the thinner printed parts save about $4 of filament; v0.1 was $295. There is still no custom PCB. The battery is 76.8 Wh [L3], under the 100 Wh airline limit: R14 is met.
 
 ## P. Foam variant (CPD-DDR-001 D7)
 
@@ -237,7 +241,7 @@ The documented low-cost variant replaces the VIPs with 25 mm polyurethane foam (
 | --- | --- | --- | --- |
 | R8 | Refreeze a fully melted PCM in 8 h or less at 25 °C | All PCM 8.0 h, a few minutes over (jacket 6.8 h, lid pack 8.0 h) [G4] | **Not met** |
 | R12 | 5.5 kg or less empty (relaxed) | 5.70 kg [K2] | **Not met** |
-| R15 | Parts $310 or less; no custom PCB | $308 [L2]; modules on perfboard | Met |
+| R15 | Parts $310 or less; no custom PCB | $308 [L2]; modules on perfboard | Within the value-engineering target |
 | R4 | 12 h or more at 43 °C, no power | 13.3 h; 10.2 h at +30 % leak [D2, D3] | At risk |
 | R5 | 24 h or more at 32 °C, battery then PCM | 27.3 h; 21.4 h at +30 % leak [F2] | At risk |
 | R6 | 16 h or more at 43 °C, battery then PCM (relaxed) | 16.7 h; 12.6 h at +30 % leak [F2] | At risk |

@@ -2,7 +2,7 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827) [![DOI](https://zenodo.org/badge/1386351223.svg)](https://zenodo.org/badge/latestdoi/1386351223) [![REUSE compliant](https://github.com/BoujeeEnjinia1701/coldpod/actions/workflows/reuse.yml/badge.svg)](https://github.com/BoujeeEnjinia1701/coldpod/actions/workflows/reuse.yml) [![Archived in Software Heritage](https://archive.softwareheritage.org/badge/origin/https://github.com/BoujeeEnjinia1701/coldpod/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/BoujeeEnjinia1701/coldpod)
 
-**Area:** BioMedical · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** $310 USD · **Difficulty:** 3 of 5
+**Area:** BioMedical · **TRL:** 3 of 9 (proof of concept on paper) · **Value-engineering target:** $310 USD (hypothetical control target; estimated cost $308) · **Difficulty:** 3 of 5
 
 Portable Peltier cooler with a phase-change buffer and a temperature logger that raises alerts on excursions.
 
@@ -59,7 +59,7 @@ Full problem statement: [docs/01-problem.md](docs/01-problem.md)
 
 A carry case 366 x 220 x 207 mm holds 1.37 L of insulin or vaccines (24 insulin pens) in an aluminium liner wrapped in a phase-change material that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module refreezes the phase-change material from a 12 V socket, a solar panel or a USB-C charger, through a loop thermosiphon that carries heat one way only; an aluminium cold plate tray round the lid pack lets it freeze that pack too. A 76.8 Wh LiFePO4 battery keeps it cooling on the road, and a logger records the payload temperature every minute and raises alarms on excursions.
 
-TRL 3 calculations ([CPD-CAL-001](docs/04-calcs/01-sizing.md)): about 13.3 h with no power at 43 °C, 27.3 h off-grid at 32 °C and 16.7 h off-grid at 43 °C, all with thin margins. Two hardware cut-outs in series keep a stuck-on driver from freezing the payload. Two targets are missed: refreezing all the phase-change material takes 8.0 h, a few minutes over the 8 h target, and the case weighs 5.70 kg empty (target 5.5 kg) now that every fixing is in; the options are awaiting Amish ([design decisions register](docs/06-design-decisions.md)). The parts cost $308 against the $310 budget. TRL 4 (lab testing) is on hold.
+TRL 3 calculations ([CPD-CAL-001](docs/04-calcs/01-sizing.md)): about 13.3 h with no power at 43 °C, 27.3 h off-grid at 32 °C and 16.7 h off-grid at 43 °C, all with thin margins. Two hardware cut-outs in series keep a stuck-on driver from freezing the payload. Two targets are missed: refreezing all the phase-change material takes 8.0 h, a few minutes over the 8 h target, and the case weighs 5.70 kg empty (target 5.5 kg) now that every fixing is in; the options are awaiting Amish ([design decisions register](docs/06-design-decisions.md)). The estimated parts cost is $308 against the $310 value-engineering target (a hypothetical control target, not a limit), $2 under it. TRL 4 (lab testing) is on hold.
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
@@ -108,7 +108,7 @@ Controlled documents follow the portfolio [documentation standard](.kit/STANDARD
 
 ## Credits
 
-Designed by Amish Chadha. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for roles. To cite this design, use [CITATION.cff](CITATION.cff) (GitHub shows it as "Cite this repository").
+Designed by Amish Chadha, with contributions from Dr. Geeti Chadha. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for roles. To cite this design, use [CITATION.cff](CITATION.cff) (GitHub shows it as "Cite this repository").
 
 AI assistance (Claude) was used to accelerate concept renders, prototype documentation and first-pass sizing calculations. Design direction and all decisions are Amish Chadha's, recorded in this repository's decision records (`docs/decisions/`).
 

@@ -3,7 +3,7 @@ doc_id: CPD-PRC-001
 title: ColdPod design precis
 project: ColdPod
 doc_type: Design precis
-version: "0.6"
+version: "0.7"
 status: Draft
 date: '2026-10-01'
 author: Amish Chadha
@@ -33,6 +33,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Constructable design (CPD-DDR-003, Draft, open for Amish's review); numbers from CPD-CAL-001 v0.4; build plan CPD-BLD-001 and decisions register CPD-DEC-001 added
+- version: "0.7"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # ColdPod design precis
@@ -106,7 +110,7 @@ Table 2. Hold times, charging, size, mass and cost.
 | Log storage | 1.38 MB for 60 days | 1 record per minute, 16 bytes [J1] | R9 met on 2 MB flash |
 | Size | 366 x 220 x 207 mm (14.4 x 8.7 x 8.1 in) overall | Handle up [A6] | R13 met |
 | Mass, empty | **5.70 kg (12.6 lb)** | Model volumes and densities [K2]; the fixings and parts that make the design buildable add about 0.17 kg (CPD-DDR-003) | R12 **not met** (5.5 kg) |
-| Parts cost | **$308** | `bom/bom.csv` [L2] | R15 met ($310) |
+| Parts cost | **$308** | `bom/bom.csv` [L2] | R15 within the value-engineering target ($310) |
 
 ## Key design choices
 
@@ -120,7 +124,7 @@ Amish decided choices 1 to 9 on 2026-09-25, going with the recommendation in eac
 6. **Vacuum-insulated panels instead of foam (decided, D7).** Polyurethane foam of the same thickness (about 0.024 W/(m·K)) gives 0.161 W/K rather than 0.092 W/K, so the passive hold at 43 °C would drop from 13.3 h to about 7.6 h (CPD-CAL-001, P1 and P2), but it would save about $45 and some mass. VIPs are used, with a foam version documented as a low-cost variant.
 7. **Local alarms and Bluetooth Low Energy only (decided, D8).** No cellular or LoRa radio in the first build (either would add $20 to $40 and more power).
 8. **Alarm thresholds (decided, D9).** Warn after 10 min outside 2 to 8 °C; alarm at once at 0 °C or lower on the payload probe; alarm if the liner probe reaches 1 °C (an early freeze warning); adjustable per product.
-9. **Budget raised to $300 (decided, D10).** Kept at $300 by CPD-DDR-002, then raised to $310 (item 16); the parts cost of the constructable design is $308.
+9. **Value-engineering target (decided, D10).** The target is $310 (a hypothetical control target, not a limit; $300 at D10, $310 after CPD-DDR-002 item 16); the estimated parts cost of the constructable design is $308, $2 under the target.
 
 Amish decided the TRL 3 review items on 2026-09-25, again going with the recommendation in each case (CPD-DDR-002):
 
@@ -130,7 +134,7 @@ Amish decided the TRL 3 review items on 2026-09-25, again going with the recomme
 13. **Evaporator can and loop thermosiphon confirmed (decided, DDR-002 item 5).** As sized in CPD-CAL-001: a 1.0 mm aluminium can around the jacket fed by an 8 mm copper loop. The mechanical disconnect (choice 2b) stays ready as the fallback if a maker cannot charge the loop.
 14. **Peltier class and drive confirmed (decided, DDR-002 item 6).** TEC1-12703 class module, smooth DC through an LC filter, heat sink of 0.50 K/W or better with the fan.
 15. **Buck-boost driver (decided, DDR-002 item 7).** The Peltier driver can raise the module voltage above a low vehicle input (10 V), rather than narrowing the 12 V input range to 11 to 15 V (about $4 more).
-16. **Budget kept at $300 (decided, DDR-002 item 8), then raised to $310 (decided by Amish, 2026-09-26, DDR-002 N3).** A VIP quote is to come before any purchase decision; purchasing is TRL 4 work, on hold.
+16. **Value-engineering target of $310 (decided by Amish, DDR-002 item 8 and N3).** A VIP quote is to come before any purchase decision; purchasing is TRL 4 work, on hold.
 
 ![Exploded view](../media/exploded.png)
 
