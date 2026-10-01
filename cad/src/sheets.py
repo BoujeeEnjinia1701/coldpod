@@ -61,12 +61,13 @@ def main():
     asm = build()
     views = project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P2",
-              author="Amish Chadha", date=DATE, scale=None, theme="technical",
+    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P3",
+              author="Amish Chadha", date=DATE, scale=1 / 5, theme="technical",
               material="Printed PETG shell, 25 mm VIPs, 5 °C PCM, aluminium liner; see bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
-                         ("P2", "Lid cold plate, liner cut-out, thinner walls (CPD-DDR-002)", DATE, "AC")])
-    s.add_ortho(views)
+                         ("P2", "Lid cold plate, liner cut-out, thinner walls (CPD-DDR-002)", DATE, "AC"),
+                         ("P3", "Layout and labels tidied", "2026-09-30", "AC")])
+    s.add_ortho(views, dims=False)
     k = s.scale
     c = ortho_cells(s, views)
     out = []
@@ -93,7 +94,7 @@ def main():
     out += [ext(wl, ys, wl, y - 5), ext(wr, ys, wr, y - 5)]
     out += dim_h(wl, wr, y - 4, f"{2 * Lv['sh_y']:.0f} shell")
     s._layers += out
-    s.add_svg(views["iso"], 276, 32, 140, 106, label="Isometric view", sublabel="Not to scale")
+    s.add_svg(views["iso"], 276, 44, 140, 82, label="Isometric view", sublabel="Not to scale")
     s.add_notes("Main dimensions and interfaces (mm)", [
         f"Overall {bb.size.X:.0f} L x {bb.size.Y:.0f} W x {bb.size.Z:.0f} H, handle up",
         f"Body {2 * Lv['sh_x']:.0f} x {2 * Lv['sh_y']:.0f} x {Lv['lid_top']:.0f}; bay {P['bay_l']:.0f}, head {P['head_l']:.0f}",
@@ -106,7 +107,7 @@ def main():
         "Cut-outs in series: cold block −5 °C, liner 3 °C",
         "Empty mass about 5.53 kg (CPD-CAL-001 v0.2, K2)",
         "Third-angle; front view from -Y, right view from +X",
-    ], x=276, y=160, width=140)
+    ], x=276, y=145, width=140)
     path = s.save(ROOT / "cad" / "drawings" / "CPD-DWG-001")
     shutil.rmtree(work, ignore_errors=True)
     print(f"wrote {path} and .pdf, .png at scale 1:{1 / k:g}")
