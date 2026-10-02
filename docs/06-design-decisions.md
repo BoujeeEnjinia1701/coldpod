@@ -3,9 +3,9 @@ doc_id: CPD-DEC-001
 title: ColdPod design decisions register
 project: ColdPod
 doc_type: Design decisions register
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,6 +17,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: Budget treated as a value-engineering target
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Amish approved the recommendations for open decisions 1 to 7 (2026-10-02); moved to decisions made (CPD-DDR-003 accepted)"
 ---
 
 # ColdPod design decisions register
@@ -25,15 +29,7 @@ Every design decision still to be made, and every decision made, in one place. E
 
 ## Open decisions
 
-| # | Decision needed | Options | Recommendation | Affects in the build | Source |
-| --- | --- | --- | --- | --- | --- |
-| 1 | Accept the design-for-construction changes (pads and towers on the shell, rim slots, foam strip, loop in the can corner, block frame, liner feet and collar, folded lid tray, fixings, drip tray, cable duct) | (a) accept; (b) accept with changes | (a) | The whole build plan | CPD-DDR-003, A1 |
-| 2 | Mass (R12): 5.70 kg against 5.5 kg, now 0.20 kg over; replaces the earlier 0.03 kg question | (a) relax R12 to 5.75 kg; (b) keep 5.5 kg and weigh at TRL 4; (c) save mass now (1.0 mm tray, lighter handle and strap) | (a), since the added mass is the fixings the case needs; (c) if the target must stay | Lid tray gauge, handle choice | CPD-DDR-003, A2; CPD-DDR-002, N2 |
-| 3 | Refreeze (R8): all the PCM takes 8.0 h (8.03 h), a few minutes over 8 h | (a) restate R8 as 9 h for all the PCM; (b) accept the miss; (c) a thinner lid pack, trading passive hold | (a) | None in the build | CPD-DDR-002, N1; CPD-CAL-001 v0.4, G4 |
-| 4 | Battery removal (R14): the pack comes out by removing the battery bay with four screws | (a) count that as removable for the prototype; (b) add a shipping switch in the bay | (a) for the prototype | Battery bay wiring | CPD-DDR-003, A3 |
-| 5 | Working fluid and charge for the loop thermosiphon | Chosen with the refrigeration technician, for example R-134a or R-1234yf, by charge and local rules | Decide with the technician at TRL 4 | Step 3 (charging) | CPD-DDR-003, A4 |
-| 6 | Co-design partner: an immunization program, a diabetes association or a humanitarian logistics group | Partner per area, chosen later | None yet | Not part of the TRL 3 build | CPD-DDR-001, O1 |
-| 7 | Appearance model: handle form, a window over the heat sink, the second status light, base bumper, labels and wordmark (`docs/REVIEW.md`, 2026-09-26, items 1, 2, 5 and 6; items 3, 4 and 7 were adopted for construction in CPD-DDR-003, open under decision 1) | As listed in the review note | Round bail in the model; no window; second light adopted; labels under BOM line 16; bumper decided with mass (decision 2) | Renders and product model only | `docs/REVIEW.md`, 2026-09-26 |
+None. All open decisions were decided on 2026-10-02.
 
 ## To confirm when parts are bought
 
@@ -61,4 +57,11 @@ Value-engineering target: USD 310 (a hypothetical control target, not a limit). 
 | 2026-09-25 | TRL 2 review items D1 to D11: 5 °C organic PCM, thermosiphon with a mechanical disconnect as fallback, evaporator on the outer face of the PCM, 76.8 Wh LiFePO4 pack, R6 redefined to 16 h, R12 relaxed to 5.5 kg, VIPs with a foam variant documented, local alarms and Bluetooth only, alarm defaults, budget $300, outreach vaccinators first | Amish, going with the recommendation | CPD-DDR-001 |
 | 2026-09-25 | TRL 3 recommendations: lid cold plate, 3 °C liner cut-out, thinner printed parts, evaporator can and loop thermosiphon, TEC1-12703 class with smooth DC, buck-boost driver, budget kept at $300 | Amish: "i accept all your recommendations, go with them across all repos." | CPD-DDR-002 |
 | 2026-09-26 | Budget top-up to $310 (R15 met) | Amish: "I am ok with the budget top ups" | CPD-DDR-002, N3 |
-| 2026-09-30 | Make the design physically buildable while drawing the build plan | Amish: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." The resulting changes are open for review (decision 1) | CPD-DDR-003 |
+| 2026-09-30 | Make the design physically buildable while drawing the build plan | Amish: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." The changes themselves were accepted on 2026-10-02 (below) | CPD-DDR-003 |
+| 2026-10-02 | Design for construction accepted: the changes P1 to P12 (pads and towers on the shell, rim slots, foam strip, loop in the can corner, block frame, liner feet and collar, folded lid tray, fixings, drip tray, cable duct) and their knock-on changes, as made | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A1 |
+| 2026-10-02 | Mass (R12): option (a). R12 relaxed to 5.75 kg for the prototype, which is weighed at TRL 4; the base bumper is left off so the 0.05 kg margin is not spent before weighing | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A2; CPD-DDR-002, N2 |
+| 2026-10-02 | Refreeze (R8): option (a). R8 restated as 9 h or less for all the PCM at 25 °C, still an overnight refreeze | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-002, N1; CPD-CAL-001 v0.4, G4 |
+| 2026-10-02 | Battery removal (R14): option (a) for the prototype; the battery bay on four screws counts as removable. Before any field or air travel use, add the shipping switch and check the carrier's lithium battery rules | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A3 |
+| 2026-10-02 | Loop working fluid: R-134a (non-flammable, safety class A1) for the prototype, with the charge set by the refrigeration technician from the loop volume; a lower-impact fluid such as R-1234yf (A2L, mildly flammable) is revisited only for a product version and under local rules | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A4 |
+| 2026-10-02 | Co-design partner: an immunization program, consistent with outreach vaccinators first (CPD-DDR-001, D11). First candidate to approach: PATH, or a national immunization program's outreach team reached through it | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-001, O1 |
+| 2026-10-02 | Appearance model: round bail in the model; heat sink kept solid (no window); second status light adopted; labels and wordmark under BOM line 16; base bumper left out until the prototype is weighed | Amish: "i approve your recommendations for all 555 open decisions." | `docs/REVIEW.md`, 2026-09-26 |

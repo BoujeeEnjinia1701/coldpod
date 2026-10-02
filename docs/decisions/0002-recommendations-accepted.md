@@ -3,9 +3,9 @@ doc_id: CPD-DDR-002
 title: ColdPod recommendations accepted
 project: ColdPod
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Budget top-up to $310 decided by Amish (N3); R15 met
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "O1, N1 and N2 decided by Amish on 2026-10-02 (CPD-DEC-001)"
 ---
 
 # 0002: Recommendations accepted
 
 - **Date:** 2026-09-25
-- **Status:** accepted. Every item with a recommendation is decided by Amish; the item without a recommendation, and three new findings from the recalculation, stay open.
+- **Status:** accepted. Every item with a recommendation is decided by Amish; the item without a recommendation and three new findings from the recalculation stayed open; N3 was decided on 2026-09-26, and O1, N1 and N2 on 2026-10-02 ("i approve your recommendations for all 555 open decisions."; CPD-DEC-001).
 
 ## Context
 
@@ -54,13 +58,13 @@ Other effects:
 
 ## Items still open
 
-*Table 2. Proposed, awaiting Amish.*
+*Table 2. Items open on 2026-09-25, with their later decisions.*
 
 | # | Item | Status |
 | --- | --- | --- |
-| O1 | Co-design partner: an immunization program, a diabetes association or a humanitarian logistics group | Proposed, awaiting Amish. No recommendation was made; partners are picked per area later |
-| N1 | R8 refreeze: 8.4 h for all the PCM against 8 h, now that the lid pack is frozen actively. Giving the module 30 W and the battery 7 W only reaches 8.2 h (CPD-CAL-001, G10). Options: (a) restate R8 as 9 h for all the PCM; (b) accept the miss; (c) a thinner lid pack, trading passive hold | New finding from CPD-CAL-001 v0.2. Proposed, awaiting Amish; suggestion (a) |
-| N2 | R12 mass: 5.53 kg against 5.5 kg. Options: (a) keep the target and settle it by weighing when TRL 4 resumes; (b) relax to 5.6 kg; (c) a lighter strap and handle | New finding. Proposed, awaiting Amish; suggestion (a) |
+| O1 | Co-design partner: an immunization program, a diabetes association or a humanitarian logistics group | No recommendation was made on 2026-09-25. Decided by Amish, 2026-10-02: an immunization program; first candidate to approach, PATH or a national immunization program's outreach team reached through it (CPD-DEC-001) |
+| N1 | R8 refreeze: 8.4 h for all the PCM against 8 h, now that the lid pack is frozen actively. Giving the module 30 W and the battery 7 W only reaches 8.2 h (CPD-CAL-001, G10). Options: (a) restate R8 as 9 h for all the PCM; (b) accept the miss; (c) a thinner lid pack, trading passive hold | New finding from CPD-CAL-001 v0.2. Decided by Amish, 2026-10-02: (a), R8 restated as 9 h for all the PCM (CPD-DEC-001) |
+| N2 | R12 mass: 5.53 kg against 5.5 kg. Options: (a) keep the target and settle it by weighing when TRL 4 resumes; (b) relax to 5.6 kg; (c) a lighter strap and handle | New finding. Superseded by CPD-DDR-003 A2 (0.20 kg over); decided by Amish, 2026-10-02: R12 relaxed to 5.75 kg for the prototype, weighed at TRL 4 (CPD-DEC-001) |
 | N3 | R15 cost: $303 against the $300 budget. Options: (a) raise `budget_usd` to $310; (b) keep $300 and wait for the VIP quote (on hold with TRL 4); (c) keep $300 and drop the buck-boost stage for an 11 to 15 V vehicle input (saves about $4, reopens R7) | New finding. Budget top-up to $310: decided by Amish, 2026-09-26. `budget_usd` set to 310; R15 met ($303 against $310, CPD-CAL-001 v0.3) |
 
 ## Budget top-up, 2026-09-26

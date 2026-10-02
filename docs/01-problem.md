@@ -3,9 +3,9 @@ doc_id: CPD-PRB-001
 title: ColdPod problem statement
 project: ColdPod
 doc_type: Problem statement
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,6 +29,10 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Budget top-up approved by Amish; budget $310
+- version: "0.6"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Partner type decided and first candidate to approach (CPD-DEC-001, 2026-10-02)"
 ---
 
 # ColdPod problem statement
@@ -79,5 +83,5 @@ The gap ColdPod addresses: an open, repairable carrier that combines passive sto
 ## Open questions
 
 - Which user comes first? Decided by Amish, 2026-09-25 (CPD-DDR-001 D11): the outreach vaccinator first, since that user sets the 43 °C design case; the traveller with insulin second.
-- Which partner should help shape the requirements (an immunization program, a diabetes association, or a humanitarian logistics group)? Proposed, awaiting Amish; partners are to be picked per area later.
+- Which partner should help shape the requirements? Decided by Amish, 2026-10-02 (CPD-DEC-001): an immunization program, consistent with outreach vaccinators first. First candidate to approach: PATH, or a national immunization program's outreach team reached through it. Nothing is agreed yet.
 - How hot does it really get inside a carrier strapped to a motorbike in direct sun? The 43 °C WHO test point is used until field data exists.

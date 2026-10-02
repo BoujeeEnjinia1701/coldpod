@@ -3,9 +3,9 @@ doc_id: CPD-BLD-001
 title: ColdPod prototype build plan
 project: ColdPod
 doc_type: Build plan
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: First build plan; design made constructable (CPD-DDR-003, Draft, open for Amish's review)
+  - version: "0.2"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "CPD-DDR-003 accepted (2026-10-02); loop working fluid R-134a in section 3 and safety stop S2"
 ---
 
 # ColdPod prototype build plan
@@ -33,7 +37,7 @@ The prototype is one ColdPod carry case, 366 x 220 x 207 mm with the handle up. 
 
 ## 2. What changed to make it buildable
 
-The concept showed what ColdPod does; many of its parts had no fixing or could not be put together as drawn. Each change below keeps what ColdPod does. All of them are recorded in decision record CPD-DDR-003, open for Amish's review. One rule drives most of them: there is a VIP behind every wall of the shell, so no screw, rivet or drill may pass through a shell wall, and every outside fixing lands on a printed pad or tower with a threaded insert.
+The concept showed what ColdPod does; many of its parts had no fixing or could not be put together as drawn. Each change below keeps what ColdPod does. All of them are recorded in decision record CPD-DDR-003, which Amish accepted on 2026-10-02. One rule drives most of them: there is a VIP behind every wall of the shell, so no screw, rivet or drill may pass through a shell wall, and every outside fixing lands on a printed pad or tower with a threaded insert.
 
 *Table 1. Changes from the concept.*
 
@@ -122,7 +126,7 @@ Make and check each component before the assembly step that needs it. Sizes are 
 
 *Figure 7. Loop thermosiphon bending sketch (CPD-DWG-103).*
 
-**What it is and what it is made from.** The one-way heat path: a sealed copper circuit in which a working fluid boils in the ring at the bottom of the can, rises as vapour, condenses in the cold block and runs back down as liquid. Soft copper refrigeration tube 8 x 0.5 mm.
+**What it is and what it is made from.** The one-way heat path: a sealed copper circuit in which the working fluid (R-134a) boils in the ring at the bottom of the can, rises as vapour, condenses in the cold block and runs back down as liquid. Soft copper refrigeration tube 8 x 0.5 mm.
 
 **How to make it.** Bending is bench work; brazing, leak testing and charging are for a refrigeration technician (safety stops S1 and S2).
 
@@ -564,7 +568,7 @@ These are the checks a TRL 4 test report would record; this plan only lists them
 Stop at each point. Carry on only when everything listed is true.
 
 - **S1. Before any brazing.** The can, loop and block are on a steel bench with no plastic, VIP, PCM or paper within 1 m. Work in a ventilated space with a fire extinguisher at hand. Brazing is done by a technician trained in it, with eye protection and a nitrogen purge.
-- **S2. Before the loop is charged.** The technician is qualified to handle refrigerants where you live and chooses the working fluid and charge. The loop has passed a dry nitrogen leak test at the technician's test pressure. Eye protection and gloves; never heat a charged loop.
+- **S2. Before the loop is charged.** The technician is qualified to handle refrigerants where you live. The working fluid is R-134a (non-flammable, safety class A1); the technician sets the charge from the loop volume. The loop has passed a dry nitrogen leak test at the technician's test pressure. Eye protection and gloves; never heat a charged loop.
 - **S3. Before the VIPs come out of their packaging.** No knives, drills or sharp tools on the bench. Handle panels by their faces, never by a corner.
 - **S4. Before the cells come into the workshop.** Each cell reads about 2.8 to 3.4 V, with no swelling, dents or leaks and a datasheet from its maker. The fuse is out. A charging spot is ready on a non-combustible surface with a fire extinguisher for electrical fires.
 - **S5. Before first power to the Peltier module.** The heat sink is clamped and the fan connected: a module run without its heat sink overheats in seconds. Both cut-outs are in series in the module supply and pass their check. The bench supply current limit is 3 A or less.

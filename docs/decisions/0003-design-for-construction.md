@@ -3,9 +3,9 @@ doc_id: CPD-DDR-003
 title: ColdPod design for construction
 project: ColdPod
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Accepted by Amish (2026-10-02), with A1 to A4 as recommended (A4: R-134a); status kept Draft"
 ---
 
 # 0003: Design for construction
 
 - **Date:** 2026-10-01
-- **Status:** proposed. The changes in Table 1 were made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review. Nothing in this record changes what ColdPod does, its pitch or its safety case. The items in Table 3 are Proposed, awaiting Amish.
+- **Status:** accepted. Amish, 2026-10-02: "i approve your recommendations for all 555 open decisions." This covers every change in Table 1 and its knock-on changes, and the recommendations for A1 to A4 in Table 3, which are now decided and recorded in the design decisions register (CPD-DEC-001). Nothing in this record changes what ColdPod does or its pitch; A3 and A4 add safety rules (below).
 
 ## Context
 
@@ -64,18 +68,18 @@ The changes keep what ColdPod does: the same payload space and pen layout, the s
 | Drawings | CPD-DWG-001 Rev P4; making sketches CPD-DWG-101 to 115 added | Follows the model |
 | Documents | CPD-CAL-001 v0.4, CPD-REQ-001 v0.6, CPD-PRC-001 v0.6, BOM and BOM notes; new CPD-BLD-001 and CPD-DEC-001 | Follows the model |
 
-*Table 3. Proposed, awaiting Amish.*
+*Table 3. Items proposed to Amish; all accepted on 2026-10-02 as recommended in the register (A4 with R-134a named).*
 
 | # | Question | Options | Recommendation |
 | --- | --- | --- | --- |
 | A1 | Accept the design-for-construction changes in Table 1. | (a) accept; (b) accept with changes. | (a). |
-| A2 | Mass: R12 is now missed by 0.20 kg, not 0.03 kg (this replaces the earlier question CPD-DDR-002 N2). Every added gram is a fixing the case needs. | (a) relax R12 to 5.75 kg; (b) keep 5.5 kg and settle it by weighing at TRL 4; (c) look for mass now: a 1.0 mm tray (about 0.05 kg, slower lid refreeze), a lighter handle and strap. | (a), because the extra mass is what it takes to build the case; (c) if the target must stay. |
-| A3 | Battery removal (R14 asks for a removable battery or a shipping switch): the pack now comes out by removing the battery bay (four screws) and unplugging the duct leads. | (a) count that as removable for the prototype; (b) add a shipping switch in the bay. | (a) for the prototype; revisit with airline guidance before field use. |
-| A4 | Refrigerant for the loop: CPD-CAL-001 sizes the loop by its conductance and does not name a working fluid, and the charge must be set before the technician fills it. | Choose with the technician, for example R-134a or R-1234yf, by the charge needed and local rules. | Decide with the technician at TRL 4. |
+| A2 | Mass: R12 is now missed by 0.20 kg, not 0.03 kg (this replaces the earlier question CPD-DDR-002 N2). Every added gram is a fixing the case needs. | (a) relax R12 to 5.75 kg; (b) keep 5.5 kg and settle it by weighing at TRL 4; (c) look for mass now: a 1.0 mm tray (about 0.05 kg, slower lid refreeze), a lighter handle and strap. | (a), because the extra mass is what it takes to build the case; (c) if the target must stay. Accepted 2026-10-02: R12 is 5.75 kg for the prototype, weighed at TRL 4, with the base bumper left off. |
+| A3 | Battery removal (R14 asks for a removable battery or a shipping switch): the pack now comes out by removing the battery bay (four screws) and unplugging the duct leads. | (a) count that as removable for the prototype; (b) add a shipping switch in the bay. | (a) for the prototype; revisit with airline guidance before field use. Accepted 2026-10-02: before any field or air travel use, add the shipping switch and check the carrier's lithium battery rules. |
+| A4 | Refrigerant for the loop: CPD-CAL-001 sizes the loop by its conductance and does not name a working fluid, and the charge must be set before the technician fills it. | Choose with the technician, for example R-134a or R-1234yf, by the charge needed and local rules. | Decide with the technician at TRL 4. Accepted 2026-10-02 as changed in the register: R-134a (non-flammable, A1) for the prototype, charge set by the technician from the loop volume; R-1234yf (A2L) only for a product version under local rules. |
 
 ## Consequences
 
 - `design_state: constructable` in `project.yaml`. The build plan CPD-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`).
-- Requirement counts are unchanged at 10 met, 3 at risk, 2 not met (R8, R12), 2 not verifiable at TRL 3 (CPD-CAL-001 v0.4); R12's miss is larger and R8's smaller.
+- Requirement counts are unchanged at 10 met, 3 at risk, 2 not met (R8, R12), 2 not verifiable at TRL 3 (CPD-CAL-001 v0.4); R12's miss is larger and R8's smaller. With the decisions of 2026-10-02, R12 is relaxed to 5.75 kg and R8 restated as 9 h, so both are met on paper: 12 met, 3 at risk, 2 not verifiable (CPD-REQ-001 v0.8).
 - The photoreal renders (`media/render-*.png`), `media/card.png`, `media/social-preview.png` and the appearance model `cad/src/product_model.py` still show the concept handle position, a flat lid plate and no pads, towers, slots or duct; they need regenerating on Amish's Mac, where Blender is.
 - Building the loop needs a refrigeration technician; this is called out as a safety stop in the build plan.

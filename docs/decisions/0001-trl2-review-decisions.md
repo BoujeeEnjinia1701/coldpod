@@ -3,9 +3,9 @@ doc_id: CPD-DDR-001
 title: ColdPod TRL 2 review decisions
 project: ColdPod
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002); item O2 now decided, see CPD-DDR-002
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Item O1 decided by Amish on 2026-10-02 (CPD-DEC-001)"
 ---
 
 # 0001: TRL 2 review decisions
 
 - **Date:** 2026-09-25
-- **Status:** accepted for items D1 to D11; item O2 accepted through CPD-DDR-002; item O1 remains proposed
+- **Status:** accepted for items D1 to D11; item O2 accepted through CPD-DDR-002; item O1 decided by Amish on 2026-10-02 (CPD-DEC-001)
 
 ## Context
 
@@ -63,7 +67,7 @@ Notes on the decided items:
 
 | # | Item | State |
 | --- | --- | --- |
-| O1 | Co-design partner (an immunization program, a diabetes association or a humanitarian logistics group) | Proposed, awaiting Amish. No recommendation was made; the portfolio decision is to pick partners per area later |
+| O1 | Co-design partner (an immunization program, a diabetes association or a humanitarian logistics group) | No recommendation was made on 2026-09-25. Decided by Amish, 2026-10-02: an immunization program; first candidate to approach, PATH or a national immunization program's outreach team reached through it (CPD-DEC-001) |
 | O2 | New TRL 3 proposals: lid pack cold path, liner freeze cut-out, mass, evaporator can and loop thermosiphon, Peltier class and drive, vehicle input headroom, budget margin | Decided by Amish, 2026-09-25: go with recommendation. Recorded item by item, with what changed in the repo, in CPD-DDR-002 (`0002-recommendations-accepted.md`). The thermosiphon tilt limit carried no separate recommendation; it stays a test question for after TRL 3 |
 
 ## Consequences

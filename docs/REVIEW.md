@@ -283,3 +283,57 @@ The photoreal renders (`media/render-hero.png`, `media/render-exploded.png`, `me
 ### Recommended next step
 
 Amish reviews CPD-DDR-003 and the register. TRL 4 (building to the plan) stays on hold until he asks for it.
+
+## Session 2026-10-02: open decisions decided
+
+Amish, 2026-10-02: "i approve your recommendations for all 555 open decisions." This approves the recommendation written for every open decision in the design decisions register (CPD-DEC-001). trl stays 3; nothing was built, bought or tested, and TRL 4 remains on hold.
+
+### Decisions recorded (7)
+
+| Register item | Decision |
+| --- | --- |
+| 1 | CPD-DDR-003 accepted: P1 to P12 and their knock-on changes, as made |
+| 2 | R12 relaxed to 5.75 kg for the prototype; weighed at TRL 4; base bumper left off |
+| 3 | R8 restated as 9 h for all the PCM at 25 °C |
+| 4 | Battery bay on four screws counts as removable for the prototype; shipping switch and carrier rules before any field or air travel use |
+| 5 | R-134a (non-flammable, A1) for the prototype loop, charge set by the technician; R-1234yf only for a product version |
+| 6 | Partner: an immunization program; first candidate to approach, PATH or a national program's outreach team through it |
+| 7 | Round bail in the model, solid heat sink, second status light adopted, labels and wordmark under BOM line 16, no bumper until weighed |
+
+All 7 moved to Decisions made in CPD-DEC-001, dated 2026-10-02; the Open decisions section now reads "None."
+
+### Documents changed
+
+- `docs/06-design-decisions.md` (CPD-DEC-001 v0.3): items 1 to 7 moved to Decisions made; Open decisions reads "None"; the 2026-09-30 row now points to the acceptance
+- `docs/decisions/0003-design-for-construction.md` (CPD-DDR-003 v0.3): status accepted (kept Draft); A1 to A4 marked accepted; requirement consequence added
+- `docs/03-requirements.md` (CPD-REQ-001 v0.8): R8 restated as 9 h, R12 relaxed to 5.75 kg (both met on paper), R14 status states the prototype removal method and the travel rule; counts updated
+- `docs/04-calcs/01-sizing.md` (CPD-CAL-001 v0.6): R8, R12 and R14 text and Table 9 against the restated targets; counts 12 met, 3 at risk, 2 not verifiable
+- `docs/02-concept.md` (CPD-PRC-001 v0.8): summary and results table against the new targets; refrigerant and battery removal safety notes; first partner candidate
+- `docs/01-problem.md` (CPD-PRB-001 v0.6): partner type and first candidate to approach
+- `docs/05-build-plan.md` (CPD-BLD-001 v0.2): section 2 says CPD-DDR-003 is accepted; R-134a named for the loop and in safety stop S2
+- `bom/bom-notes.md`: CPD-DDR-003 accepted; R-134a for item 7; labels and wordmark under item 16
+- `README.md`: R8 and R12 against the new targets
+- `docs/decisions/0001-trl2-review-decisions.md` (CPD-DDR-001 v0.3): item O1 ("Proposed, awaiting Amish") recorded as decided
+- `docs/decisions/0002-recommendations-accepted.md` (CPD-DDR-002 v0.3): items O1, N1 and N2 (awaiting Amish) recorded as decided
+- PDFs regenerated with `python3 .kit/render.py`; superseded versions removed.
+
+### Follow-up actions to carry approved decisions into the design
+
+The model, BOM quantities and prices, calculations and pictures were not changed in this session. These actions carry the approved decisions into them:
+
+1. Decision 2 and 3 (calculations): Re-run `docs/04-calcs/sizing.py` with R8 at 9 h and R12 at 5.75 kg so its R8, R12 lines, counts and `results.csv` match CPD-REQ-001 v0.8.
+2. Decision 2 (test plan): Weigh the prototype at TRL 4 against 5.75 kg before any base bumper is added.
+3. Decision 4 (model, BOM, build plan pictures): Before any field or air travel use, add the shipping switch to the battery bay: model, BOM line, wiring picture and build plan section; check the carrier's lithium battery rules.
+4. Decision 5 (BOM): Name R-134a and its charge allowance in BOM line 7 (currently the charged loop without a named fluid) and price the charge with the technician.
+5. Decision 6 (documents): Approach the first candidate partner (PATH, or a national immunization program's outreach team through it); nothing is agreed yet.
+6. Decision 7 (model): Add the second (red) status light at the mirrored position beside the display in `cad/src/model.py`, matching the red and green LEDs of BOM line 1.
+7. Decision 7 (pictures): Update `cad/src/product_model.py` and regenerate the photoreal renders, card and social preview on Amish's Mac: round bail, solid cooling head top (no window), second status light, labels and wordmark, no base bumper.
+
+### Points found in the review
+
+Raised when the recommendations were written (2026-10-01) and kept here so they are not lost:
+
+- R14 is shown as 'Met: 76.8 Wh' in CPD-REQ-001 v0.6 while the battery removal question (CPD-DDR-003, A3; register item 4) is still open; the status should read 'met on paper, removal method awaiting Amish'.
+- Item 3 options omit the power-split option in CPD-CAL-001 (G10): giving the module 30 W and the battery 7 W brings refreeze to 7.8 h, meeting R8, at the cost of an 11.5 h battery recharge.
+- Item 6 lists a diabetes association and a humanitarian logistics group as equal options, but D11 already decided outreach vaccinators first; the options should be narrowed.
+- Item 2's 5.75 kg limit leaves only 0.05 kg on estimated masses; if the bumper (item 7) were adopted it would likely use that margin up.
