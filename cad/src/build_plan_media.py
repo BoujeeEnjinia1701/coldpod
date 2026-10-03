@@ -78,7 +78,7 @@ def made():
         "power": part("Power board, inlets, ambient sensor", S("power", "power_so", "inlets", "ambient"), COL["power"]),
         "head": part("Cooling head housing", C["head"].shape, COL["head"]),
         "cells": part("Cell cradle, cells and BMS", S("cradle", "cells"), COL["cells"]),
-        "logger": part("Logger, display, alarm light", S("logger", "logger_so", "display", "alarm"), COL["display"]),
+        "logger": part("Logger, display, status lights, shipping switch", S("logger", "logger_so", "display", "alarm", "alarm2", "shipswitch"), COL["display"]),
         "bay": part("Battery bay housing", C["bay"].shape, COL["bay"]),
         "duct": part("Cable duct cover", C["duct"].shape, COL["duct"]),
         "handle": part("Handle and latches", S("handle", "latches"), COL["handle"]),
@@ -290,10 +290,14 @@ def sheets(only=None):
         part=part("Battery bay housing", C["bay"].shape, COL["bay"]), neighbours=g("shell", "cells", "cradle", "logger"),
         title="ColdPod battery bay housing: making sketch", material="PETG or ASA, 3D printed, 2 mm walls",
         inset_view=(24, -130),
+        rev="P2", revisions=[("P1", "Making sketch for the build plan", DATE, "AC"),
+                             ("P2", "Second status light hole and shipping switch hole", "2026-10-02", "AC")],
         notes=["Box 45 x 160 x 169.5 mm, 2 mm walls, open on the shell side.",
                "End wall: four vent slots 60 x 4 from 30 up.",
-               "Top: display window 26 x 60, 9 mm from the end wall; 10.4 mm hole",
-               "  for the alarm light, 22 from the end wall, 50 toward the back.",
+               "Top: display window 26 x 60, 9 mm from the end wall; 10.4 mm holes",
+               "  for the two status lights, 22 from the end wall, 50 toward the back",
+               "  and 50 toward the front; 10.4 mm hole for the shipping switch, 22",
+               "  from the end wall, 64 toward the back.",
                "Back wall: notch 8 x 12 at the shell end, 6 up, for the cable duct;",
                "  four 3.4 mm holes for the logger standoffs.",
                "Four ears like the cooling head's, mirrored.",
@@ -514,12 +518,13 @@ def steps(only=None):
     st(15, [part("Battery bay housing", C["bay"].shape, COL["bay"])],
        [mv(part("Cell cradle, cells and BMS", S("cradle", "cells"), COL["cells"]), (130, 0, 0)),
         mv(part("Logger on standoffs", S("logger", "logger_so"), COL["logger"]), (70, -40, 0)),
-        mv(part("Display and alarm light", S("display", "alarm"), COL["display"]), (90, 0, -40))],
+        mv(part("Display and two status lights", S("display", "alarm", "alarm2"), COL["display"]), (90, 0, -40)),
+        mv(part("Shipping switch", C["shipswitch"].shape, "#DC2626"), (60, 0, 70))],
        "build the battery bay",
-       "Cradle screwed to the floor, cells in, BMS on top, strap; logger on the back wall; display under its window",
+       "Cradle and cells, BMS, strap; logger on the back wall; display, two lights and switch in their holes",
        elev=28, azim=-50, label_done=True)
     after14 = after12 + [head_sa]
-    bay_sa = part("Battery bay with cells, logger and display", S("bay", "cradle", "cells", "logger", "logger_so", "display", "alarm"), COL["bay"])
+    bay_sa = part("Battery bay with cells, logger and display", S("bay", "cradle", "cells", "logger", "logger_so", "display", "alarm", "alarm2", "shipswitch"), COL["bay"])
     st(16, after14, [mv(bay_sa, (-140, 0, 0))], "battery bay onto the shell",
        "Fuse out. Connect the duct leads, then four M3 screws through the ears into the shell pads",
        elev=20, azim=-130, label_done=False)
@@ -587,20 +592,22 @@ def wiring():
     blk(96, 33, 20, 11, "Cut-outs in series", "bimetal, no firmware:\nblock -5 °C, liner 3 °C", "#B91C1C")
     blk(96, 14, 20, 12, "Peltier module", "TEC1-12703 class\non the cold block", "#64748B")
     blk(48, 14, 18, 12, "Sensors", "payload, liner, block,\nambient; lid reed", "#D4A017")
-    blk(5, 46, 26, 12, "LiFePO4 pack", "4S 12.8 V 6 Ah, BMS\nwith charge temp. stop", "#C2410C")
-    blk(5, 28, 26, 12, "Logger", "nRF52840 class, RTC,\n2 MB flash, 3.3 V", "#0F766E")
-    blk(5, 12, 26, 11, "Display and alarm", "e-paper, buzzer,\nred and green lights", "#38BDF8")
+    blk(5, 38, 26, 11, "LiFePO4 pack", "4S 12.8 V 6 Ah, BMS\nwith charge temp. stop", "#C2410C")
+    blk(5, 24, 26, 11, "Logger", "nRF52840 class, RTC,\n2 MB flash, 3.3 V", "#0F766E")
+    blk(5, 10, 26, 11, "Display and lights", "e-paper, buzzer, green\nand red status lights", "#38BDF8")
+    blk(5, 52, 26, 9, "Shipping switch", "lockable isolator, 30 V DC", "#DC2626")
+    wire([(18, 49), (18, 52)], RED); lab(18.8, 50.5, "1.0 mm²", RED)
     wire([(64, 55.5), (70, 55.5)], RED); lab(67, 57.6, "1.0 mm²", RED, "center")
     wire([(80, 50), (80, 44)], RED); lab(80.6, 47, "1.0 mm²", RED)
     wire([(90, 55.5), (96, 55.5)], RED); lab(93, 57.6, "0.25 mm²", RED, "center")
     wire([(90, 38.5), (96, 38.5)], RED); lab(93, 40.6, "0.75 mm²", RED, "center")
     wire([(106, 33), (106, 26)], RED); lab(106.6, 29.5, "0.75 mm²", RED)
-    wire([(31, 52), (40, 52), (40, 66.5), (80, 66.5), (80, 61)], RED); lab(52, 68.4, "battery, 1.0 mm², 5 A fuse at the pack, through the duct", RED)
-    wire([(73, 50), (73, 47.5), (37, 47.5), (37, 38), (31, 38)], RED, 1.4); lab(42, 45.6, "3.3 V and ground, 0.25 mm², through the duct", RED)
+    wire([(31, 56.5), (40, 56.5), (40, 66.5), (80, 66.5), (80, 61)], RED); lab(52, 68.4, "battery, 1.0 mm², 5 A fuse at the pack, after the switch, through the duct", RED)
+    wire([(73, 50), (73, 47.5), (37, 47.5), (37, 31.5), (31, 31.5)], RED, 1.4); lab(42, 45.6, "3.3 V and ground, 0.25 mm², through the duct", RED)
     wire([(31, 34), (70, 34)], GRY, 1.2); lab(45, 32.2, "driver enable and set point, 0.14 mm²", GRY)
-    wire([(48, 20), (37, 20), (37, 30), (31, 30)], BLU, 1.4); lab(38.3, 25, "8-core cable,\n0.14 mm²,\nvia the duct", BLU)
-    wire([(18, 28), (18, 23)], BLU, 1.4); lab(18.6, 25.5, "SPI and GPIO", BLU)
-    ax.text(36, 6.2, "Safety: battery fuse out until the stop points in section 6 of the plan are passed. Charge the pack only between 0 and 45 °C.",
+    wire([(48, 20), (37, 20), (37, 27), (31, 27)], BLU, 1.4); lab(38.3, 25, "8-core cable,\n0.14 mm²,\nvia the duct", BLU)
+    wire([(18, 24), (18, 21)], BLU, 1.4); lab(18.6, 22.5, "SPI and GPIO", BLU)
+    ax.text(36, 6.2, "Safety: fuse out and shipping switch off until the section 6 stop points are passed. Charge the pack only between 0 and 45 °C.",
             fontsize=7.6, color="#B45309", fontweight="bold")
     ax.text(36, 3.6, "Red: power. Blue: sensor bus. Grey: control. All circuits are 20 V DC or less; no mains wiring.", fontsize=7.2, color=MUT)
     out = OUT / "wiring.png"

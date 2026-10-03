@@ -3,7 +3,7 @@ doc_id: CPD-BLD-001
 title: ColdPod prototype build plan
 project: ColdPod
 doc_type: Build plan
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: "CPD-DDR-003 accepted (2026-10-02); loop working fluid R-134a in section 3 and safety stop S2"
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Second status light and battery shipping switch added to the battery bay, wiring and steps; pictures redrawn"
 ---
 
 # ColdPod prototype build plan
@@ -31,7 +35,7 @@ ColdPod is a research and educational prototype, not a medical device. Never use
 
 *Figure 1. Every component pulled apart and numbered in build order. The cooling head is at the right-hand end, the battery bay at the left.*
 
-The prototype is one ColdPod carry case, 366 x 220 x 207 mm with the handle up. From the inside out it is a printed rack of 24 insulin pens in an aluminium liner; a jacket of sealed pouches of phase-change material (a paraffin that melts at 5 °C) inside an aluminium evaporator can; seven vacuum-insulated panels (VIPs); and a 3D-printed shell. A copper loop bonded to the bottom of the can carries heat out to an aluminium cold block, a Peltier module and a finned heat sink with a fan in a printed cooling head at the right-hand end; the battery, logger and display sit in a printed bay at the left-hand end. Figure 1 shows the 23 component groups in the order you make or fit them. Fifteen are made: the shell, the evaporator can, the copper loop, the cold block, three slot fillers, the liner, its feet and collar, the rack, the block frame, the two end housings, the cell cradle, the cable duct cover, the lid cold plate tray and the lid cap. Everything else is bought: the VIPs (to size), the PCM pouches, the Peltier module, heat sink and fan, the battery cells, the electronic modules, the handle and the latches. The work is 3D printing, simple sheet-metal work done by a local shop, tube bending, brazing and charging the loop (by a refrigeration technician), and wiring bought modules. The parts cost about $308, from the bill of materials.
+The prototype is one ColdPod carry case, 366 x 220 x 207 mm with the handle up. From the inside out it is a printed rack of 24 insulin pens in an aluminium liner; a jacket of sealed pouches of phase-change material (a paraffin that melts at 5 °C) inside an aluminium evaporator can; seven vacuum-insulated panels (VIPs); and a 3D-printed shell. A copper loop bonded to the bottom of the can carries heat out to an aluminium cold block, a Peltier module and a finned heat sink with a fan in a printed cooling head at the right-hand end; the battery, logger and display sit in a printed bay at the left-hand end. Figure 1 shows the 23 component groups in the order you make or fit them. Fifteen are made: the shell, the evaporator can, the copper loop, the cold block, three slot fillers, the liner, its feet and collar, the rack, the block frame, the two end housings, the cell cradle, the cable duct cover, the lid cold plate tray and the lid cap. Everything else is bought: the VIPs (to size), the PCM pouches, the Peltier module, heat sink and fan, the battery cells, the electronic modules, the handle and the latches. The work is 3D printing, simple sheet-metal work done by a local shop, tube bending, brazing and charging the loop (by a refrigeration technician), and wiring bought modules. The parts cost about $313, from the bill of materials.
 
 > **Safety:** The prototype holds a 76.8 Wh lithium iron phosphate battery, about 0.94 kg of combustible paraffin in sealed pouches, a sealed refrigerant loop under pressure and a heat sink that reaches about 53 °C. Keep the battery fuse out until section 6 says otherwise. Brazing and charging the loop are done by a refrigeration technician before any plastic, VIP or PCM is near it. A punctured VIP loses its insulation without any visible sign: never cut, drill or press a sharp tool against one.
 
@@ -55,7 +59,7 @@ The concept showed what ColdPod does; many of its parts had no fixing or could n
 | Condensation | Would drip on the power board | A drip tray and drain tube (Figure 17) | The cooling head drains outward |
 | Cables | No route out of the cavity or between the two ends | Grommets at the cooling end and a duct cover along the back (Figure 24) | Every lead has a path |
 
-The case is 8 mm wider (the handle pivots stand on pads) and weighs about 5.70 kg empty, against 5.53 kg for the concept.
+The case is 8 mm wider (the handle pivots stand on pads) and weighs about 5.74 kg empty, against 5.53 kg for the concept.
 
 ## 3. Making the components
 
@@ -300,7 +304,8 @@ Inside, the power board stands on four M3 standoffs, the inlets fit the end wall
 | Cut-outs | Two normally closed bimetal thermostats: one on the cold block opening at -5 °C, one on the liner opening at 3 °C |
 | Logger | nRF52840-class module with a real-time clock and 2 MB of flash, 3.3 V |
 | Sensors | Glycol-buffered payload probe, liner probe, cold-block probe and ambient sensor, digital, ±0.5 °C or better |
-| Display and alarm | 2.13 in e-paper, buzzer, red and green lights |
+| Display and lights | 2.13 in e-paper, buzzer, one green and one red status light |
+| Shipping switch | Panel-mount rotary battery isolator for a 10 mm hole, rated 30 V DC and 10 A or more, with a lockable off position |
 
 Wire it like this, with stranded copper and a ferrule on every screw terminal:
 
@@ -308,14 +313,14 @@ Wire it like this, with stranded copper and a ferrule on every screw terminal:
 2. Input stage to the Peltier driver: 1.0 mm².
 3. Peltier driver through the cold-block cut-out and then the liner cut-out to the module: 0.75 mm² (20 AWG). The two cut-outs are in series in the module supply and work without any firmware.
 4. Fan driver to the fan: 0.25 mm² (24 AWG).
-5. Battery pack to the charger, through the 5 A fuse at the pack: 1.0 mm², along the cable duct.
+5. Battery pack through the shipping switch, then the 5 A fuse at the pack, to the charger: 1.0 mm², along the cable duct. The switch cuts the pack's positive lead, so with it off nothing in the box is live.
 6. 3.3 V and ground from the power board to the logger: 0.25 mm², along the duct.
 7. Sensor cable (eight cores, 0.14 mm²) from the cavity to the logger, along the duct; the driver enable and set point from the logger back to the driver in the same run.
-8. Logger to the display and alarm: the display's own ribbon, and 0.25 mm² for the buzzer and lights.
+8. Logger to the display and alarm: the display's own ribbon, and 0.25 mm² for the buzzer and the two status lights.
 
 Conformal-coat the power board after the wiring checks pass: water condenses in the cooling head.
 
-**Check before moving on.** Every wire continues end to end and is labelled; with the battery fuse out, no rail reads short to ground; each cut-out reads closed at room temperature and open when chilled in a bag of ice water (it opens at 3 °C; the block's at -5 °C needs a freezer).
+**Check before moving on.** Every wire continues end to end and is labelled; with the battery fuse out, no rail reads short to ground; with the shipping switch off and the fuse in, the board reads no voltage; each cut-out reads closed at room temperature and open when chilled in a bag of ice water (it opens at 3 °C; the block's at -5 °C needs a freezer).
 
 ### 3.13 Cell cradle
 
@@ -339,9 +344,9 @@ Conformal-coat the power board after the wiring checks pass: water condenses in 
 
 **What it is and what it is made from.** The vented printed box for the battery, logger and display. PETG or ASA, 45 x 160 x 169.5 mm, 2 mm walls, open on the shell side.
 
-**How to make it.** Print it open side down. Check four vent slots 60 x 4 from 30 up in the end wall; a display window 26 x 60 in the top, 9 from the end wall; a 10.4 mm hole for the alarm light, 22 from the end wall and 50 toward the back; the duct notch in the back wall; four 3.4 mm holes in the back wall for the logger standoffs; and four ears like the cooling head's.
+**How to make it.** Print it open side down. Check four vent slots 60 x 4 from 30 up in the end wall; a display window 26 x 60 in the top, 9 from the end wall; two 10.4 mm holes for the status lights, 22 from the end wall, one 50 toward the back and one 50 toward the front; a 10.4 mm hole for the shipping switch, 22 from the end wall and 64 toward the back; the duct notch in the back wall; four 3.4 mm holes in the back wall for the logger standoffs; and four ears like the cooling head's.
 
-**How it fits the parts next to it.** Four M3 screws through the ears into the shell's left-hand pads, as Figure 19. The logger stands on four M3 standoffs on the back wall, the display sits under its window, and the alarm light is pushed into its hole from inside.
+**How it fits the parts next to it.** Four M3 screws through the ears into the shell's left-hand pads, as Figure 19. The logger stands on four M3 standoffs on the back wall, the display sits under its window, the two status lights are pushed into their holes from inside, and the shipping switch is fitted in its hole from inside and tightened with its nut.
 
 **Check before moving on.** The display window lines up with the display's active area.
 
@@ -412,8 +417,8 @@ Buy to specification, not brand. Line numbers are those of the bill of materials
 - **PCM pouches (line 5).** About 0.94 kg of organic PCM melting at 5 °C (RT 5 HC class) in sealed HDPE pouches: a floor pouch with a relief at each liner foot, two long side pouches, two left-end pouches and three narrow right-end pouches (one between the risers and one outside each), about 0.67 kg in all; and a lid pack about 0.27 kg that fits the tray.
 - **Peltier module (line 8).** 40 x 40 mm, 127 couples, about 3 A maximum (TEC1-12703 class).
 - **Heat sink and fan (line 9).** Finned aluminium sink 80 x 80 x 30 mm, 0.50 K/W or better with the fan; 70 mm 12 V fan; wire finger guard.
-- **Battery (line 11).** Four 32700 lithium iron phosphate cells, 3.2 V, 6 Ah, from a maker that publishes a datasheet; four-cell battery management board with a charge temperature stop; 5 A fuse.
-- **Power board modules (line 12), logger (line 13), sensors and cut-outs (line 14), display and alarm (line 15).** As Table 2.
+- **Battery (line 11).** Four 32700 lithium iron phosphate cells, 3.2 V, 6 Ah, from a maker that publishes a datasheet; four-cell battery management board with a charge temperature stop; 5 A fuse. The shipping switch (line 18) isolates the pack for field use and air travel; the carrier's lithium battery rules are checked before any such trip.
+- **Power board modules (line 12), logger (line 13), sensors and cut-outs (line 14), display and lights (line 15), shipping switch (line 18).** As Table 2.
 - **Handle and latches (lines 2 and 3).** Folding bail handle rated 10 kg or more with pivot eyes for M5 screws; padded 38 mm strap with two D-rings; two draw latches with keepers.
 - **Construction parts (line 17).** 22 M3 and 2 M5 brass heat-set inserts, foam strip, 4 mm drain tube, acrylic foam tape.
 - **Fixings and consumables (line 16).** M3 and M5 stainless screws, M3 standoffs, grommets, silicone sealant, two-part epoxy, thermally conductive epoxy, thermal paste, closed-cell foam tape, conformal coating, eight-core sensor cable, wire, ferrules and labels.
@@ -510,7 +515,7 @@ Connect the module, fan, cut-out and drain; slide the housing over the stack; fo
 
 ![Step 15](05-build-plan/step-15.png)
 
-On the bench: cradle screwed to the floor, cells in, battery management board on top, strap; logger on its standoffs on the back wall; display under its window and the alarm light in its hole. **Hold point:** safety stop S4; fuse out.
+On the bench: cradle screwed to the floor, cells in, battery management board on top, strap; logger on its standoffs on the back wall; display under its window, the two status lights in their holes and the shipping switch in its hole, switched off. **Hold point:** safety stop S4; fuse out.
 
 ### Step 16: battery bay onto the shell
 
@@ -560,7 +565,7 @@ These are the checks a TRL 4 test report would record; this plan only lists them
 | Logger and probes | R9 | Read all four probes in a room and in an ice-water bath | Each within ±0.5 °C of a reference thermometer |
 | Alarms | R10 | Open the lid; unplug a probe; warm the payload probe by hand past 8 °C | Lid-open, sensor-fault and out-of-range alarms sound and show |
 | Drain | R16 | Pour 20 ml of water into the drip tray | It leaves through the head floor; the power board stays dry |
-| Size and mass | R12, R13 | Measure over the handle; weigh empty | Within 400 x 250 x 250 mm; mass recorded (5.70 kg estimated) |
+| Size and mass | R12, R13 | Measure over the handle; weigh empty | Within 400 x 250 x 250 mm; mass recorded (5.74 kg estimated) |
 | Battery removal | R14 | Remove the battery bay and unplug the duct leads | The pack comes out with a screwdriver |
 
 ## 6. Safety stops

@@ -1,10 +1,11 @@
 """ColdPod product appearance model (build123d), TRL 3.
 
-Finished-product look for photoreal renders: a filleted off-white tub with a black rubber base
-bumper, a lid cap with an EPDM gasket line and two teal draw latches, a steel bail handle with a
-ribbed rubber grip on pivot bosses, graphite end housings with rounded exhaust and intake slots,
-a smoked window over the heat sink in the cooling head, USB-C and 12 V inlets, a lit e-paper
-logger display with a green status light, a raised wordmark and a 2 to 8 degC label, and the
+Finished-product look for photoreal renders: a filleted off-white tub (no base bumper until the
+prototype is weighed), a lid cap with an EPDM gasket line and two teal draw latches, a round steel
+bail handle with a ribbed rubber grip on pivot bosses, graphite end housings with rounded exhaust
+and intake slots and a solid top over the heat sink (no window), USB-C and 12 V inlets, a lit
+e-paper logger display with a green and a red status light, a flush battery shipping switch, a
+raised wordmark and a 2 to 8 degC label (labels and wordmark are BOM line 16), and the
 full internal stack for the exploded view (VIP set, evaporator can and loop thermosiphon, PCM
 jacket and lid pack, liner and rack with pens, Peltier module, heat sink and fan, cells, boards).
 APPEARANCE MODEL ONLY: no tolerances, no fabrication detail. CONCEPT, NOT FOR FABRICATION.
@@ -34,14 +35,14 @@ TITLE = "ColdPod: portable medicine cooler with a temperature logger"
 RENDER_VIEWS = [
     {"name": "hero", "groups": ["shell", "internal", "context"], "explode": False, "el": 30, "az": -40,
      "note": "Product render from the front right and above (about 30 deg elevation); cooling head "
-             "with heat sink window and exhaust grille at right, logger display at far left"},
+             "with solid top and exhaust grille at right, logger display at far left"},
     {"name": "exploded", "groups": ["shell", "internal", "accessory"], "explode": True, "el": 28, "az": -55,
      "note": "Exploded view from the front right and above (about 28 deg elevation): handle, lid, gasket, "
              "lid VIP and PCM pack, cold plate, liner with pens, PCM jacket, evaporator can and "
              "thermosiphon, VIP set, tub; Peltier, heat sink and fan at right; cells and logger at left"},
     {"name": "detail", "groups": ["shell", "internal"], "explode": False, "el": 34, "az": -140,
      "note": "Detail view from the front left and above (about 34 deg elevation): battery and "
-             "electronics bay with the lit e-paper logger display, status lights and vents"},
+             "electronics bay with the lit e-paper logger display, two status lights, shipping switch and vents"},
 ]
 
 # Colours (restrained product palette; kit accent for the latches and wordmark)
@@ -68,7 +69,6 @@ C_SCREEN = "#E4ECE6"
 C_INK = "#1F2937"
 C_GREEN = "#22C55E"
 C_RED = "#7F1D1D"
-C_WINDOW = "#B9C8D2"
 C_WHITE = "#F7F7F5"
 C_FABRIC = "#2A3038"
 
@@ -77,8 +77,6 @@ FONT = str(HERE.parents[2] / ".kit" / "fonts" / "IBMPlexSans-SemiBold.ttf")
 # Appearance-only detail sizes (mm)
 R_PLAN = 12.0          # tub and lid plan corner radius
 GASKET_H = 1.6         # visible gasket band under the lid
-BUMPER_H = 12.0        # rubber base bumper height
-BUMPER_PROUD = 1.0
 PIVOT_Z = 136.0        # handle pivot centre (arm bottom in model.py is 128)
 LATCH_X = (-72.0, 72.0)
 
@@ -129,7 +127,7 @@ def _text(txt, size, font=FONT):
 
 
 def _tub(P, L):
-    """Outer shell (BOM 1): filleted tub, gasket groove, base bumper recess, pipe pass-throughs."""
+    """Outer shell (BOM 1): filleted tub, gasket groove, pipe pass-throughs. No base bumper (CPD-DEC-001, 2026-10-02)."""
     sx, sy, vx, vy = L["sh_x"], L["sh_y"], L["vip_x"], L["vip_y"]
     rim = L["rim"]
     tub = _prism(2 * sx, 2 * sy, R_PLAN, 0.0, rim)
@@ -143,15 +141,11 @@ def _tub(P, L):
         tub -= Pos(sx - 2, y, ez) * Rot(0, 90, 0) * Cylinder(r + 1, 8)
     gasket = _prism(2 * sx - 0.6, 2 * sy - 0.6, R_PLAN - 0.3, rim - GASKET_H, GASKET_H) - \
         _prism(2 * sx - 5.0, 2 * sy - 5.0, R_PLAN - 2.5, rim - GASKET_H - 1, GASKET_H + 2)
-    bumper = _prism(2 * sx + 2 * BUMPER_PROUD, 2 * sy + 2 * BUMPER_PROUD, R_PLAN + BUMPER_PROUD, 0.0, BUMPER_H)
-    bumper = _fillet_try(bumper, _top_edges(bumper), [0.9, 0.6])
-    bumper = _fillet_try(bumper, _bottom_edges(bumper), [0.9, 0.6])
-    bumper -= _prism(2 * sx - 4, 2 * sy - 4, R_PLAN - 2, -1, BUMPER_H + 2)
-    return tub, gasket, bumper
+    return tub, gasket
 
 
 def _lid(P, L):
-    """Lid cap (BOM 2): 5 mm printed cap, filleted top edge, raised wordmark and window marking."""
+    """Lid cap (BOM 2): 5 mm printed cap, filleted top edge, raised wordmark and range marking (labels and wordmark, BOM 16)."""
     sx, sy = L["sh_x"], L["sh_y"]
     lid = _prism(2 * sx, 2 * sy, R_PLAN, L["rim"], P["lid_cap_t"])
     lid = _fillet_try(lid, _top_edges(lid), [2.0, 1.5, 1.0])
@@ -211,7 +205,7 @@ def _handle(P, L):
 
 
 def _housings(P, L):
-    """End housings (BOM 10): cooling head at +X with window, grille, intake slots and inlets; bay at -X."""
+    """End housings (BOM 10): cooling head at +X with solid top, grille, intake slots and inlets; bay at -X."""
     sx, top, wt = L["sh_x"], L["lid_top"], P["end_wall"]
     ew, hx1, bx0 = P["end_w"] / 2, L["head_x1"], L["bay_x0"]
     zc = L["block_z0"] + P["block"][2] / 2
@@ -233,12 +227,7 @@ def _housings(P, L):
     for i in range(5):                                   # intake slots on the front face (as model.py)
         x = sx + 12 + i * 9
         head -= _slot_y(-ew - 1, wt + 3, x + 2.5, 50.0, 5.0, 40.0)
-    # window over the heat sink in the top of the cooling head (appearance proposal)
-    win_l, win_w = hx1 - sx - 18.0, 88.0
-    win_x = (sx + hx1) / 2 - 1.0
-    head -= _prism(win_l + 3, win_w + 3, 5.0, top - 0.8, 2.0, x=win_x)
-    head -= _prism(win_l, win_w, 4.0, top - wt - 1, wt + 2, x=win_x)
-    window = _prism(win_l + 2.6, win_w + 2.6, 4.8, top - 0.8, 0.8, x=win_x)
+    # the top of the cooling head stays solid: no window (CPD-DEC-001, 2026-10-02)
     # USB-C and 12 V inlets low on the +X face (appearance proposal)
     head -= _slot_x(hx1 - wt - 1, wt + 3, -28.0, 36.0, 9.4, 3.8)
     head -= Pos(hx1 - wt / 2, 22.0, 36.0) * Rot(0, 90, 0) * Cylinder(8.0, wt + 2)
@@ -247,7 +236,7 @@ def _housings(P, L):
         z = 30 + i * 10
         bay -= _slot_x(bx0 - 1, wt + 2, 0, z + 2, 60.0, 4.0)
     # display pocket: the module sits in a shallow recess (top face stays at lid_top)
-    return head, bay, window, zc
+    return head, bay, zc
 
 
 def _inlets(P, L):
@@ -275,7 +264,7 @@ def _housing_screws(P, L):
 
 
 def _display(P, L):
-    """E-paper display and alarm (BOM 15): bezel, lit screen, readout, status lights, buzzer holes."""
+    """E-paper display and alarm (BOM 15): bezel, lit screen, readout, two status lights; shipping switch (BOM 18)."""
     bx0, top = L["bay_x0"], L["lid_top"]
     cxd = bx0 + 22.0
     bezel = _prism(30.0, 66.0, 4.0, top, 3.0, x=cxd)
@@ -289,12 +278,17 @@ def _display(P, L):
     bar = Pos(cxd + 8.5, 0.0, ink_z + 0.06) * Box(1.2, 46.0, 0.12)
     ink = big + small + bar
     ring_g = Pos(cxd, 50.0, top + 1.0) * (Cylinder(6.5, 2.0) - Cylinder(5.0, 3.0))
-    ring_r = Pos(cxd, -50.0, top + 1.0) * (Cylinder(6.5, 2.0) - Cylinder(3.6, 3.0))
+    ring_r = Pos(cxd, -50.0, top + 1.0) * (Cylinder(6.5, 2.0) - Cylinder(5.0, 3.0))
     green = Pos(cxd, 50.0, top + 2.0) * Cylinder(5.0, 4.0)
     green = _fillet_try(green, _top_edges(green), [1.5, 1.0])
-    red = Pos(cxd, -50.0, top + 1.5) * Cylinder(3.6, 3.0)
-    red = _fillet_try(red, _top_edges(red), [1.2, 0.8])
-    return bezel + ring_g + ring_r, screen, ink, green, red
+    red = Pos(cxd, -50.0, top + 2.0) * Cylinder(5.0, 4.0)
+    red = _fillet_try(red, _top_edges(red), [1.5, 1.0])
+    # battery shipping switch (BOM 18): flush rotary isolator, 10 mm hole, 64 mm toward the back
+    sw_ring = Pos(cxd, 64.0, top + 1.0) * (Cylinder(6.5, 2.0) - Cylinder(5.0, 3.0))
+    sw_knob = Pos(cxd, 64.0, top + 1.6) * Cylinder(4.6, 3.2)
+    sw_knob = _fillet_try(sw_knob, _top_edges(sw_knob), [1.0, 0.6])
+    sw_knob -= Pos(cxd, 64.0, top + 3.0) * Box(2.0, 8.0, 1.2)
+    return bezel + ring_g + ring_r + sw_ring, screen, ink, green, red, sw_knob
 
 
 def _label(P, L):
@@ -350,14 +344,13 @@ def product_parts(P=PARAMS):
     E_BAY = (-220, 0, 0)
 
     # ---- outer shell, bumper, gasket, lid, latches, handle (shell group)
-    tub, gasket, bumper = _tub(P, L)
+    tub, gasket = _tub(P, L)
     add("Outer shell (tub)", tub, C_TUB, "plastic", 1, "shell", E_TUB)
-    add("Base bumper (TPE)", bumper, C_RUBBER, "rubber", 1, "shell", E_TUB)
     add("Lid gasket (EPDM)", gasket, C_RUBBER, "rubber", 2, "shell", E_GASKET)
     lid, word, mark = _lid(P, L)
     add("Lid cap", lid, C_LID, "plastic", 2, "shell", E_LID)
-    add("Lid wordmark", word, C_ACCENT, "painted", 2, "shell", E_LID)
-    add("Lid range marking", mark, "#6B7280", "painted", 2, "shell", E_LID)
+    add("Lid wordmark", word, C_ACCENT, "painted", 16, "shell", E_LID)
+    add("Lid range marking", mark, "#6B7280", "painted", 16, "shell", E_LID)
     lbases, levers = _latches(P, L)
     add("Draw latch bases and keepers", lbases, C_STEEL, "metal", 2, "shell", E_TUB)
     add("Draw latch levers", levers, C_ACCENT, "plastic", 2, "shell", E_TUB)
@@ -371,9 +364,8 @@ def product_parts(P=PARAMS):
     add("Handle pivot screws", pscrews, C_ALU, "metal", 16, "shell", E_HANDLE)
 
     # ---- end housings (shell group)
-    head, bay, window, zc = _housings(P, L)
+    head, bay, zc = _housings(P, L)
     add("Cooling head housing", head, C_HOUSING, "plastic", 10, "shell", E_HEAD)
-    add("Cooling head window (smoked)", window, C_WINDOW, "clear", 10, "shell", (E_HEAD[0], 0, 60))
     add("Battery and electronics bay housing", bay, C_HOUSING, "plastic", 10, "shell", E_BAY)
     hs_head, hs_bay = _housing_screws(P, L)
     add("Cooling head screws", hs_head, C_ALU, "metal", 16, "shell", E_HEAD)
@@ -384,13 +376,14 @@ def product_parts(P=PARAMS):
     add("12 V inlet trim ring", flange, C_ALU, "metal", 12, "shell", E_HEAD)
 
     # ---- display and alarm (BOM 15)
-    bezel, screen, ink, green, red = _display(P, L)
+    bezel, screen, ink, green, red, sw_knob = _display(P, L)
     E_DISP = (E_BAY[0], 0, 80)
     add("Display bezel and light rings", bezel, C_FAN, "plastic", 15, "shell", E_DISP)
     add("E-paper display (lit)", screen, C_SCREEN, "emissive", 15, "shell", E_DISP)
     add("Display readout", ink, C_INK, "paper", 15, "shell", E_DISP)
     add("Status light, green (lit)", green, C_GREEN, "emissive", 15, "shell", E_DISP)
-    add("Alarm light, red", red, C_RED, "plastic", 15, "shell", E_DISP)
+    add("Second status light, red", red, C_RED, "plastic", 15, "shell", E_DISP)
+    add("Battery shipping switch", sw_knob, "#B91C1C", "plastic", 18, "shell", E_DISP)
 
     # ---- insulation, PCM, liner and payload (internal group)
     lid_vip = _box(-px, px, -py, py, L["lidpcm_z1"], L["rim"])

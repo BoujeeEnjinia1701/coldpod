@@ -1,4 +1,4 @@
-"""ColdPod general arrangement sheet CPD-DWG-001, Rev P4 (TRL 3, constructable design).
+"""ColdPod general arrangement sheet CPD-DWG-001, Rev P5 (TRL 3, constructable design).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CPD-DWG-001.svg, .pdf and .png from the parametric model in
@@ -17,6 +17,7 @@ from model import PARAMS as P, build, levels  # noqa: E402
 
 DATE = "2026-09-25"
 DATE4 = "2026-10-01"
+DATE5 = "2026-10-02"
 
 
 def ortho_cells(sheet, views, names=("front", "top", "right")):
@@ -62,13 +63,14 @@ def main():
     asm = build()
     views = project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P4",
-              author="Amish Chadha", date=DATE4, scale=1 / 5, theme="technical",
+    s = Sheet(project="ColdPod", title="General arrangement", dwg_no="CPD-DWG-001", rev="P5",
+              author="Amish Chadha", date=DATE5, scale=1 / 5, theme="technical",
               material="Printed PETG shell, 25 mm VIPs, 5 °C PCM, aluminium liner; see bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
                          ("P2", "Lid cold plate, liner cut-out, thinner walls (CPD-DDR-002)", DATE, "AC"),
                          ("P3", "Layout and labels tidied", "2026-09-30", "AC"),
-                         ("P4", "Design made constructable (CPD-DDR-003)", DATE4, "AC")])
+                         ("P4", "Design made constructable (CPD-DDR-003)", DATE4, "AC"),
+                         ("P5", "Second status light and battery shipping switch (CPD-DEC-001)", DATE5, "AC")])
     s.add_ortho(views, dims=False)
     k = s.scale
     c = ortho_cells(s, views)
@@ -108,7 +110,7 @@ def main():
         "Peltier 40 x 40 (TEC1-12703 class); sink 80 x 80 x 30",
         "Cut-outs in series: cold block −5 °C, liner 3 °C",
         "Fixings on printed pads; no screw through a VIP wall",
-        "Empty mass about 5.70 kg (CPD-CAL-001 v0.4, K2)",
+        "Empty mass about 5.74 kg (CPD-CAL-001 v0.7, K2)",
         "Third-angle; front view from -Y, right view from +X",
     ], x=276, y=145, width=140)
     path = s.save(ROOT / "cad" / "drawings" / "CPD-DWG-001")

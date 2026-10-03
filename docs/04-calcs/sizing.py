@@ -462,6 +462,8 @@ M = {
     "LiFePO4 cells, 4 x 32700": 4 * 0.14,
     "BMS, fuse, holder": 0.08,
     "Electronics (power board, logger, sensors, cut-outs, display)": 0.17,
+    "Battery shipping switch (panel-mount isolator, CPD-DEC-001 2026-10-02)": 0.03,
+    "R-134a charge (about 40 % of the loop volume as liquid, 1.2 kg/L; CPD-DEC-001 2026-10-02)": math.pi * (ro - 0.5e-3) ** 2 * (loop_len + riser_len) * 1000 * 0.4 * 1.2,
     "Wiring and hardware": 0.15,
 }
 for k_, m_ in M.items():
@@ -501,7 +503,7 @@ d_lid = v1["lid"] * RHO_PETG * f_lid1 / 1e3 + 0.04 - M["Lid cap, gasket, latches
 d_h = (v1["head"] + v1["bay"]) * RHO_PETG * f_h1 / 1e3 - M["End housings with ears (PETG, printed)"]
 pr("O1", "Saving: shell 4 to 3 mm / lid cap 8 to 5 mm / housings 3 to 2 mm (kg)", f"{d_shell:.2f} / {d_lid:.2f} / {d_h:.2f}")
 pr("O3", "Lid cold plate, 1.5 mm aluminium, adds (kg)", M["Lid cold plate tray (aluminium)"], "", "{:.2f}")
-pr("O4", "Over the 5.5 kg target by (kg)", M_tot - 5.5, "", "{:.2f}")
+pr("O4", "Over the original 5.5 kg target by (kg); R12 is now 5.75 kg", M_tot - 5.5, "", "{:.2f}")
 
 # ---------------------------------------------------------------- P. foam variant (CPD-DDR-001 D7)
 head("P. Documented low-cost variant: 25 mm polyurethane foam instead of VIPs")
@@ -529,11 +531,11 @@ RES = [
     ("R5", "24 h or more at 32 °C, battery then PCM", f"{F[32.0][2]:.1f} h ({F13[32.0][2]:.1f} h at +30 % leak)", status(F[32.0][2], F13[32.0][2], 24)),
     ("R6", "16 h or more at 43 °C, battery then PCM (relaxed)", f"{F[43.0][2]:.1f} h ({F13[43.0][2]:.1f} h at +30 % leak)", status(F[43.0][2], F13[43.0][2], 16)),
     ("R7", "Holds up to 43 °C on 12 V or 45 W USB-C PD", f"{h43['p_in']:.1f} W input; lid pack held by the plate; buck-boost from {V_IN_MIN:.0f} V", "Met"),
-    ("R8", "Refreeze melted PCM in 8 h or less at 25 °C", f"All PCM {t_ref:.2f} h (jacket {t_ref_j:.1f} h, lid pack {t_ref_l:.1f} h)", "Met" if t_ref <= 8.0 else "Not met"),
+    ("R8", "Refreeze all the PCM in 9 h or less at 25 °C", f"All PCM {t_ref:.2f} h (jacket {t_ref_j:.1f} h, lid pack {t_ref_l:.1f} h)", "Met" if t_ref <= 9.0 else "Not met"),
     ("R9", "±0.5 °C, 1 min log, 60 days, CSV export", f"{rec / 1e6:.2f} MB of 2.10 MB; accuracy by sensor selection", "Met"),
     ("R10", "Alarm logic and thresholds", "Design intent only; no firmware sketch at TRL 3", "Not verifiable at TRL 3"),
     ("R11", "Logger runs 14 days after cooling stops", f"{BATT_WH * BATT_RESERVE / 5e-3 / 24:.0f} days at 5 mW", "Met"),
-    ("R12", "5.5 kg or less empty (relaxed)", f"{M_tot:.2f} kg", "Met" if M_tot <= 5.5 else "Not met"),
+    ("R12", "5.75 kg or less empty (relaxed for the prototype)", f"{M_tot:.2f} kg", "Met" if M_tot <= 5.75 else "Not met"),
     ("R13", "Fits 400 x 250 x 250 mm", f"{ov_x:.0f} x {ov_y:.0f} x {ov_z:.0f} mm", "Met"),
     ("R14", "Battery 100 Wh or less", f"{BATT_WH:.1f} Wh", "Met"),
     ("R15", f"Parts ${BUDGET_USD:.0f} or less; no custom PCB", f"${cost:.0f}", "Met" if cost <= BUDGET_USD else "Not met"),

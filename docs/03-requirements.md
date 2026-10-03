@@ -3,7 +3,7 @@ doc_id: CPD-REQ-001
 title: ColdPod requirements
 project: ColdPod
 doc_type: Requirements
-version: "0.8"
+version: "0.9"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -41,11 +41,15 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "Decisions of 2026-10-02: R8 restated as 9 h, R12 relaxed to 5.75 kg for the prototype, R14 removal method for the prototype; R8 and R12 now met on paper"
+- version: "0.9"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Status against CPD-CAL-001 v0.7: battery shipping switch and R-134a charge added; R12 5.74 kg (0.01 kg margin); R15 $313, $3 over the value-engineering target"
 ---
 
 # ColdPod requirements
 
-These are the requirements for the concept, checked by calculation at TRL 3 in CPD-CAL-001 v0.4 against the constructable design of CPD-DDR-003, which Amish accepted on 2026-10-02. Amish decided the TRL 2 review items on 2026-09-25 (CPD-DDR-001): R6 is redefined from 24 h to 16 h at 43 °C (D5), R12 is relaxed from 5.0 kg to 5.5 kg (D6), R15 follows the $300 value-engineering target of D10 and the R10 alarm defaults are adopted (D9). He then accepted the TRL 3 recommendations (CPD-DDR-002): R2 now names the two hardware cut-outs in series and R7 names the buck-boost driver that serves the full 10 to 15 V vehicle range; no target was relaxed. The target is now $310 (CPD-DDR-002 N3), a hypothetical control target and not a limit, and R15 follows it. No target changed in v0.6; the values follow the constructable design. Against CPD-CAL-001 v0.4, ten requirements were met, three at risk, two **not met** by small margins (R8 and R12) and two not verifiable at TRL 3 (R10 and R16). On 2026-10-02 Amish relaxed R12 to 5.75 kg for the prototype and restated R8 as 9 h (CPD-DEC-001), so twelve are now met on paper, three at risk and two not verifiable; R14's removal method was decided for the prototype. Before DDR-002 the count was seven met, five at risk and three not met (R2, R8, R12).
+These are the requirements for the concept, checked by calculation at TRL 3 in CPD-CAL-001 v0.7 against the constructable design of CPD-DDR-003, which Amish accepted on 2026-10-02. Amish decided the TRL 2 review items on 2026-09-25 (CPD-DDR-001): R6 is redefined from 24 h to 16 h at 43 °C (D5), R12 is relaxed from 5.0 kg to 5.5 kg (D6), R15 follows the $300 value-engineering target of D10 and the R10 alarm defaults are adopted (D9). He then accepted the TRL 3 recommendations (CPD-DDR-002): R2 now names the two hardware cut-outs in series and R7 names the buck-boost driver that serves the full 10 to 15 V vehicle range; no target was relaxed. The target is now $310 (CPD-DDR-002 N3), a hypothetical control target and not a limit, and R15 follows it. No target changed in v0.6; the values follow the constructable design. Against CPD-CAL-001 v0.4, ten requirements were met, three at risk, two **not met** by small margins (R8 and R12) and two not verifiable at TRL 3 (R10 and R16). On 2026-10-02 Amish relaxed R12 to 5.75 kg for the prototype and restated R8 as 9 h (CPD-DEC-001), so twelve were met on paper; after the battery shipping switch was added (BOM line 18, $5) the cost is $313 and R15 is $3 over its target, so eleven are met, three at risk, one not met (R15) and two not verifiable; R14's removal method was decided for the prototype. Before DDR-002 the count was seven met, five at risk and three not met (R2, R8, R12).
 
 Table 1. Requirements.
 
@@ -62,10 +66,10 @@ Table 1. Requirements.
 | R9 | Record the temperature | Payload probe accuracy ±0.5 °C; log every 1 min; 60 days or more on board; export as CSV over Bluetooth Low Energy or USB | Datasheet and storage calculation; later calibration | Met: 1.38 MB of 2.10 MB; accuracy by sensor selection |
 | R10 | Raise alarms early | Local sound, light and display alarm, plus a phone notification when paired: warn after 10 min outside 2 to 8 °C; alarm at once at 0 °C or lower on the payload probe; early freeze warning at 1 °C on the liner probe; low battery, sensor fault and lid open for more than 2 min (defaults decided, CPD-DDR-001 D9; adjustable per product) | Design review of firmware sketch | Not verifiable at TRL 3: design intent only, no firmware sketch |
 | R11 | Keep logging when the cooling stops | Logger runs 14 days or more after the Peltier is shut off for low battery | Power budget | Met: about 96 days |
-| R12 | Be light enough to carry all day | 5.75 kg (12.7 lb) or less empty for the prototype (relaxed from 5.0 kg, CPD-DDR-001 D6, and from 5.5 kg, CPD-DDR-003 A2, 2026-10-02) | Mass estimate, weighing at TRL 4 | Met on paper: 5.70 kg, 0.05 kg margin (5.53 kg before the fixings and parts added to make the design buildable, CPD-DDR-003); no base bumper until the prototype is weighed |
+| R12 | Be light enough to carry all day | 5.75 kg (12.7 lb) or less empty for the prototype (relaxed from 5.0 kg, CPD-DDR-001 D6, and from 5.5 kg, CPD-DDR-003 A2, 2026-10-02) | Mass estimate, weighing at TRL 4 | Met on paper: 5.74 kg, 0.01 kg margin (0.05 kg before the battery shipping switch and the R-134a charge were added) (5.53 kg before the fixings and parts added to make the design buildable, CPD-DDR-003); no base bumper until the prototype is weighed |
 | R13 | Be compact | Fits in 400 x 250 x 250 mm including handle | Massing model | Met: 366 x 220 x 207 mm |
 | R14 | Travel by air | Battery 100 Wh or less, removable or with a shipping switch | Battery specification | Met for the prototype: 76.8 Wh; the pack comes out with the battery bay (four screws), counted as removable for the prototype (CPD-DDR-003 A3, 2026-10-02). Before any field or air travel use: a shipping switch and the carrier's lithium battery rules |
-| R15 | Be affordable and buildable | Estimated parts cost within the $310 value-engineering target (hypothetical control target, CPD-DDR-002 N3); no custom PCB for the first build | Priced BOM | Within the value-engineering target: $308 against $310, with the construction parts of CPD-DDR-003 |
+| R15 | Be affordable and buildable | Estimated parts cost within the $310 value-engineering target (hypothetical control target, CPD-DDR-002 N3); no custom PCB for the first build | Priced BOM | Over the value-engineering target by $3: $313 against $310, after the $5 battery shipping switch (BOM line 18) added on 2026-10-02 |
 | R16 | Survive field use | Splash resistant (IP54 target for electronics bays); survives a 0.5 m drop onto a hard floor while loaded | Design review; later test | Not verifiable at TRL 3 |
 | R17 | Be clearly labelled as a prototype | "Research prototype, not a medical device" on the box, the display start screen and every exported log | Design review | Met by design |
 

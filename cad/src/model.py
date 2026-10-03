@@ -322,6 +322,8 @@ def build_components(P=PARAMS):
         bay -= B(bx0 - 1, bx0 + wt + 1, -30, 30, z, z + 4)
     bay -= B(bx0 + 9, bx0 + 35, -30, 30, top - wt - 1, top + 1)        # display window
     bay -= _zcyl(bx0 + 22, 50, top - wt - 1, top + 1, 5.2)              # alarm light and buzzer hole
+    bay -= _zcyl(bx0 + 22, -50, top - wt - 1, top + 1, 5.2)             # second status light hole (mirrored)
+    bay -= _zcyl(bx0 + 22, 64, top - wt - 1, top + 1, 5.2)              # battery shipping switch hole
     bay -= B(-sx - dd, -sx + 1, ew - wt - 1, ew + 1, dz0, dz1)          # duct notch
     for y in (P["pad_y"], -P["pad_y"]):
         for z in P["pad_z"]:
@@ -448,12 +450,16 @@ def build_components(P=PARAMS):
     led = _zcyl(bx0 + 22, 50, top - wt - 8, top, 5.0)
     add("display", "E-paper display", disp, 15, "display", "bought")
     add("alarm", "Alarm light and buzzer", led, 15, "display", "bought")
+    led2 = _zcyl(bx0 + 22, -50, top - wt - 8, top, 5.0)
+    add("alarm2", "Second status light (red), mirrored", led2, 15, "display", "bought")
+    swt = _zcyl(bx0 + 22, 64, top - wt - 18, top, 5.0)
+    add("shipswitch", "Battery shipping switch, flush panel isolator", swt, 18, "shipsw", "bought")
 
     # ---- 3 handle
     hd = P["handle_d"]
     ya = sy + pt
-    handle = (B(-hd / 2, hd / 2, -ya - hd / 2, -ya, P["handle_pivot_z"], P["handle_top"])
-              + B(-hd / 2, hd / 2, ya, ya + hd / 2, P["handle_pivot_z"], P["handle_top"])
+    handle = (_zcyl(0, -ya - hd / 4, P["handle_pivot_z"], P["handle_top"], hd / 4)       # round bail rod (CPD-DEC-001, 2026-10-02)
+              + _zcyl(0, ya + hd / 4, P["handle_pivot_z"], P["handle_top"], hd / 4)
               + Pos(0, 0, P["handle_top"]) * Rot(90, 0, 0) * Cylinder(hd / 2, 2 * ya + hd))
     add("handle", "Bail handle", handle, 3, "handle", "bought")
     return C
@@ -467,7 +473,7 @@ GROUPS = [("shell", "Outer shell", 1), ("lid", "Lid cap with gasket", 2), ("lidp
           ("sink", "Hot-side heat sink and fan", 9), ("housings", "End housings (cooling head, battery bay)", 10),
           ("cells", "LiFePO4 pack, 12.8 V 6 Ah, with BMS", 11), ("power", "Power board (USB-C PD, 12 V, drivers)", 12),
           ("logger", "Logger controller (nRF52840 class)", 13), ("sensors", "Temperature sensors and liner cut-out", 14),
-          ("display", "E-paper display and alarm", 15)]
+          ("display", "E-paper display and two status lights", 15), ("shipsw", "Battery shipping switch", 18)]
 
 
 def build_parts(P=PARAMS):
@@ -535,14 +541,14 @@ TOUCH = [
     ("inlets", "head", "Inlets in the head end wall"), ("drain", "frame", "Drain tube under the drip tray"), ("drain", "head", "Drain tube through the head floor"),
     ("cradle", "bay", "Cell cradle on the bay floor"), ("cells", "cradle", "Cells in the cradle"),
     ("logger_so", "bay", "Logger standoffs on the bay back wall"), ("logger", "logger_so", "Logger on its standoffs"),
-    ("display", "bay", "Display under the bay top"), ("probe", "liner", "Probe clip on the liner end wall"),
+    ("display", "bay", "Display under the bay top"),  ("probe", "liner", "Probe clip on the liner end wall"),
     ("liner_probe", "liner", "Liner probe on the liner"), ("cutout", "liner", "Liner cut-out on the liner"),
     ("ambient", "head", "Ambient sensor on the head front"), ("charge", "block", "Charge stub in the block"),
 ]
 # Pairs allowed to overlap in the model because one passes through the other by design
 PASS = {("cable", "liner"), ("cable", "can"), ("cable", "fillers"), ("cable", "shell"), ("cable", "foam"), ("cable", "pcm_jacket"),
         ("drain", "head"), ("screws", "block"), ("screws", "frame"), ("screws", "sink"), ("screws", "shell"),
-        ("loop", "block"), ("loop", "fillers"), ("loop", "shell"), ("alarm", "bay"), ("inlets", "head")}
+        ("loop", "block"), ("loop", "fillers"), ("loop", "shell"), ("alarm", "bay"), ("alarm2", "bay"), ("shipswitch", "bay"), ("inlets", "head")}
 CLEAR = [("loop", "vip_endlo", 1.0, "Riser bends clear of the lower VIP end panel"),
          ("lidplate", "vip_front", 0.4, "Lid tray clear of the VIP walls"),
          ("probe", "pens", 1.0, "Payload probe clear of the top layer of pens"),
@@ -553,7 +559,13 @@ CLEAR = [("loop", "vip_endlo", 1.0, "Riser bends clear of the lower VIP end pane
          ("power", "drain", 1.0, "Power board clear of the drain tube"),
          ("power", "frame", 30.0, "Power board well below the drip tray"),
          ("guard", "head", 1.0, "Finger guard inside the grille wall"),
-         ("logger", "cells", 5.0, "Logger clear of the cells and BMS")]
+         ("logger", "cells", 5.0, "Logger clear of the cells and BMS"),
+         ("shipswitch", "cells", 5.0, "Shipping switch body clear of the cells"),
+         ("shipswitch", "display", 8.0, "Shipping switch clear of the display"),
+         ("shipswitch", "logger", 1.0, "Shipping switch clear of the logger board"),
+         ("shipswitch", "alarm", 2.0, "Shipping switch clear of the first status light"),
+         ("alarm2", "display", 2.0, "Second status light clear of the display"),
+         ("alarm2", "alarm", 60.0, "Status lights well apart (mirrored)")]
 
 
 def checks(P=PARAMS):

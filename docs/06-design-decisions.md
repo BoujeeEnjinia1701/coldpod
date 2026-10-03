@@ -3,7 +3,7 @@ doc_id: CPD-DEC-001
 title: ColdPod design decisions register
 project: ColdPod
 doc_type: Design decisions register
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: "Amish approved the recommendations for open decisions 1 to 7 (2026-10-02); moved to decisions made (CPD-DDR-003 accepted)"
+  - version: "0.4"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Value engineering restated after the approved follow-ups were carried into the model and BOM: USD 313, USD 3 over the target (battery shipping switch added)"
 ---
 
 # ColdPod design decisions register
@@ -45,10 +49,10 @@ None. All open decisions were decided on 2026-10-02.
 
 ## Value engineering
 
-Value-engineering target: USD 310 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 308 (USD 2 under the target).
+Value-engineering target: USD 310 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 313 (USD 3 over the target).
 
 - **Main cost drivers:** the vacuum-insulated panel set (about USD 60, still an estimate until quoted), the thermosiphon loop (about USD 28), the buck-boost Peltier driver (USD 22 to 26), the lid cold plate tray (USD 13) and the liner cut-out (USD 10 to 13).
-- **Savings worth trying:** a VIP quote before any purchase; thinner printed parts, which already saved about USD 4 of filament; and re-pricing the driver and thermosiphon parts at purchase.
+- **Savings worth trying:** a VIP quote before any purchase; thinner printed parts, which already saved about USD 4 of filament; and re-pricing the driver and thermosiphon parts at purchase; the USD 5 shipping switch could wait until a trip needs it, which would bring the cost back to USD 308.
 
 ## Decisions made
 
@@ -61,7 +65,7 @@ Value-engineering target: USD 310 (a hypothetical control target, not a limit). 
 | 2026-10-02 | Design for construction accepted: the changes P1 to P12 (pads and towers on the shell, rim slots, foam strip, loop in the can corner, block frame, liner feet and collar, folded lid tray, fixings, drip tray, cable duct) and their knock-on changes, as made | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A1 |
 | 2026-10-02 | Mass (R12): option (a). R12 relaxed to 5.75 kg for the prototype, which is weighed at TRL 4; the base bumper is left off so the 0.05 kg margin is not spent before weighing | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A2; CPD-DDR-002, N2 |
 | 2026-10-02 | Refreeze (R8): option (a). R8 restated as 9 h or less for all the PCM at 25 °C, still an overnight refreeze | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-002, N1; CPD-CAL-001 v0.4, G4 |
-| 2026-10-02 | Battery removal (R14): option (a) for the prototype; the battery bay on four screws counts as removable. Before any field or air travel use, add the shipping switch and check the carrier's lithium battery rules | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A3 |
+| 2026-10-02 | Battery removal (R14): option (a) for the prototype; the battery bay on four screws counts as removable. Before any field or air travel use, add the shipping switch and check the carrier's lithium battery rules. The switch is now in the model and the BOM (line 18, USD 5), which took the cost from USD 308 to USD 313 | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A3 |
 | 2026-10-02 | Loop working fluid: R-134a (non-flammable, safety class A1) for the prototype, with the charge set by the refrigeration technician from the loop volume; a lower-impact fluid such as R-1234yf (A2L, mildly flammable) is revisited only for a product version and under local rules | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A4 |
 | 2026-10-02 | Co-design partner: an immunization program, consistent with outreach vaccinators first (CPD-DDR-001, D11). First candidate to approach: PATH, or a national immunization program's outreach team reached through it | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-001, O1 |
 | 2026-10-02 | Appearance model: round bail in the model; heat sink kept solid (no window); second status light adopted; labels and wordmark under BOM line 16; base bumper left out until the prototype is weighed | Amish: "i approve your recommendations for all 555 open decisions." | `docs/REVIEW.md`, 2026-09-26 |

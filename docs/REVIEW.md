@@ -337,3 +337,39 @@ Raised when the recommendations were written (2026-10-01) and kept here so they 
 - Item 3 options omit the power-split option in CPD-CAL-001 (G10): giving the module 30 W and the battery 7 W brings refreeze to 7.8 h, meeting R8, at the cost of an 11.5 h battery recharge.
 - Item 6 lists a diabetes association and a humanitarian logistics group as equal options, but D11 already decided outreach vaccinators first; the options should be narrowed.
 - Item 2's 5.75 kg limit leaves only 0.05 kg on estimated masses; if the bumper (item 7) were adopted it would likely use that margin up.
+
+## Session 2026-10-02: approved follow-ups carried out
+
+Amish approved on 2026-10-02 that every follow-up action from the open-decision sign-off be carried out. trl stays 3; nothing was built, bought or tested.
+
+### Follow-ups (7)
+
+| # | Follow-up | Result |
+| --- | --- | --- |
+| 1 | Re-run the sizing script against R8 at 9 h and R12 at 5.75 kg | Done. R8 met (8.03 h), R12 met (5.74 kg, 0.01 kg margin) |
+| 2 | Weigh the prototype at TRL 4 | Not done: TRL 4 work, on hold |
+| 3 | Shipping switch: model, BOM line, wiring picture, build plan | Done. Flush isolator in the bay top; BOM line 18 (USD 5); wiring picture, bay making sketch, step 15 and build plan updated. Carrier rules still to be checked before any trip (outreach, not done) |
+| 4 | Name R-134a and its charge in BOM line 7 | Done. 25 g allowance (about 15 g calculated), USD 3 inside the USD 28; the technician's own price is TRL 4 work, not done |
+| 5 | Approach the first candidate partner | Not done: outreach by Amish |
+| 6 | Second (red) status light in the model | Done, mirrored beside the display; checks added |
+| 7 | Appearance model and renders | Appearance model done (round bail, solid head top, two lights, shipping switch, labels and wordmark under line 16, no bumper); render scenes exported to /home/claude/renders/coldpod (hero, exploded, detail). Photoreal renders, card and social preview: not done, made on Amish's Mac |
+
+The bail legs in the model are now round rods (decision 7, "round bail").
+
+### Requirement changes (CPD-CAL-001 v0.7)
+
+- R8: Not met to Met (9 h target). R12: Not met to Met on paper (5.74 kg against 5.75 kg).
+- R15: Met to **Not met**: USD 313 against USD 310. The USD 5 shipping switch moved it from USD 308 (USD 2 under). Value-engineering target: USD 310. Estimated cost of the constructable design: USD 313 (USD 3 over the target). Deferring the switch until a trip needs it would restore USD 308. Proposed, awaiting Amish.
+- Counts: 11 met, 3 at risk, 1 not met (R15), 2 not verifiable. Mass 5.74 kg.
+
+### Documents changed
+
+`cad/src/model.py` (69 checks pass; STEP and STL regenerated), `bom/bom.csv`, `bom/bom-notes.md`, `docs/04-calcs/sizing.py` and `01-sizing.md` (CPD-CAL-001 v0.7), `docs/03-requirements.md` (CPD-REQ-001 v0.9), `docs/02-concept.md` (CPD-PRC-001 v0.9), `docs/05-build-plan.md` (CPD-BLD-001 v0.3), `docs/06-design-decisions.md` (CPD-DEC-001 v0.4), `README.md`, drawings CPD-DWG-001 (Rev P5) and CPD-DWG-112 (Rev P2), concept media, build plan pictures (overview, wiring, step 15, step 16), `cad/src/product_model.py`.
+
+### Cross-repo actions
+
+None found in this repo's list.
+
+## 2026-10-02: photoreal renders redone on the constructable design
+
+Rendered with Blender Cycles on Amish's Mac from the updated appearance model; captioned with `.kit/photo_caption.py`; `media/card.png` and `media/social-preview.png` regenerated with `.kit/cards.py`. Views: hero, exploded, detail. image_qc passes. Appearance deviations are those logged above as proposed, awaiting Amish.

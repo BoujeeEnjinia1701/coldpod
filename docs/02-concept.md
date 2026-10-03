@@ -3,7 +3,7 @@ doc_id: CPD-PRC-001
 title: ColdPod design precis
 project: ColdPod
 doc_type: Design precis
-version: "0.8"
+version: "0.9"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -41,11 +41,15 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "Decisions of 2026-10-02: CPD-DDR-003 accepted; R8 restated as 9 h and R12 relaxed to 5.75 kg; R-134a and battery removal safety rules; first partner candidate"
+- version: "0.9"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Figures from CPD-CAL-001 v0.7: 5.74 kg, $313 ($3 over the value-engineering target); battery shipping switch (item 18) and second status light added to the model and BOM"
 ---
 
 # ColdPod design precis
 
-ColdPod is a carry case about the size of a lunch cooler (366 x 220 x 207 mm) that holds 1.37 L of insulin or vaccines (24 pens) at 2 to 8 °C. The payload sits in an aluminium liner wrapped in a phase-change material (PCM) that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module freezes the PCM from a 12 V socket, a solar panel or a USB-C charger, and a small LiFePO4 battery keeps it running on the road. A two-phase loop thermosiphon connects the two and carries heat in one direction only, so a stopped Peltier does not leak heat back in. A logger records the payload temperature every minute and raises alarms. An aluminium cold plate tray holding the lid PCM pack lands on the evaporator can's rim flange when the lid closes, so the Peltier freezes all the PCM, and a second hardware cut-out on the liner stops a stuck-on driver from freezing the payload. Version 0.6 describes the constructable design of CPD-DDR-003 (Draft, open for Amish's review), in which every part can be made and fixed; the prototype build plan is CPD-BLD-001 and open decisions are in the register CPD-DEC-001. The TRL 3 calculations (CPD-CAL-001 v0.4) give about 13.3 h with no power at 43 °C, 27.3 h off-grid at 32 °C and 16.7 h off-grid at 43 °C, for $308 in parts and 5.70 kg empty. The hold times meet their targets with thin margins. Refreezing all the PCM takes 8.0 h and the case weighs 5.70 kg; on 2026-10-02 Amish restated R8 as 9 h and relaxed R12 to 5.75 kg for the prototype, so both are met on paper (R12 with 0.05 kg of margin, to be weighed at TRL 4). The parts cost is within the $310 budget that Amish approved on 2026-09-26 (R15 met).
+ColdPod is a carry case about the size of a lunch cooler (366 x 220 x 207 mm) that holds 1.37 L of insulin or vaccines (24 pens) at 2 to 8 °C. The payload sits in an aluminium liner wrapped in a phase-change material (PCM) that melts at 5 °C, inside 25 mm vacuum-insulated panels. A Peltier module freezes the PCM from a 12 V socket, a solar panel or a USB-C charger, and a small LiFePO4 battery keeps it running on the road. A two-phase loop thermosiphon connects the two and carries heat in one direction only, so a stopped Peltier does not leak heat back in. A logger records the payload temperature every minute and raises alarms. An aluminium cold plate tray holding the lid PCM pack lands on the evaporator can's rim flange when the lid closes, so the Peltier freezes all the PCM, and a second hardware cut-out on the liner stops a stuck-on driver from freezing the payload. Version 0.6 describes the constructable design of CPD-DDR-003 (Draft, open for Amish's review), in which every part can be made and fixed; the prototype build plan is CPD-BLD-001 and open decisions are in the register CPD-DEC-001. The TRL 3 calculations (CPD-CAL-001 v0.7) give about 13.3 h with no power at 43 °C, 27.3 h off-grid at 32 °C and 16.7 h off-grid at 43 °C, for $313 in parts and 5.74 kg empty. The hold times meet their targets with thin margins. Refreezing all the PCM takes 8.0 h and the case weighs 5.74 kg; on 2026-10-02 Amish restated R8 as 9 h and relaxed R12 to 5.75 kg for the prototype, so both are met on paper (R12 with 0.05 kg of margin, to be weighed at TRL 4). The parts cost is within the $310 budget that Amish approved on 2026-09-26 (R15 met).
 
 ![Hero render](../media/hero.png)
 
@@ -83,9 +87,10 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4.
 | 12 | Power board | USB-C PD sink (20 V), 12 V input (10 to 15 V) with reverse-polarity protection, LiFePO4 charger, buck-boost Peltier driver with an LC filter, fan driver; the cold-block and liner cut-outs wired in series in the Peltier supply | Off-the-shelf modules on perfboard; no custom PCB |
 | 13 | Logger controller | nRF52840 module with real-time clock and 2 MB flash | Bluetooth Low Energy link to a phone |
 | 14 | Temperature sensors and liner cut-out | Glycol-buffered payload probe, liner probe, cold-block probe, ambient sensor; bimetal cut-out on the liner opening at 3 °C | Digital sensors with ±0.5 °C or better accuracy; the cut-out works without firmware |
-| 15 | Display and alarm | 2.13 in e-paper, buzzer, red and green LED | E-paper keeps the last reading visible with no power |
+| 15 | Display and alarm | 2.13 in e-paper, buzzer, two status lights (green and red, mirrored either side of the display) | E-paper keeps the last reading visible with no power |
+| 18 | Battery shipping switch | Panel-mount rotary isolator, flush in the bay top, in series with the pack positive lead ahead of the fuse | Isolates the pack before any field or air travel (decided 2026-10-02) |
 
-Item 16 (wiring, fasteners, latches and consumables) is in the BOM but not modelled.
+Item 16 (wiring, fasteners, latches and consumables) is in the BOM but not modelled; item 17 (printed construction parts) is in the model.
 
 ![Cutaway](../media/cutaway.png)
 
@@ -113,8 +118,8 @@ Table 2. Hold times, charging, size, mass and cost.
 | Logger reserve | about 96 days | 15 % of 76.8 Wh at a 5 mW allowance [J4] | R11 met |
 | Log storage | 1.38 MB for 60 days | 1 record per minute, 16 bytes [J1] | R9 met on 2 MB flash |
 | Size | 366 x 220 x 207 mm (14.4 x 8.7 x 8.1 in) overall | Handle up [A6] | R13 met |
-| Mass, empty | **5.70 kg (12.6 lb)** | Model volumes and densities [K2]; the fixings and parts that make the design buildable add about 0.17 kg (CPD-DDR-003) | R12 met on paper (5.75 kg for the prototype, 2026-10-02) |
-| Parts cost | **$308** | `bom/bom.csv` [L2] | R15 within the value-engineering target ($310) |
+| Mass, empty | **5.74 kg (12.7 lb)** | Model volumes and densities [K2]; the fixings and parts that make the design buildable add about 0.17 kg (CPD-DDR-003) | R12 met on paper (5.75 kg for the prototype, 2026-10-02) |
+| Parts cost | **$313** | `bom/bom.csv` [L2] | R15 over the value-engineering target ($310) by $3 |
 
 ## Key design choices
 
@@ -128,7 +133,7 @@ Amish decided choices 1 to 9 on 2026-09-25, going with the recommendation in eac
 6. **Vacuum-insulated panels instead of foam (decided, D7).** Polyurethane foam of the same thickness (about 0.024 W/(m·K)) gives 0.161 W/K rather than 0.092 W/K, so the passive hold at 43 °C would drop from 13.3 h to about 7.6 h (CPD-CAL-001, P1 and P2), but it would save about $45 and some mass. VIPs are used, with a foam version documented as a low-cost variant.
 7. **Local alarms and Bluetooth Low Energy only (decided, D8).** No cellular or LoRa radio in the first build (either would add $20 to $40 and more power).
 8. **Alarm thresholds (decided, D9).** Warn after 10 min outside 2 to 8 °C; alarm at once at 0 °C or lower on the payload probe; alarm if the liner probe reaches 1 °C (an early freeze warning); adjustable per product.
-9. **Value-engineering target (decided, D10).** The target is $310 (a hypothetical control target, not a limit; $300 at D10, $310 after CPD-DDR-002 item 16); the estimated parts cost of the constructable design is $308, $2 under the target.
+9. **Value-engineering target (decided, D10).** The target is $310 (a hypothetical control target, not a limit; $300 at D10, $310 after CPD-DDR-002 item 16); the estimated parts cost of the constructable design is $313, $3 over the target (the $5 battery shipping switch added on 2026-10-02 took it from $308 to $313).
 
 Amish decided the TRL 3 review items on 2026-09-25, again going with the recommendation in each case (CPD-DDR-002):
 

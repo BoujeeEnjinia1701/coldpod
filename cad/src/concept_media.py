@@ -21,11 +21,11 @@ from model import build_parts  # noqa: E402
 COLORS = {"shell": "#D1D5DB", "lid": "#9CA3AF", "lidplate": "#94A3B8", "handle": "#374151", "vip": "#E7E5E4", "pcm": "#60A5FA",
           "liner": "#A8A29E", "pens": "#F9FAFB", "thermo": "#B87333", "tec": "#F3F4F6", "sink": "#4B5563",
           "housings": "#0F766E", "cells": "#C2410C", "power": "#15803D", "logger": "#1F2937",
-          "sensors": "#D4A017", "display": "#38BDF8"}
+          "sensors": "#D4A017", "display": "#38BDF8", "shipsw": "#DC2626"}
 EXPLODE = {"shell": (0, 0, -260), "thermo": (0, 0, 180), "pcm": (0, 0, 320), "lidplate": (0, 0, 365), "liner": (0, 0, 460),
            "pens": (0, 0, 460), "lid": (0, 0, 600), "handle": (0, 0, 720), "tec": (150, 0, 0),
            "sink": (220, 0, 0), "housings": (0, 0, -260), "cells": (-170, 0, 0), "power": (110, 0, -40),
-           "logger": (-120, 0, 70), "sensors": (0, -190, 0), "display": (-60, 0, 170)}
+           "logger": (-120, 0, 70), "sensors": (0, -190, 0), "display": (-60, 0, 170), "shipsw": (-60, 90, 170)}
 parts = [Part(name, shape, COLORS[k], bom, EXPLODE.get(k, (0, 0, 0))) for k, name, shape, bom in build_parts()]
 
 # Context for scale: a table top and a phone lying next to the case
