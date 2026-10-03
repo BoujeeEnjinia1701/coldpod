@@ -3,9 +3,9 @@ doc_id: CPD-DEC-001
 title: ColdPod design decisions register
 project: ColdPod
 doc_type: Design decisions register
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-10-02'
+date: '2026-10-03'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,6 +25,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: "Value engineering restated after the approved follow-ups were carried into the model and BOM: USD 313, USD 3 over the target (battery shipping switch added)"
+  - version: "0.5"
+    date: '2026-10-03'
+    author: Amish Chadha
+    change: "Amish accepted the cost overrun against the value-engineering target on 2026-10-03; row added to decisions made; value engineering section updated"
 ---
 
 # ColdPod design decisions register
@@ -51,6 +55,8 @@ None. All open decisions were decided on 2026-10-02.
 
 Value-engineering target: USD 310 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 313 (USD 3 over the target).
 
+Amish accepted this overrun on 2026-10-03: the estimated cost of USD 313 against the USD 310 target (USD 3 over), keeping the USD 5 battery shipping switch (BOM line 18). Amish: "Cost over target - i accept all the cost variations and overruns". It stays reported against the target as an accepted overrun, and the savings below remain worth trying.
+
 - **Main cost drivers:** the vacuum-insulated panel set (about USD 60, still an estimate until quoted), the thermosiphon loop (about USD 28), the buck-boost Peltier driver (USD 22 to 26), the lid cold plate tray (USD 13) and the liner cut-out (USD 10 to 13).
 - **Savings worth trying:** a VIP quote before any purchase; thinner printed parts, which already saved about USD 4 of filament; and re-pricing the driver and thermosiphon parts at purchase; the USD 5 shipping switch could wait until a trip needs it, which would bring the cost back to USD 308.
 
@@ -69,3 +75,4 @@ Value-engineering target: USD 310 (a hypothetical control target, not a limit). 
 | 2026-10-02 | Loop working fluid: R-134a (non-flammable, safety class A1) for the prototype, with the charge set by the refrigeration technician from the loop volume; a lower-impact fluid such as R-1234yf (A2L, mildly flammable) is revisited only for a product version and under local rules | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-003, A4 |
 | 2026-10-02 | Co-design partner: an immunization program, consistent with outreach vaccinators first (CPD-DDR-001, D11). First candidate to approach: PATH, or a national immunization program's outreach team reached through it | Amish: "i approve your recommendations for all 555 open decisions." | CPD-DDR-001, O1 |
 | 2026-10-02 | Appearance model: round bail in the model; heat sink kept solid (no window); second status light adopted; labels and wordmark under BOM line 16; base bumper left out until the prototype is weighed | Amish: "i approve your recommendations for all 555 open decisions." | `docs/REVIEW.md`, 2026-09-26 |
+| 2026-10-03 | Cost overrun accepted: the estimated cost of USD 313 against the USD 310 target (USD 3 over), keeping the USD 5 battery shipping switch (BOM line 18) | Amish: "Cost over target - i accept all the cost variations and overruns" | [REVIEW.md](REVIEW.md), session 2026-10-03 |
